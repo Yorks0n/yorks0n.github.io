@@ -8,7 +8,7 @@
 <title>文献 | Yorksite</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
-<meta name="author" content="">
+<meta name="author" content="Yorkson">
 <link rel="canonical" href="https://yorks0n.github.io/tags/%E6%96%87%E7%8C%AE/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://yorks0n.github.io/favicon.ico">
@@ -137,18 +137,9 @@
     </h2>
   </header>
   <div class="entry-content">
-    <p>Best practices for single-cell analysis across modalities 跨模式单细胞分析的最佳实践，于 2023 年 3 月 31 日发表于 nature reviews genetics。最近在研究单细胞分析相关的资料，因此记下这篇笔记。文章中包含了 Transcriptome、Chromatin accessibility、Surface protein expression、空间转录组等多个方面，但就近期关注点而言，只精简记录单细胞转录组部分的笔记。如果有需要，可以阅读原文。
-从原始计数矩阵到高质量单细胞数据 原始计数矩阵是直接从测序数据定量得来的矩阵，一般根据每个细胞 barcode 与 UMI 确定细胞中各种 mRNA 的数量，然而原始数据中包含着各种系统噪声和误差（比如来自建库操作、样本质量、测序批次等），因此在这一预处理过程中试图去除误差。这一过程涉及到质量控制、归一化、数据矫正和特征选择等过程，还可能会涉及到消除批次效应以整合多批次数据的过程。
-滤低质量细胞和噪声校正 Filtering low-quality cells and noise correction 大多数分析过程假定每个单细胞液滴中都包含来自单个完整细胞的 RNA。细胞质量差（比如死细胞）、溶液中破裂细胞产生的 RNA 污染、同时捕获多个细胞的情况违反这一假设，因此需要在进一步分析之前去除这部分数据。
-低质量细胞：检测基因数量过少、深度过低或是线粒体计数（植物还有叶绿体）过多的细胞都被认为是低质量细胞。一般通过手动设置的阈值来进行识别和过滤，可以参照先前文章或是基于中值绝对偏差数对样本进行过滤。需要综合考虑过滤的指标，同时注意质量控制是在样本水平上进行的，因为样本之间的阈值可能会有很大差异。
-中值绝对偏差数（Median Absolute Deviation, MAD）
-基于中值绝对偏差数（Median Absolute Deviation, MAD）的样本自动过滤是一种统计方法，用于识别和剔除数据集中的离群值。这种方法主要有以下几个步骤：
-计算数据集的中位数（median）。 对每个数据点，计算其与中位数的偏差绝对值。 计算这些绝对偏差的中位数，得到MAD值。 选择一个阈值，通常是MAD的某个倍数（例如3倍MAD），用于判断数据点是否为离群值。 剔除大于阈值的数据点，即被认为是离群值的数据点。 这种基于MAD的方法对于处理非正态分布的数据集具有较好的鲁棒性，而且相对标准差受异常值影响更小，因此可以有效地识别和过滤异常值。
-无细胞游离 RNA：通常存在于溶液中，并在建库过程中分配给每个细胞，产生一种类似背景值的效果。如果是细胞类群特异性标志物的 RNA 污染了其他细胞，后续分析中可能将不同的细胞群混合在一起。流行的 SoupX 等方法根据样本中「空液滴」的表达情况去除污染；CellBender 将环境 RNA 的去除制定为无监督贝叶斯模型，该模型不需要细胞类型特异性基因表达谱的先验知识。应当尽量不忽略去除环境 RNA 这一步，以提升下游分析的质量。
-空液滴和双联体液滴（包含两个细胞的液滴）：由不同细胞类型形成的双联体很难注释，并可能导致细胞类型标注错误。常见的双峰检测方法随机抽取两个细胞组合成模拟双联体，并将其与其他细胞测量结果进行比较。scDblFinder 采用此方法， 并在多项测试中准确性和计算效率优于其他方法。还可以应用多种不同检测方法并比较结果以提高准确性。
-归一化和方差稳定化 Normalization and variance stabilization 不同细胞的 mRNA 含量不同，加上测序过程随机误差，将导致细胞有不同的初始计数。归一化可以矫正测序深度的差异，使不同细胞具有可比性。随后稳定方差以确保少数离群值对整体数据影响不会太大。...</p>
+    <p>Best practices for single-cell analysis across modalities</p>
   </div>
-  <footer class="entry-footer"><span title='2023-04-07 13:39:20 +0000 UTC'>四月 7, 2023</span></footer>
+  <footer class="entry-footer"><span title='2023-04-07 13:39:20 +0000 UTC'>四月 7, 2023</span>&nbsp;·&nbsp;Yorkson</footer>
   <a class="entry-link" aria-label="post link to 【读文献】单细胞分析最佳实践" href="https://yorks0n.github.io/posts/read-single-cell-best-practice/"></a>
 </article>
     </main>

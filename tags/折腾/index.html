@@ -8,7 +8,7 @@
 <title>折腾 | Yorksite</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
-<meta name="author" content="">
+<meta name="author" content="Yorkson">
 <link rel="canonical" href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://yorks0n.github.io/favicon.ico">
@@ -137,11 +137,9 @@
     </h2>
   </header>
   <div class="entry-content">
-    <p>文件准备 将Shiny用到的server.R和ui.R一起放在app文件夹中
-./app: server.R ui.R 写个Dockerfile，把用到的包都写在 install.r 后面
-FROM rocker/r-base:latest LABEL maintainer=&#34;email &lt;example@mail.com&gt;&#34; RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \ sudo \ libcurl4-gnutls-dev \ libcairo2-dev \ libxt-dev \ libssl-dev \ libssh2-1-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* RUN install.r shiny shinyBS dplyr stringr RUN echo &#34;local(options(shiny.port = 3838, shiny.host = &#39;0.0.0.0&#39;))&#34; &gt; /usr/lib/R/etc/Rprofile.site RUN addgroup --system app \ &amp;&amp; adduser --system --ingroup app app WORKDIR /home/app COPY app . RUN chown app:app -R /home/app USER app EXPOSE 3838 CMD [&#34;R&#34;, &#34;-e&#34;, &#34;shiny::runApp(&#39;/home/app&#39;)&#34;] 按以下方式进行构建...</p>
+    <p>介绍了如何将 Shiny App 打包成 Docker 格式，方便在不同设备环境下托管</p>
   </div>
-  <footer class="entry-footer"><span title='2023-03-28 09:30:49 +0000 UTC'>三月 28, 2023</span></footer>
+  <footer class="entry-footer"><span title='2023-03-28 09:30:49 +0000 UTC'>三月 28, 2023</span>&nbsp;·&nbsp;Yorkson</footer>
   <a class="entry-link" aria-label="post link to Docker 打包 Shiny App" href="https://yorks0n.github.io/posts/docker-pack-shiny-app/"></a>
 </article>
 
@@ -162,7 +160,7 @@ git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面�
 npm install @vercel/ncc 然后对index.js 进行打包
 ncc build index.js -o dist 打包产物会存放于dist/index....</p>
   </div>
-  <footer class="entry-footer"><span title='2023-03-24 16:30:23 +0000 UTC'>三月 24, 2023</span></footer>
+  <footer class="entry-footer"><span title='2023-03-24 16:30:23 +0000 UTC'>三月 24, 2023</span>&nbsp;·&nbsp;Yorkson</footer>
   <a class="entry-link" aria-label="post link to 部署预印本追踪 TRxiv 到 Github Action" href="https://yorks0n.github.io/posts/deploy-trxiv-github-action/"></a>
 </article>
 
@@ -172,16 +170,9 @@ ncc build index.js -o dist 打包产物会存放于dist/index....</p>
     </h2>
   </header>
   <div class="entry-content">
-    <p>注：本文首发于少数派，您可以 前往此处 阅读修订后版本。
-Karabiner 全称 Karabiner-Elements[^下文简称为 Karabiner]，是 macOS 上的一款功能强劲的改键工具，可以将键盘上的按键映射成其他一个或多个按键组合。然而，Karabiner 使用JSON 作为配置文件，非常繁琐且不易理解，给上手带来了很高的门槛。
-上图展示了 Karabiner 中与 Goku 中，实现相同效果所需要的写法差异。
-于是，有人专门为其制作了一个工具「Goku」，借助 Goku 可以方便地为 Karabiner 进行配置。
-准备工作：
-Karabiner-Elements 可以从官网进行下载 Goku 使用 Homebrew 进行安装：brew install yqrashawn/goku/goku 在 Karabiner 中确保配置文件 Profiles 选择默认的 Default 前往 ~/.config/目录，创建名为 karabiner.edn 的 Goku 配置文件 参考下文进行配置文件的编辑，每次编辑完后在终端中执行 goku 使修改生效 将 Caps Lock 变为键盘功能的中枢 通常，我们将⌃Control &#43; ⌥Option &#43; ⇧Shift &#43; ⌘Command 同时按下的组合称为 Hyper 键，因为程序内置的快捷键不会预设这么复杂的组合，因此使用 Hyper 键设定快捷键，能最大程度上避免与预设发生冲突。
-大写锁定键 Caps Lock 位于键盘左侧中间，用起来很顺手，但我只用它切换输入法，输入大写字母靠 ⇧shift，因此这里先对它下手，你也可以选择其他顺手且不常用的按键。
-以下的 Goku 配置文件 karabiner.edn 写法，可以将大写锁定键修改为 Hyper 键，这时只需要按下这一个键，就可以发挥 ⌃Control &#43; ⌥Option &#43; ⇧Shift &#43; ⌘Command 同时按下的效果。...</p>
+    <p>如何借助 Goku 书写 Karabiner 配置文件</p>
   </div>
-  <footer class="entry-footer"><span title='2022-06-16 21:19:19 +0800 +0800'>六月 16, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-06-16 21:19:19 +0800 +0800'>六月 16, 2022</span>&nbsp;·&nbsp;Yorkson</footer>
   <a class="entry-link" aria-label="post link to Karabiner 助力，让你的键盘操作快人一步" href="https://yorks0n.github.io/posts/karabiner/"></a>
 </article>
 
@@ -191,18 +182,9 @@ Karabiner-Elements 可以从官网进行下载 Goku 使用 Homebrew 进行安装
     </h2>
   </header>
   <div class="entry-content">
-    <p>注：本文首发于少数派，您可以 前往此处 阅读修订后版本。
-前言 本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。
-文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。
-阅读本文可能需要一定 Linux 基础知识。
-n8n 是什么 n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。
-利用 Docker 安裝 n8n n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。
-这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 Installation guides for n8n。
-假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。
-# 创建数据储存文件夹 mkdir ~/n8n-data 复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开5678的 TCP 端口。
-# 利用Docker安装运行n8n docker run -d \ --name n8n --restart unless-stopped \ -p 5678:5678 \ -v ~/n8n-data:/home/node/....</p>
+    <p>本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。</p>
   </div>
-  <footer class="entry-footer"><span title='2022-05-25 18:19:19 +0800 +0800'>五月 25, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-05-25 18:19:19 +0800 +0800'>五月 25, 2022</span>&nbsp;·&nbsp;Yorkson</footer>
   <a class="entry-link" aria-label="post link to 利用 n8n 打造飞书 RSS 推送机器人" href="https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/"></a>
 </article>
     </main>
