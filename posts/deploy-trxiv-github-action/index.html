@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>部署预印本追踪 TRxiv 到 Github Action | Yorksite</title>
+<meta name="keywords" content="note">
+<meta name="description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
+新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
+git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
+# action.yml name: &#39;trxiv&#39; description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39; runs: using: &#39;node16&#39; main: &#39;dist/index.js&#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
+# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
+https://www.toptal.com/developers/gitignore
+文件推送到远程仓库 然后push到远程仓库
+git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
+npm install @vercel/ncc 然后对index.js 进行打包
+ncc build index.js -o dist 打包产物会存放于dist/index.">
+<meta name="author" content="">
+<link rel="canonical" href="https://yorks0n.github.io/posts/deploy-trxiv-github-action/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://yorks0n.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://yorks0n.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yorks0n.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://yorks0n.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://yorks0n.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="部署预印本追踪 TRxiv 到 Github Action" />
+<meta property="og:description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
+新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
+git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
+# action.yml name: &#39;trxiv&#39; description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39; runs: using: &#39;node16&#39; main: &#39;dist/index.js&#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
+# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
+https://www.toptal.com/developers/gitignore
+文件推送到远程仓库 然后push到远程仓库
+git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
+npm install @vercel/ncc 然后对index.js 进行打包
+ncc build index.js -o dist 打包产物会存放于dist/index." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yorks0n.github.io/posts/deploy-trxiv-github-action/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-24T16:30:23+00:00" />
+<meta property="article:modified_time" content="2023-03-24T16:30:23+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="部署预印本追踪 TRxiv 到 Github Action"/>
+<meta name="twitter:description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
+新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
+git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
+# action.yml name: &#39;trxiv&#39; description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39; runs: using: &#39;node16&#39; main: &#39;dist/index.js&#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
+# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
+https://www.toptal.com/developers/gitignore
+文件推送到远程仓库 然后push到远程仓库
+git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
+npm install @vercel/ncc 然后对index.js 进行打包
+ncc build index.js -o dist 打包产物会存放于dist/index."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://yorks0n.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "部署预印本追踪 TRxiv 到 Github Action",
+      "item": "https://yorks0n.github.io/posts/deploy-trxiv-github-action/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "部署预印本追踪 TRxiv 到 Github Action",
+  "name": "部署预印本追踪 TRxiv 到 Github Action",
+  "description": "将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。\n新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。\ngit clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境\n# action.yml name: \u0026#39;trxiv\u0026#39; description: \u0026#39;Tracking popular bioRxiv and medRxiv preprints\u0026#39; runs: using: \u0026#39;node16\u0026#39; main: \u0026#39;dist/index.js\u0026#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。\n# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules\nhttps://www.toptal.com/developers/gitignore\n文件推送到远程仓库 然后push到远程仓库\ngit add . git commit -m \u0026#34;Initialize\u0026#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc\nnpm install @vercel/ncc 然后对index.js 进行打包\nncc build index.js -o dist 打包产物会存放于dist/index.",
+  "keywords": [
+    "note"
+  ],
+  "articleBody": "将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。\n新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。\ngit clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境\n# action.yml name: 'trxiv' description: 'Tracking popular bioRxiv and medRxiv preprints' runs: using: 'node16' main: 'dist/index.js' 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。\n# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules\nhttps://www.toptal.com/developers/gitignore\n文件推送到远程仓库 然后push到远程仓库\ngit add . git commit -m \"Initialize\" git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc\nnpm install @vercel/ncc 然后对index.js 进行打包\nncc build index.js -o dist 打包产物会存放于dist/index.js\n创建工作流 在本地创建.github/workflows/main.yml，这个文件实际确定了 Github Action 的行为，此yml格式文件一定要注意正确的缩进。\n配置文件内容：\n# main.yml ## 动作的名称 name: 'TRxiv update' # 触发条件 ## 条件1，代码push进仓库 ## 条件2，定时任务，在UTC 10和22点，即北京时间18点和6点运行 on: push: schedule: - cron: '0 10,22 * * *' # jobs 定义了要执行的一系列任务 jobs: ## 这个job的名称 TRxiv_update_job: ## runs-on 内置运行任务的server类型 runs-on: ubuntu-latest name: Update the csv file steps: ## 必须有这一步，让运行的文件夹成为一个git repo - uses: actions/checkout@v3 ## 运行脚本，指向我们的repo - name: 'run script' uses: Yorks0n/TRxiv@main ## 运行完后，把运行产生在本地的data.csv更新回仓库中 - name: Commit files run: | git config --local user.email \"github email adress\" git config --local user.name \"github user name\" git pull git add README.md git add data.csv git commit -m \"update data.csv\" shell: bash ## 使用秘钥确认具有上传权限，同时以秘钥方式提交不会触发push action，避免陷入loop - name: Push changes uses: ad-m/github-push-action@master with: github_token: ${{ secrets.MY_GIT_TOKEN }} branch: main 再次将文件推送到远程仓库 git add . git commit -m \"Update Workflow\" git push 后续更新 每次想更新修改前，先在目录中把最新版的环境拉下来\ngit pull 修改过脚本后，要重新打包用到的代码：ncc build index.js --license licenses.txt\n然后再提交回仓库\n参考 How to Build Your First JavaScript GitHub Action\n如何使用 Github Actions 自动抓取每日必应壁纸?\nPermission denied to github-actions[bot]\nCreating a JavaScript action - GitHub Docs\n",
+  "wordCount" : "232",
+  "inLanguage": "zh",
+  "datePublished": "2023-03-24T16:30:23Z",
+  "dateModified": "2023-03-24T16:30:23Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yorks0n.github.io/posts/deploy-trxiv-github-action/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yorksite",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yorks0n.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://yorks0n.github.io/" accesskey="h" title="Yorksite (Alt + H)">Yorksite</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://yorks0n.github.io/archives/" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yorks0n.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yorks0n.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      部署预印本追踪 TRxiv 到 Github Action
+    </h1>
+    <div class="post-meta"><span title='2023-03-24 16:30:23 +0000 UTC'>三月 24, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。</p>
+<h2 id="新建github仓库">新建Github仓库<a hidden class="anchor" aria-hidden="true" href="#新建github仓库">#</a></h2>
+<p>新建一个public仓库，名叫TRxiv，并将远程仓库<code>git clone</code>到本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone git@github.com:Yorks0n/TRxiv.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd TRxiv
+</span></span></code></pre></div><h2 id="创建一个动作元数据文件">创建一个动作元数据文件<a hidden class="anchor" aria-hidden="true" href="#创建一个动作元数据文件">#</a></h2>
+<p>要让仓库里能被以Action的形式直接调用，需要在<strong>根目录</strong>中创建一个<code>action.yml</code>配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># action.yml</span>
+</span></span><span style="display:flex;"><span>name: <span style="color:#e6db74">&#39;trxiv&#39;</span>
+</span></span><span style="display:flex;"><span>description: <span style="color:#e6db74">&#39;Tracking popular bioRxiv and medRxiv preprints&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>runs:
+</span></span><span style="display:flex;"><span>  using: <span style="color:#e6db74">&#39;node16&#39;</span>
+</span></span><span style="display:flex;"><span>  main: <span style="color:#e6db74">&#39;dist/index.js&#39;</span>
+</span></span></code></pre></div><h2 id="准备运行的代码">准备运行的代码<a hidden class="anchor" aria-hidden="true" href="#准备运行的代码">#</a></h2>
+<p>手动将写好的JS脚本拷贝进来，完整代码在此 <a href="https://github.com/Yorks0n/TRxiv">Yorkson/TRxiv</a>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 在这里初始化一下npm</span>
+</span></span><span style="display:flex;"><span>npm init -y
+</span></span></code></pre></div><p>准备一个<code>.gitignore</code>文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有<code>node_modules</code></p>
+<p><a href="https://www.toptal.com/developers/gitignore">https://www.toptal.com/developers/gitignore</a></p>
+<h2 id="文件推送到远程仓库">文件推送到远程仓库<a hidden class="anchor" aria-hidden="true" href="#文件推送到远程仓库">#</a></h2>
+<p>然后push到远程仓库</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Initialize&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><h2 id="打包软件">打包软件<a hidden class="anchor" aria-hidden="true" href="#打包软件">#</a></h2>
+<p>因为前面把<code>node_modules</code> 从上传的文件列表中忽略了，但脚本<code>index.js</code>内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用<code>ncc</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm install @vercel/ncc
+</span></span></code></pre></div><p>然后对<code>index.js</code> 进行打包</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncc build index.js -o dist
+</span></span></code></pre></div><p>打包产物会存放于<code>dist/index.js</code></p>
+<h2 id="创建工作流">创建工作流<a hidden class="anchor" aria-hidden="true" href="#创建工作流">#</a></h2>
+<p>在本地创建<code>.github/workflows/main.yml</code>，这个文件实际确定了 Github Action 的行为，此<code>yml</code>格式文件一定要注意正确的缩进。</p>
+<p>配置文件内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># main.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 动作的名称</span>
+</span></span><span style="display:flex;"><span>name: <span style="color:#e6db74">&#39;TRxiv update&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 触发条件</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 条件1，代码push进仓库</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 条件2，定时任务，在UTC 10和22点，即北京时间18点和6点运行</span>
+</span></span><span style="display:flex;"><span>on:
+</span></span><span style="display:flex;"><span>  push:
+</span></span><span style="display:flex;"><span>  schedule:
+</span></span><span style="display:flex;"><span>    - cron: <span style="color:#e6db74">&#39;0 10,22 * * *&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># jobs 定义了要执行的一系列任务 </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>jobs:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## 这个job的名称</span>
+</span></span><span style="display:flex;"><span>  TRxiv_update_job:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## runs-on 内置运行任务的server类型</span>
+</span></span><span style="display:flex;"><span>    runs-on: ubuntu-latest
+</span></span><span style="display:flex;"><span>    name: Update the csv file
+</span></span><span style="display:flex;"><span>    steps: 
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 必须有这一步，让运行的文件夹成为一个git repo</span>
+</span></span><span style="display:flex;"><span>      - uses: actions/checkout@v3
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 运行脚本，指向我们的repo</span>
+</span></span><span style="display:flex;"><span>      - name: <span style="color:#e6db74">&#39;run script&#39;</span>
+</span></span><span style="display:flex;"><span>        uses: Yorks0n/TRxiv@main
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 运行完后，把运行产生在本地的data.csv更新回仓库中</span>
+</span></span><span style="display:flex;"><span>      - name: Commit files
+</span></span><span style="display:flex;"><span>        run: |
+</span></span><span style="display:flex;"><span>         git config --local user.email <span style="color:#e6db74">&#34;github email adress&#34;</span>
+</span></span><span style="display:flex;"><span>         git config --local user.name <span style="color:#e6db74">&#34;github user name&#34;</span>
+</span></span><span style="display:flex;"><span>         git pull
+</span></span><span style="display:flex;"><span>         git add README.md
+</span></span><span style="display:flex;"><span>         git add data.csv
+</span></span><span style="display:flex;"><span>         git commit -m <span style="color:#e6db74">&#34;update data.csv&#34;</span>
+</span></span><span style="display:flex;"><span>        shell: bash
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 使用秘钥确认具有上传权限，同时以秘钥方式提交不会触发push action，避免陷入loop</span>
+</span></span><span style="display:flex;"><span>      - name: Push changes
+</span></span><span style="display:flex;"><span>        uses:  ad-m/github-push-action@master
+</span></span><span style="display:flex;"><span>        with:
+</span></span><span style="display:flex;"><span>         github_token: <span style="color:#e6db74">${</span>{ secrets.MY_GIT_TOKEN <span style="color:#e6db74">}</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>         branch: main
+</span></span></code></pre></div><h2 id="再次将文件推送到远程仓库">再次将文件推送到远程仓库<a hidden class="anchor" aria-hidden="true" href="#再次将文件推送到远程仓库">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Update Workflow&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><h2 id="后续更新">后续更新<a hidden class="anchor" aria-hidden="true" href="#后续更新">#</a></h2>
+<p>每次想更新修改前，先在目录中把最新版的环境拉下来</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull
+</span></span></code></pre></div><p><strong>修改过脚本后，要重新打包用到的代码</strong>：<code>ncc build index.js --license licenses.txt</code></p>
+<p>然后再提交回仓库</p>
+<h2 id="参考">参考<a hidden class="anchor" aria-hidden="true" href="#参考">#</a></h2>
+<p><a href="https://www.freecodecamp.org/news/build-your-first-javascript-github-action/">How to Build Your First JavaScript GitHub Action</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/354188341">如何使用 Github Actions 自动抓取每日必应壁纸?</a></p>
+<p><a href="https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot">Permission denied to github-actions[bot]</a></p>
+<p><a href="https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action">Creating a JavaScript action - GitHub Docs</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://yorks0n.github.io/tags/note/">note</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://yorks0n.github.io/">Yorksite</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on Yorksite</title>
+    <link>https://yorks0n.github.io/tags/</link>
+    <description>Recent content in Tags on Yorksite</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 Mar 2023 09:30:49 +0000</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>note</title>
+      <link>https://yorks0n.github.io/tags/note/</link>
+      <pubDate>Tue, 28 Mar 2023 09:30:49 +0000</pubDate>
+      
+      <guid>https://yorks0n.github.io/tags/note/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mutter</title>
+      <link>https://yorks0n.github.io/tags/mutter/</link>
+      <pubDate>Fri, 24 Mar 2023 15:29:49 +0000</pubDate>
+      
+      <guid>https://yorks0n.github.io/tags/mutter/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>visualization</title>
+      <link>https://yorks0n.github.io/tags/visualization/</link>
+      <pubDate>Thu, 09 Mar 2023 20:40:01 +0000</pubDate>
+      
+      <guid>https://yorks0n.github.io/tags/visualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>database</title>
+      <link>https://yorks0n.github.io/tags/database/</link>
+      <pubDate>Sat, 28 May 2022 17:14:41 +0000</pubDate>
+      
+      <guid>https://yorks0n.github.io/tags/database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>academic</title>
+      <link>https://yorks0n.github.io/tags/academic/</link>
+      <pubDate>Mon, 18 Apr 2022 17:28:27 +0000</pubDate>
+      
+      <guid>https://yorks0n.github.io/tags/academic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>writing</title>
+      <link>https://yorks0n.github.io/tags/writing/</link>
+      <pubDate>Mon, 18 Apr 2022 17:28:27 +0000</pubDate>
+      
+      <guid>https://yorks0n.github.io/tags/writing/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
