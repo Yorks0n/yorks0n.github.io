@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Docker 打包 Shiny App | Yorksite</title>
-<meta name="keywords" content="note">
+<meta name="keywords" content="折腾">
 <meta name="description" content="文件准备 将Shiny用到的server.R和ui.R一起放在app文件夹中
 ./app: server.R ui.R 写个Dockerfile，把用到的包都写在 install.r 后面
 FROM rocker/r-base:latest LABEL maintainer=&#34;email &lt;example@mail.com&gt;&#34; RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \ sudo \ libcurl4-gnutls-dev \ libcairo2-dev \ libxt-dev \ libssl-dev \ libssh2-1-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* RUN install.r shiny shinyBS dplyr stringr RUN echo &#34;local(options(shiny.port = 3838, shiny.host = &#39;0.0.0.0&#39;))&#34; &gt; /usr/lib/R/etc/Rprofile.site RUN addgroup --system app \ &amp;&amp; adduser --system --ingroup app app WORKDIR /home/app COPY app . RUN chown app:app -R /home/app USER app EXPOSE 3838 CMD [&#34;R&#34;, &#34;-e&#34;, &#34;shiny::runApp(&#39;/home/app&#39;)&#34;] 按以下方式进行构建">
@@ -102,7 +102,7 @@ FROM rocker/r-base:latest LABEL maintainer=&#34;email &lt;example@mail.com&gt;&#
   "name": "Docker 打包 Shiny App",
   "description": "文件准备 将Shiny用到的server.R和ui.R一起放在app文件夹中\n./app: server.R ui.R 写个Dockerfile，把用到的包都写在 install.r 后面\nFROM rocker/r-base:latest LABEL maintainer=\u0026#34;email \u0026lt;example@mail.com\u0026gt;\u0026#34; RUN apt-get update \u0026amp;\u0026amp; apt-get install -y --no-install-recommends \\ sudo \\ libcurl4-gnutls-dev \\ libcairo2-dev \\ libxt-dev \\ libssl-dev \\ libssh2-1-dev \\ \u0026amp;\u0026amp; rm -rf /var/lib/apt/lists/* RUN install.r shiny shinyBS dplyr stringr RUN echo \u0026#34;local(options(shiny.port = 3838, shiny.host = \u0026#39;0.0.0.0\u0026#39;))\u0026#34; \u0026gt; /usr/lib/R/etc/Rprofile.site RUN addgroup --system app \\ \u0026amp;\u0026amp; adduser --system --ingroup app app WORKDIR /home/app COPY app . RUN chown app:app -R /home/app USER app EXPOSE 3838 CMD [\u0026#34;R\u0026#34;, \u0026#34;-e\u0026#34;, \u0026#34;shiny::runApp(\u0026#39;/home/app\u0026#39;)\u0026#34;] 按以下方式进行构建",
   "keywords": [
-    "note"
+    "折腾"
   ],
   "articleBody": "文件准备 将Shiny用到的server.R和ui.R一起放在app文件夹中\n./app: server.R ui.R 写个Dockerfile，把用到的包都写在 install.r 后面\nFROM rocker/r-base:latest LABEL maintainer=\"email \" RUN apt-get update \u0026\u0026 apt-get install -y --no-install-recommends \\ sudo \\ libcurl4-gnutls-dev \\ libcairo2-dev \\ libxt-dev \\ libssl-dev \\ libssh2-1-dev \\ \u0026\u0026 rm -rf /var/lib/apt/lists/* RUN install.r shiny shinyBS dplyr stringr RUN echo \"local(options(shiny.port = 3838, shiny.host = '0.0.0.0'))\" \u003e /usr/lib/R/etc/Rprofile.site RUN addgroup --system app \\ \u0026\u0026 adduser --system --ingroup app app WORKDIR /home/app COPY app . RUN chown app:app -R /home/app USER app EXPOSE 3838 CMD [\"R\", \"-e\", \"shiny::runApp('/home/app')\"] 按以下方式进行构建\n# name of the image export IMAGE=\"yorks0n/trxiv_shiny\" # build image docker build -t $IMAGE . # run and test locally docker run -p 8080:3838 $IMAGE 居然就行了！\n部署在 Railway 上 # 安装 brew install railway # 登录 railway login 创建一个项目，并输入项目名称\n➜ railway init \u003e Project Name TRxiv_shiny Created project TRxiv_shiny on Personal 虽然当前目录下有个 Dockerfile 了，但是这 XX 的 railway 部署时候端口和默认 docker 的不太一样，或者我没找到哪里设置，所以如果要部署在 railway 上，还需要改一下 Dockerfile。虽然在这指定了ENV PORT=3838，但实际上 railway 每次开的端口都不太一样，所以标准 docker 的写法不太行。\nFROM rocker/r-base:latest LABEL maintainer=\"Yorkson \" RUN apt-get update \u0026\u0026 apt-get install -y --no-install-recommends \\ sudo \\ libcurl4-gnutls-dev \\ libcairo2-dev \\ libxt-dev \\ libssl-dev \\ libssh2-1-dev \\ \u0026\u0026 rm -rf /var/lib/apt/lists/* RUN install.r shiny shinyBS dplyr stringr RUN addgroup --system app \\ \u0026\u0026 adduser --system --ingroup app app WORKDIR /home/app COPY app . RUN chown app:app -R /home/app USER app EXPOSE 3838 ENV PORT=3838 # 研究后发现，这里以获取PORT的方式，才能在 Railway 中部署 CMD [\"R\", \"-e\", \"shiny::runApp('/home/app', host = '0.0.0.0', port=as.numeric(Sys.getenv('PORT')))\"] railway up 参考资料 在Windows系统下，基于WLS从零开始部署我的 R shiny项目到 Docker 中，并将镜像发布到 Docker Hub（内附详细操作流程）_douerw的博客-CSDN博客\nDockerizing Shiny Applications\nDockerized Shiny Apps with Dependencies\n",
   "wordCount" : "245",
@@ -187,7 +187,7 @@ FROM rocker/r-base:latest LABEL maintainer=&#34;email &lt;example@mail.com&gt;&#
 
 <article class="post-single">
   <header class="post-header">
-    
+    <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
     <h1 class="post-title">
       Docker 打包 Shiny App
     </h1>
@@ -273,7 +273,7 @@ FROM rocker/r-base:latest LABEL maintainer=&#34;email &lt;example@mail.com&gt;&#
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://yorks0n.github.io/tags/note/">note</a></li>
+      <li><a href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/">折腾</a></li>
     </ul>
   </footer>
 </article>

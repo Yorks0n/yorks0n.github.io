@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>利用 n8n 打造飞书 RSS 推送机器人 | Yorksite</title>
+<meta name="keywords" content="折腾">
+<meta name="description" content="注：本文首发于少数派，您可以 前往此处 阅读修订后版本。
+前言 本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。
+文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。
+阅读本文可能需要一定 Linux 基础知识。
+n8n 是什么 n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。
+利用 Docker 安裝 n8n n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。
+这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 Installation guides for n8n。
+假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。
+# 创建数据储存文件夹 mkdir ~/n8n-data 复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开5678的 TCP 端口。
+# 利用Docker安装运行n8n docker run -d \ --name n8n --restart unless-stopped \ -p 5678:5678 \ -v ~/n8n-data:/home/node/.">
+<meta name="author" content="">
+<link rel="canonical" href="https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://yorks0n.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://yorks0n.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yorks0n.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://yorks0n.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://yorks0n.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="利用 n8n 打造飞书 RSS 推送机器人" />
+<meta property="og:description" content="注：本文首发于少数派，您可以 前往此处 阅读修订后版本。
+前言 本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。
+文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。
+阅读本文可能需要一定 Linux 基础知识。
+n8n 是什么 n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。
+利用 Docker 安裝 n8n n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。
+这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 Installation guides for n8n。
+假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。
+# 创建数据储存文件夹 mkdir ~/n8n-data 复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开5678的 TCP 端口。
+# 利用Docker安装运行n8n docker run -d \ --name n8n --restart unless-stopped \ -p 5678:5678 \ -v ~/n8n-data:/home/node/." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-25T18:19:19+08:00" />
+<meta property="article:modified_time" content="2022-05-25T18:19:19+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="利用 n8n 打造飞书 RSS 推送机器人"/>
+<meta name="twitter:description" content="注：本文首发于少数派，您可以 前往此处 阅读修订后版本。
+前言 本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。
+文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。
+阅读本文可能需要一定 Linux 基础知识。
+n8n 是什么 n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。
+利用 Docker 安裝 n8n n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。
+这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 Installation guides for n8n。
+假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。
+# 创建数据储存文件夹 mkdir ~/n8n-data 复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开5678的 TCP 端口。
+# 利用Docker安装运行n8n docker run -d \ --name n8n --restart unless-stopped \ -p 5678:5678 \ -v ~/n8n-data:/home/node/."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://yorks0n.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "利用 n8n 打造飞书 RSS 推送机器人",
+      "item": "https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "利用 n8n 打造飞书 RSS 推送机器人",
+  "name": "利用 n8n 打造飞书 RSS 推送机器人",
+  "description": "注：本文首发于少数派，您可以 前往此处 阅读修订后版本。\n前言 本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。\n文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。\n阅读本文可能需要一定 Linux 基础知识。\nn8n 是什么 n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。\n利用 Docker 安裝 n8n n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。\n这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 Installation guides for n8n。\n假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。\n# 创建数据储存文件夹 mkdir ~/n8n-data 复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开5678的 TCP 端口。\n# 利用Docker安装运行n8n docker run -d \\ --name n8n --restart unless-stopped \\ -p 5678:5678 \\ -v ~/n8n-data:/home/node/.",
+  "keywords": [
+    "折腾"
+  ],
+  "articleBody": "注：本文首发于少数派，您可以 前往此处 阅读修订后版本。\n前言 本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。\n文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。\n阅读本文可能需要一定 Linux 基础知识。\nn8n 是什么 n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。\n利用 Docker 安裝 n8n n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。\n这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 Installation guides for n8n。\n假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。\n# 创建数据储存文件夹 mkdir ~/n8n-data 复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开5678的 TCP 端口。\n# 利用Docker安装运行n8n docker run -d \\ --name n8n --restart unless-stopped \\ -p 5678:5678 \\ -v ~/n8n-data:/home/node/.n8n \\ -e GENERIC_TIMEZONE=\"Asia/Shanghai\" \\ n8nio/n8n 稍作等待，等 Docker 安装完成后，如果一切顺利，访问服务器ip地址:5678就能看到 n8n 的运行页面了，初次进入需要创建账号密码。\n点击右上角的 New blank workflow 即可开始创建，也可以从软件提供的 Workflow 示例中，选择自己想部署的自动化流程。\n这里以搭建一个 RSS 更新自动推送到飞书的机器人为例。\n搭建飞书 RSS 推送机器人 以下是我配置好的一个流程模板，复制以下内容粘贴到 n8n 新建 workflow 的页面。\n{ \"nodes\": [ { \"parameters\": { \"url\": \"https://sspai.com/feed\" }, \"name\": \"RSS Feed Read\", \"type\": \"n8n-nodes-base.rssFeedRead\", \"typeVersion\": 1, \"position\": [ 160.5, 440 ] }, { \"parameters\": { \"conditions\": { \"number\": [ { \"value1\": \"={{new Date($node[\\\"Latest Read\\\"].data[\\\"latestRead\\\"]).getTime()}}\", \"value2\": \"={{new Date($node[\\\"RSS Feed Read\\\"].data[\\\"isoDate\\\"]).getTime()}}\" } ], \"boolean\": [], \"string\": [ { \"value1\": \"={{$json[\\\"title\\\"]}}\", \"operation\": \"contains\" } ] } }, \"name\": \"IF\", \"type\": \"n8n-nodes-base.if\", \"typeVersion\": 1, \"position\": [ 560, 440 ] }, { \"parameters\": { \"functionCode\": \"const staticData = this.getWorkflowStaticData('global');\\n\\nif (items.length \u003e 0) {\\n staticData.latestRead = items[0].json.isoDate || staticData.latestRead;\\n}\\n\\n\\nreturn items;\" }, \"name\": \"Write Latest Read\", \"type\": \"n8n-nodes-base.function\", \"typeVersion\": 1, \"position\": [ 760, 340 ] }, { \"parameters\": {}, \"name\": \"NoOp\", \"type\": \"n8n-nodes-base.noOp\", \"typeVersion\": 1, \"position\": [ 750, 580 ] }, { \"parameters\": { \"triggerTimes\": { \"item\": [ { \"mode\": \"everyX\", \"value\": 1 } ] } }, \"name\": \"Cron\", \"type\": \"n8n-nodes-base.cron\", \"typeVersion\": 1, \"position\": [ -40, 440 ] }, { \"parameters\": { \"requestMethod\": \"POST\", \"options\": { \"batchInterval\": 3000, \"batchSize\": 1 }, \"bodyParametersUi\": { \"parameter\": [ { \"name\": \"msg_type\", \"value\": \"interactive\" }, { \"name\": \"card\", \"value\": \"={\\n \\\"config\\\": {\\n \\\"wide_screen_mode\\\": true\\n },\\n \\\"header\\\": {\\n \\\"template\\\": \\\"black\\\",\\n \\\"title\\\": {\\n \\\"content\\\": \\\"{{$json[\\\"title\\\"]}}\\\",\\n \\\"tag\\\": \\\"plain_text\\\"\\n }\\n },\\n \\\"elements\\\": [\\n {\\n \\\"tag\\\": \\\"div\\\",\\n \\\"text\\\": {\\n \\\"content\\\": \\\"{{$json[\\\"contentSnippet\\\"]}}\\\",\\n \\\"tag\\\": \\\"lark_md\\\"\\n }\\n },\\n {\\n \\\"tag\\\": \\\"hr\\\"\\n },\\n {\\n \\\"elements\\\": [\\n {\\n \\\"content\\\": \\\"[阅读原文]({{$json[\\\"link\\\"]}})\\\",\\n \\\"tag\\\": \\\"lark_md\\\"\\n }\\n ],\\n \\\"tag\\\": \\\"note\\\"\\n }\\n ]\\n}\" } ] }, \"headerParametersUi\": { \"parameter\": [ { \"name\": \"Content-Type\", \"value\": \"application/json\" } ] } }, \"name\": \"HTTP Request\", \"type\": \"n8n-nodes-base.httpRequest\", \"typeVersion\": 1, \"position\": [ 1000, 340 ] }, { \"parameters\": { \"functionCode\": \"const staticData = this.getWorkflowStaticData('global');\\n\\nlatestRead = staticData.latestRead;\\n\\nfor (let item of items) {\\n item.json.latestRead = latestRead || '2022-05-05';\\n //item.json[\\\"content:encodedSnippet\\\"] = item.json[\\\"content:encodedSnippet\\\"].replace(/[\\\\r\\\\n]/g,\\\"\\\\\\\\n\\\");\\n}\\n\\nreturn items;\" }, \"name\": \"Latest Read\", \"type\": \"n8n-nodes-base.function\", \"typeVersion\": 1, \"position\": [ 360, 440 ] } ], \"connections\": { \"RSS Feed Read\": { \"main\": [ [ { \"node\": \"Latest Read\", \"type\": \"main\", \"index\": 0 } ] ] }, \"IF\": { \"main\": [ [ { \"node\": \"Write Latest Read\", \"type\": \"main\", \"index\": 0 } ], [ { \"node\": \"NoOp\", \"type\": \"main\", \"index\": 0 } ] ] }, \"Write Latest Read\": { \"main\": [ [ { \"node\": \"HTTP Request\", \"type\": \"main\", \"index\": 0 } ] ] }, \"Cron\": { \"main\": [ [ { \"node\": \"RSS Feed Read\", \"type\": \"main\", \"index\": 0 } ] ] }, \"Latest Read\": { \"main\": [ [ { \"node\": \"IF\", \"type\": \"main\", \"index\": 0 } ] ] } } } 粘贴后可以看到如下的界面：\n这里有几处可以配置，第一处是 Cron，设置自动化流程触发的频率，每隔 X 时间间隔运行一次，图中设置为每隔一小时运行。在获取 RSS 时，运行频率不宜过高。如果访问过于频繁，一方面会给对方服务器造成较大负担，同时可能被服务器禁止访问。\n第二个是在 RSS Feed Read 处，填写想订阅的 RSS 地址，这里以少数派 RSS 为例，填写完后点击Excute node，先运行一次获取数据，方便后续设置。\n第三处（可选）IF 处，设置是否需要针对标题或内容等进行过滤，默认不过滤。\n这时先转到飞书，在飞书桌面端，打开一个群（建议先创建一个单人的群进行调试），打开设置，找到群机器人，并点击添加机器人，选择自定义机器人加入群聊，详细操作可以参照 飞书自定义机器人指南。\n最后在 HTTP Request 处填入飞书机器人 webhook 地址。\n填写完成后 Excute node 尝试运行，一切顺利的话就能在飞书中看到推送来的RSS消息了。\n这里使用了卡片的形式展示消息，若是想调整消息展示样式，可以参考少数派文章 手把手教你用飞书 Webhook 打造一个消息推送 Bot。\n一图流配置\n消息机器人安全设置 由于采用 Webhook 的形式，请务必保管好 Webhook 链接，如果泄露可能会导致被推送垃圾信息。为了进一步加道保险，飞书提供了三种安全设置方式，分别是自定义关键词、IP 白名单和签名校验。\n前两种方式非常好理解，也都很好设置。自定义关键词是只有当消息中至少含有一个预设的关键词时，才会进行消息推送；IP 白名单则是只推送名单中来源的 IP 所发送的请求。但是这两种方式也有一定的局限性：\n关键词有时使消息不够简洁 部署在本地树莓派等设备上时，IP 地址不固定，无法指定 关键词和 IP 白名单各自最多只能添加十个条目 因此这里详细介绍一下在 n8n 中进行签名校验的配置方式。\n飞书的签名需要将「timestamp + “\\n” + 密钥」组合起来当作签名密钥，采用 Hmac SHA256 算法计算签名，再进行 Base64 编码。在发送消息请求时，需要增加对应的timestamp和sign 字段。\n// 开启签名验证后发送文本消息的请求示例 { \"timestamp\": \"1599360473\", \"sign\": \"xxxxxxxxxxxxxxxxxxxxx\", \"msg_type\": \"text\", \"content\": { \"text\": \"The message content is here\" } } 在 n8n 中，可以使用 Crypto 模块利用密钥生成签名，复制以下代码粘贴到配置界面，可以得到生成飞书签名用的模块组合。\n{ \"nodes\": [ { \"parameters\": { \"action\": \"hmac\", \"type\": \"SHA256\", \"value\": \"={{''}}\", \"dataPropertyName\": \"sign\", \"secret\": \"={{$json[\\\"timestamp\\\"]+'\\\\n'+$json[\\\"secret\\\"]}}\", \"encoding\": \"base64\" }, \"name\": \"Crypto\", \"type\": \"n8n-nodes-base.crypto\", \"typeVersion\": 1, \"position\": [ -80, 440 ] }, { \"parameters\": { \"values\": { \"string\": [ { \"name\": \"timestamp\", \"value\": \"={{Math.round(new Date().getTime()/1000)}}\" }, { \"name\": \"secret\" } ] }, \"options\": {} }, \"name\": \"Set\", \"type\": \"n8n-nodes-base.set\", \"typeVersion\": 1, \"position\": [ -280, 440 ] } ], \"connections\": { \"Set\": { \"main\": [ [ { \"node\": \"Crypto\", \"type\": \"main\", \"index\": 0 } ] ] } } } 将上面新增的两个模块按下图方式进行拖拽连接：\n从飞书机器人设置界面中，勾选签名校验得到密钥，填写在 Set 模块中。\n接下来将 Latest Read 模块中的代码替换为以下内容，储存计算出的签名，方便在请求的时候调用。\n// JS code in the Latest Read Module const staticData = this.getWorkflowStaticData('global'); latestRead = staticData.latestRead; for (let item of items) { item.json.latestRead = latestRead || '2022-05-05'; item.json.timestamp = $item(\"0\").$node[\"Crypto\"].json[\"timestamp\"]; item.json.sign = $item(\"0\").$node[\"Crypto\"].json[\"sign\"]; } return items; 最后在 HTTP Request 模块中增加校验用的字段：Body Parameters - Add Parameter，添加两个参数，Name 分别为 timestamp 和 sign，Value 处点击右侧 Add Expression，再分别点击选择传入的两个对应字段的值。\n这样一番倒腾，给飞书机器人模块增加了签名校验，使得信息推送更加安全。当一切配置妥当后，别忘了点击界面右上角的激活，让工作流开始自动运行。\n配置密钥验证一图流\n后记 本文介绍了如何用 n8n 打造一个飞书 RSS 推送机器人。订阅什么样的 RSS 来源，可以是网站自身提供的 RSS 地址，也可以利用 RSShub 将各种奇怪的网站转化为 RSS，甚至是利用 kill-the-newsletter 将任意 Newsletter 邮件转化为 RSS 进行追踪。\n同时，实现类似工作流的手段还有很多。对于 n8n 这部分，可以使用 IFTTT、Integrately，或是 Github Action 等，实现工作流中「监控 RSS 更新并发送 Webhook 请求」这部分；对于接收提醒，文中利用了飞书作为展示消息的界面，而 n8n 也支持连接到 Telegram、Slack 等通讯软件，或是通过 Send Email 模块实现邮件通知，以及发送到 Cubox、flomo 等各种支持 Webhook 的工具中。\n更多功能，更多组合，尽请探索，把闲置的云服务器或是积灰的树莓派等折腾起来吧。\n",
+  "wordCount" : "771",
+  "inLanguage": "zh",
+  "datePublished": "2022-05-25T18:19:19+08:00",
+  "dateModified": "2022-05-25T18:19:19+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yorksite",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yorks0n.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://yorks0n.github.io/" accesskey="h" title="Yorksite (Alt + H)">Yorksite</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://yorks0n.github.io/archives/" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yorks0n.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yorks0n.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      利用 n8n 打造飞书 RSS 推送机器人
+    </h1>
+    <div class="post-meta"><span title='2022-05-25 18:19:19 +0800 +0800'>五月 25, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>注：本文首发于少数派，您可以 <a href="https://sspai.com/post/73255">前往此处</a> 阅读修订后版本。</p>
+<h2 id="前言">前言<a hidden class="anchor" aria-hidden="true" href="#前言">#</a></h2>
+<p>本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。</p>
+<p>文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。</p>
+<p>阅读本文可能需要一定 Linux 基础知识。</p>
+<h2 id="n8n-是什么">n8n 是什么<a hidden class="anchor" aria-hidden="true" href="#n8n-是什么">#</a></h2>
+<p>n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。</p>
+<h2 id="利用-docker-安裝-n8n">利用 Docker 安裝 n8n<a hidden class="anchor" aria-hidden="true" href="#利用-docker-安裝-n8n">#</a></h2>
+<p>n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。</p>
+<p>这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 <a href="https://docs.n8n.io/hosting/installation/">Installation guides for n8n</a>。</p>
+<p>假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建数据储存文件夹</span>
+</span></span><span style="display:flex;"><span>mkdir ~/n8n-data
+</span></span></code></pre></div><p>复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开<code>5678</code>的 TCP 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 利用Docker安装运行n8n</span>
+</span></span><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--name n8n --restart unless-stopped <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-p 5678:5678 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-v ~/n8n-data:/home/node/.n8n <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-e GENERIC_TIMEZONE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>n8nio/n8n 
+</span></span></code></pre></div><p>稍作等待，等 Docker 安装完成后，如果一切顺利，访问<code>服务器ip地址:5678</code>就能看到 n8n 的运行页面了，初次进入需要创建账号密码。</p>
+<p><img loading="lazy" src="/post-images/Untitled.png" alt="Untitled"  />
+</p>
+<p>点击右上角的 New blank workflow 即可开始创建，也可以从软件提供的 Workflow 示例中，选择自己想部署的自动化流程。</p>
+<p>这里以搭建一个 RSS 更新自动推送到飞书的机器人为例。</p>
+<h2 id="搭建飞书-rss-推送机器人">搭建飞书 RSS 推送机器人<a hidden class="anchor" aria-hidden="true" href="#搭建飞书-rss-推送机器人">#</a></h2>
+<p>以下是我配置好的一个流程模板，复制以下内容粘贴到 n8n 新建 workflow 的页面。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;url&#34;</span>: <span style="color:#e6db74">&#34;https://sspai.com/feed&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;RSS Feed Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.rssFeedRead&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">160.5</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;conditions&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;number&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value1&#34;</span>: <span style="color:#e6db74">&#34;={{new Date($node[\&#34;Latest Read\&#34;].data[\&#34;latestRead\&#34;]).getTime()}}&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value2&#34;</span>: <span style="color:#e6db74">&#34;={{new Date($node[\&#34;RSS Feed Read\&#34;].data[\&#34;isoDate\&#34;]).getTime()}}&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ],
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;boolean&#34;</span>: [],
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;string&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value1&#34;</span>: <span style="color:#e6db74">&#34;={{$json[\&#34;title\&#34;]}}&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;operation&#34;</span>: <span style="color:#e6db74">&#34;contains&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;IF&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.if&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">560</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;functionCode&#34;</span>: <span style="color:#e6db74">&#34;const staticData = this.getWorkflowStaticData(&#39;global&#39;);\n\nif (items.length &gt; 0) {\n  staticData.latestRead = items[0].json.isoDate || staticData.latestRead;\n}\n\n\nreturn items;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Write Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.function&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">760</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {},
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;NoOp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.noOp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">750</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">580</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;triggerTimes&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;item&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;mode&#34;</span>: <span style="color:#e6db74">&#34;everyX&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Cron&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.cron&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-40</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;requestMethod&#34;</span>: <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;options&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;batchInterval&#34;</span>: <span style="color:#ae81ff">3000</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;batchSize&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;bodyParametersUi&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;parameter&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;msg_type&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;interactive&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;card&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={\n  \&#34;config\&#34;: {\n    \&#34;wide_screen_mode\&#34;: true\n  },\n  \&#34;header\&#34;: {\n    \&#34;template\&#34;: \&#34;black\&#34;,\n    \&#34;title\&#34;: {\n      \&#34;content\&#34;: \&#34;{{$json[\&#34;title\&#34;]}}\&#34;,\n      \&#34;tag\&#34;: \&#34;plain_text\&#34;\n    }\n  },\n  \&#34;elements\&#34;: [\n    {\n      \&#34;tag\&#34;: \&#34;div\&#34;,\n      \&#34;text\&#34;: {\n        \&#34;content\&#34;: \&#34;{{$json[\&#34;contentSnippet\&#34;]}}\&#34;,\n        \&#34;tag\&#34;: \&#34;lark_md\&#34;\n      }\n    },\n    {\n      \&#34;tag\&#34;: \&#34;hr\&#34;\n    },\n    {\n      \&#34;elements\&#34;: [\n        {\n          \&#34;content\&#34;: \&#34;[阅读原文]({{$json[\&#34;link\&#34;]}})\&#34;,\n          \&#34;tag\&#34;: \&#34;lark_md\&#34;\n        }\n      ],\n      \&#34;tag\&#34;: \&#34;note\&#34;\n    }\n  ]\n}&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;headerParametersUi&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;parameter&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Content-Type&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;application/json&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;HTTP Request&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.httpRequest&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1000</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;functionCode&#34;</span>: <span style="color:#e6db74">&#34;const staticData = this.getWorkflowStaticData(&#39;global&#39;);\n\nlatestRead = staticData.latestRead;\n\nfor (let item of items) {\n  item.json.latestRead = latestRead || &#39;2022-05-05&#39;;\n  //item.json[\&#34;content:encodedSnippet\&#34;] = item.json[\&#34;content:encodedSnippet\&#34;].replace(/[\\r\\n]/g,\&#34;\\\\n\&#34;);\n}\n\nreturn items;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.function&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">360</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;connections&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;RSS Feed Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;IF&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Write Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;NoOp&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Write Latest Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;HTTP Request&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Cron&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;RSS Feed Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Latest Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;IF&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>粘贴后可以看到如下的界面：</p>
+<p><img loading="lazy" src="/post-images/Untitled%201.png" alt="Untitled"  />
+</p>
+<p>这里有几处可以配置，第一处是 <strong>Cron</strong>，设置自动化流程触发的频率，每隔 X 时间间隔运行一次，图中设置为每隔一小时运行。在获取 RSS 时，运行频率不宜过高。如果访问过于频繁，一方面会给对方服务器造成较大负担，同时可能被服务器禁止访问。</p>
+<p><img loading="lazy" src="/post-images/Untitled%202.png" alt="Untitled"  />
+</p>
+<p>第二个是在 <strong>RSS Feed Read</strong> 处，填写想订阅的 RSS 地址，这里以少数派 RSS 为例，填写完后点击Excute node，先运行一次获取数据，方便后续设置。</p>
+<p><img loading="lazy" src="/post-images/Untitled%203.png" alt="Untitled"  />
+</p>
+<p>第三处（可选）<strong>IF</strong> 处，设置是否需要针对标题或内容等进行过滤，默认不过滤。</p>
+<p><img loading="lazy" src="/post-images/Untitled%204.png" alt="Untitled"  />
+</p>
+<p>这时先转到飞书，在<strong>飞书桌面端</strong>，打开一个群（建议先创建一个单人的群进行调试），打开<strong>设置</strong>，找到<strong>群机器人</strong>，并点击<strong>添加机器人</strong>，选择自定义机器人加入群聊，详细操作可以参照 <a href="https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN?lang=zh-CN">飞书自定义机器人指南</a>。</p>
+<p><img loading="lazy" src="/post-images/Untitled%205.png" alt="Untitled"  />
+</p>
+<p>最后在 <strong>HTTP Request</strong> 处填入飞书机器人 webhook 地址。</p>
+<p><img loading="lazy" src="/post-images/Untitled%206.png" alt="Untitled"  />
+</p>
+<p>填写完成后 Excute node 尝试运行，一切顺利的话就能在飞书中看到推送来的RSS消息了。</p>
+<p><img loading="lazy" src="/post-images/Untitled.jpeg" alt="Untitled"  />
+</p>
+<p>这里使用了卡片的形式展示消息，若是想调整消息展示样式，可以参考少数派文章 <a href="https://sspai.com/post/68578">手把手教你用飞书 Webhook 打造一个消息推送 Bot</a>。</p>
+<p><img loading="lazy" src="/post-images/Untitled%207.png" alt="一图流配置"  />
+</p>
+<p>一图流配置</p>
+<h2 id="消息机器人安全设置">消息机器人安全设置<a hidden class="anchor" aria-hidden="true" href="#消息机器人安全设置">#</a></h2>
+<p>由于采用 Webhook 的形式，请务必保管好 Webhook 链接，如果泄露可能会导致被推送垃圾信息。为了进一步加道保险，飞书提供了三种安全设置方式，分别是自定义关键词、IP 白名单和签名校验。</p>
+<p>前两种方式非常好理解，也都很好设置。自定义关键词是只有当消息中至少含有一个预设的关键词时，才会进行消息推送；IP 白名单则是只推送名单中来源的 IP 所发送的请求。但是这两种方式也有一定的局限性：</p>
+<ul>
+<li>关键词有时使消息不够简洁</li>
+<li>部署在本地树莓派等设备上时，IP 地址不固定，无法指定</li>
+<li>关键词和 IP 白名单各自最多只能添加十个条目</li>
+</ul>
+<p>因此这里详细介绍一下在 n8n 中进行签名校验的配置方式。</p>
+<p>飞书的签名需要将「timestamp + &ldquo;\n&rdquo; + 密钥」组合起来当作签名密钥，采用 Hmac SHA256 算法计算签名，再进行 Base64 编码。在发送消息请求时，需要增加对应的<code>timestamp</code>和<code>sign</code> 字段。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// 开启签名验证后发送文本消息的请求示例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#e6db74">&#34;1599360473&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;sign&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxxxxxxxxxxxxxxx&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;msg_type&#34;</span>: <span style="color:#e6db74">&#34;text&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;content&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;text&#34;</span>: <span style="color:#e6db74">&#34;The message content is here&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 n8n 中，可以使用 <strong>Crypto</strong> 模块利用密钥生成签名，复制以下代码粘贴到配置界面，可以得到生成飞书签名用的模块组合。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;hmac&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;SHA256&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={{&#39;&#39;}}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;dataPropertyName&#34;</span>: <span style="color:#e6db74">&#34;sign&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;secret&#34;</span>: <span style="color:#e6db74">&#34;={{$json[\&#34;timestamp\&#34;]+&#39;\\n&#39;+$json[\&#34;secret\&#34;]}}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;base64&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-80</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;values&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;string&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;timestamp&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={{Math.round(new Date().getTime()/1000)}}&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;options&#34;</span>: {}
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Set&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.set&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-280</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;connections&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Set&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>将上面新增的两个模块按下图方式进行拖拽连接：</p>
+<p><img loading="lazy" src="/post-images/Untitled%208.png" alt="Untitled"  />
+</p>
+<p>从飞书机器人设置界面中，勾选<strong>签名校验</strong>得到密钥，填写在 <strong>Set</strong> 模块中。</p>
+<p><img loading="lazy" src="/post-images/Untitled%209.png" alt="Untitled"  />
+</p>
+<p>接下来将 <strong>Latest Read</strong> 模块中的代码替换为以下内容，储存计算出的签名，方便在请求的时候调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// JS code in the Latest Read Module
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">const</span> <span style="color:#960050;background-color:#1e0010">staticData</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">this.getWorkflowStaticData(&#39;global&#39;);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">latestRead</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">staticData.latestRead;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">for</span> <span style="color:#960050;background-color:#1e0010">(let</span> <span style="color:#960050;background-color:#1e0010">item</span> <span style="color:#960050;background-color:#1e0010">of</span> <span style="color:#960050;background-color:#1e0010">items)</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.latestRead</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">latestRead</span> <span style="color:#960050;background-color:#1e0010">||</span> <span style="color:#960050;background-color:#1e0010">&#39;2022-05-05&#39;;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.timestamp</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">$item(</span><span style="color:#f92672">&#34;0&#34;</span><span style="color:#960050;background-color:#1e0010">).$node</span>[<span style="color:#e6db74">&#34;Crypto&#34;</span>]<span style="color:#960050;background-color:#1e0010">.json</span>[<span style="color:#e6db74">&#34;timestamp&#34;</span>]<span style="color:#960050;background-color:#1e0010">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.sign</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">$item(</span><span style="color:#e6db74">&#34;0&#34;</span><span style="color:#960050;background-color:#1e0010">).$node</span>[<span style="color:#e6db74">&#34;Crypto&#34;</span>]<span style="color:#960050;background-color:#1e0010">.json</span>[<span style="color:#e6db74">&#34;sign&#34;</span>]<span style="color:#960050;background-color:#1e0010">;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">return</span> <span style="color:#960050;background-color:#1e0010">items;</span>
+</span></span></code></pre></div><p>最后在 <strong>HTTP Request</strong> 模块中增加校验用的字段：Body Parameters - Add Parameter，添加两个参数，Name 分别为 <code>timestamp</code> 和 <code>sign</code>，Value 处点击右侧 Add Expression，再分别点击选择传入的两个对应字段的值。</p>
+<p><img loading="lazy" src="/post-images/Untitled%2010.png" alt="Untitled"  />
+</p>
+<p>这样一番倒腾，给飞书机器人模块增加了签名校验，使得信息推送更加安全。当一切配置妥当后，别忘了点击界面右上角的激活，让工作流开始自动运行。</p>
+<p><img loading="lazy" src="/post-images/Untitled%2011.png" alt="配置密钥验证一图流"  />
+</p>
+<p>配置密钥验证一图流</p>
+<h2 id="后记">后记<a hidden class="anchor" aria-hidden="true" href="#后记">#</a></h2>
+<p>本文介绍了如何用 n8n 打造一个飞书 RSS 推送机器人。订阅什么样的 RSS 来源，可以是网站自身提供的 RSS 地址，也可以利用 RSShub 将各种奇怪的网站转化为 RSS，甚至是利用 kill-the-newsletter 将任意 Newsletter 邮件转化为 RSS 进行追踪。</p>
+<p>同时，实现类似工作流的手段还有很多。对于 n8n 这部分，可以使用 IFTTT、Integrately，或是 Github Action 等，实现工作流中「监控 RSS 更新并发送 Webhook 请求」这部分；对于接收提醒，文中利用了飞书作为展示消息的界面，而 n8n 也支持连接到 Telegram、Slack 等通讯软件，或是通过 Send Email 模块实现邮件通知，以及发送到 Cubox、flomo 等各种支持 Webhook 的工具中。</p>
+<p>更多功能，更多组合，尽请探索，把闲置的云服务器或是积灰的树莓派等折腾起来吧。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/">折腾</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://yorks0n.github.io/">Yorksite</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

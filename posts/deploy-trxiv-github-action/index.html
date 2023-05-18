@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>部署预印本追踪 TRxiv 到 Github Action | Yorksite</title>
-<meta name="keywords" content="note">
+<meta name="keywords" content="折腾">
 <meta name="description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
 新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
 git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
@@ -123,7 +123,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
   "name": "部署预印本追踪 TRxiv 到 Github Action",
   "description": "将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。\n新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。\ngit clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境\n# action.yml name: \u0026#39;trxiv\u0026#39; description: \u0026#39;Tracking popular bioRxiv and medRxiv preprints\u0026#39; runs: using: \u0026#39;node16\u0026#39; main: \u0026#39;dist/index.js\u0026#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。\n# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules\nhttps://www.toptal.com/developers/gitignore\n文件推送到远程仓库 然后push到远程仓库\ngit add . git commit -m \u0026#34;Initialize\u0026#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc\nnpm install @vercel/ncc 然后对index.js 进行打包\nncc build index.js -o dist 打包产物会存放于dist/index.",
   "keywords": [
-    "note"
+    "折腾"
   ],
   "articleBody": "将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。\n新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。\ngit clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境\n# action.yml name: 'trxiv' description: 'Tracking popular bioRxiv and medRxiv preprints' runs: using: 'node16' main: 'dist/index.js' 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。\n# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules\nhttps://www.toptal.com/developers/gitignore\n文件推送到远程仓库 然后push到远程仓库\ngit add . git commit -m \"Initialize\" git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc\nnpm install @vercel/ncc 然后对index.js 进行打包\nncc build index.js -o dist 打包产物会存放于dist/index.js\n创建工作流 在本地创建.github/workflows/main.yml，这个文件实际确定了 Github Action 的行为，此yml格式文件一定要注意正确的缩进。\n配置文件内容：\n# main.yml ## 动作的名称 name: 'TRxiv update' # 触发条件 ## 条件1，代码push进仓库 ## 条件2，定时任务，在UTC 10和22点，即北京时间18点和6点运行 on: push: schedule: - cron: '0 10,22 * * *' # jobs 定义了要执行的一系列任务 jobs: ## 这个job的名称 TRxiv_update_job: ## runs-on 内置运行任务的server类型 runs-on: ubuntu-latest name: Update the csv file steps: ## 必须有这一步，让运行的文件夹成为一个git repo - uses: actions/checkout@v3 ## 运行脚本，指向我们的repo - name: 'run script' uses: Yorks0n/TRxiv@main ## 运行完后，把运行产生在本地的data.csv更新回仓库中 - name: Commit files run: | git config --local user.email \"github email adress\" git config --local user.name \"github user name\" git pull git add README.md git add data.csv git commit -m \"update data.csv\" shell: bash ## 使用秘钥确认具有上传权限，同时以秘钥方式提交不会触发push action，避免陷入loop - name: Push changes uses: ad-m/github-push-action@master with: github_token: ${{ secrets.MY_GIT_TOKEN }} branch: main 再次将文件推送到远程仓库 git add . git commit -m \"Update Workflow\" git push 后续更新 每次想更新修改前，先在目录中把最新版的环境拉下来\ngit pull 修改过脚本后，要重新打包用到的代码：ncc build index.js --license licenses.txt\n然后再提交回仓库\n参考 How to Build Your First JavaScript GitHub Action\n如何使用 Github Actions 自动抓取每日必应壁纸?\nPermission denied to github-actions[bot]\nCreating a JavaScript action - GitHub Docs\n",
   "wordCount" : "232",
@@ -208,7 +208,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
 
 <article class="post-single">
   <header class="post-header">
-    
+    <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
     <h1 class="post-title">
       部署预印本追踪 TRxiv 到 Github Action
     </h1>
@@ -313,7 +313,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://yorks0n.github.io/tags/note/">note</a></li>
+      <li><a href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/">折腾</a></li>
     </ul>
   </footer>
 </article>
