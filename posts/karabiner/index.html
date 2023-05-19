@@ -182,7 +182,7 @@
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -329,6 +329,49 @@
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#将-caps-lock-变为键盘功能的中枢">将 Caps Lock 变为键盘功能的中枢</a></li>
+    <li><a href="#结合-keyboard-maestro-实现快速搜索">结合 Keyboard Maestro 实现快速搜索</a></li>
+    <li><a href="#hyper--字母实现程序快速切换">Hyper + 字母实现程序快速切换</a></li>
+    <li><a href="#进阶让每个键都能成为修饰键">进阶，让每个键都能成为修饰键</a></li>
+    <li><a href="#结语">结语</a></li>
+    <li><a href="#相关文章">相关文章</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">

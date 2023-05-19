@@ -182,7 +182,7 @@
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -289,6 +289,67 @@
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#从原始计数矩阵到高质量单细胞数据">从原始计数矩阵到高质量单细胞数据</a>
+      <ul>
+        <li><a href="#滤低质量细胞和噪声校正-filtering-low-quality-cells-and-noise-correction">滤低质量细胞和噪声校正 Filtering low-quality cells and noise correction</a></li>
+        <li><a href="#归一化和方差稳定化-normalization-and-variance-stabilization">归一化和方差稳定化 Normalization and variance stabilization</a></li>
+        <li><a href="#消除混杂的变异来源-removing-confounding-sources-of-variation">消除混杂的变异来源 Removing confounding sources of variation</a></li>
+        <li><a href="#选择信息特征和降维-selecting-informative-features-and-reducing-dimensionality">选择信息特征和降维 Selecting informative features and reducing dimensionality</a></li>
+      </ul>
+    </li>
+    <li><a href="#为细胞集群确定亚群身份-from-clusters-to-cell-identities">为细胞集群确定亚群身份 From clusters to cell identities</a>
+      <ul>
+        <li><a href="#从单个细胞到集群-from-single-cells-to-clusters">从单个细胞到集群 From single cells to clusters</a></li>
+        <li><a href="#为细胞集群确定细胞身份-mapping-cell-clusters-to-cell-identities">为细胞集群确定细胞身份 Mapping cell clusters to cell identities</a></li>
+        <li><a href="#伪时间分析从离散状态到连续过程-from-discrete-states-to-continuous-processes">伪时间分析——从离散状态到连续过程 From discrete states to continuous processes</a></li>
+      </ul>
+    </li>
+    <li><a href="#揭示机制-revealing-mechanisms">揭示机制 Revealing mechanisms</a>
+      <ul>
+        <li><a href="#差异基因表达分析-differential-gene-expression-analysis">差异基因表达分析 Differential gene expression analysis</a></li>
+        <li><a href="#基因集富集分析-gene-set-enrichment-analysis">基因集富集分析 Gene set enrichment analysis</a></li>
+        <li><a href="#检测细胞组成的变化-deciphering-changes-in-cell-composition">检测细胞组成的变化 Deciphering changes in cell composition</a></li>
+        <li><a href="#推断扰动效应-inferring-perturbation-effects">推断扰动效应 Inferring perturbation effects</a></li>
+        <li><a href="#细胞通讯分析-communication-events-across-cells">细胞通讯分析 Communication events across cells</a></li>
+      </ul>
+    </li>
+    <li><a href="#原文">原文</a></li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">

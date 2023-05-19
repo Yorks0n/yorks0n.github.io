@@ -182,7 +182,7 @@
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -325,6 +325,65 @@
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#科研论文绘图的特点">科研论文绘图的特点</a></li>
+        <li><a href="#本文包含什么">本文包含什么</a></li>
+        <li><a href="#本文不包含什么">本文不包含什么</a></li>
+      </ul>
+    </li>
+    <li><a href="#创建画布">创建画布</a>
+      <ul>
+        <li><a href="#图片格式">图片格式</a></li>
+        <li><a href="#画布尺寸">画布尺寸</a></li>
+        <li><a href="#颜色模式">颜色模式</a></li>
+      </ul>
+    </li>
+    <li><a href="#字体">字体</a></li>
+    <li><a href="#颜色">颜色</a></li>
+    <li><a href="#分辨率">分辨率</a></li>
+    <li><a href="#图片布局">图片布局</a></li>
+    <li><a href="#额外注意事项">额外注意事项</a>
+      <ul>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">

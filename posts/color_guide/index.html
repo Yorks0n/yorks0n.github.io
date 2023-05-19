@@ -182,7 +182,7 @@
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -410,6 +410,72 @@
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#色彩模型">色彩模型</a>
+      <ul>
+        <li><a href="#人眼的色彩感知">人眼的色彩感知</a></li>
+        <li><a href="#rgb-模型">RGB 模型</a></li>
+        <li><a href="#hsbhsv">HSB/HSV</a></li>
+        <li><a href="#为什么要有不同的色彩模型">为什么要有不同的色彩模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#根据数据类型选择颜色">根据数据类型选择颜色</a>
+      <ul>
+        <li><a href="#类别色阶categorical-color-scales">类别色阶（<strong>Categorical color scales</strong>）</a></li>
+        <li><a href="#单向色阶sequential-color-scales">单向色阶（<strong>Sequential color scales）</strong></a></li>
+        <li><a href="#双向色阶diverging-color-scales">双向色阶（<strong>Diverging color scales</strong>）</a></li>
+      </ul>
+    </li>
+    <li><a href="#从色彩集中选择颜色">从色彩集中选择颜色</a>
+      <ul>
+        <li><a href="#data-viz-color-picker">Data Viz Color Picker</a></li>
+        <li><a href="#colorpicker-for-data"><strong><strong>Colorpicker for data</strong></strong></a></li>
+        <li><a href="#cartocolors"><strong>CARTOColors</strong></a></li>
+      </ul>
+    </li>
+    <li><a href="#注意事项">注意事项</a>
+      <ul>
+        <li><a href="#色觉异常">色觉异常</a></li>
+        <li><a href="#less-is-more">Less is more</a></li>
+        <li><a href="#更好地分配颜色">更好地分配颜色</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">

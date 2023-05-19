@@ -182,7 +182,7 @@
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -230,6 +230,56 @@
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what">What</a></li>
+    <li><a href="#how-to">How-to</a></li>
+    <li><a href="#why-and-why">Why and why</a>
+      <ul>
+        <li><a href="#为什么要做这个">为什么要做这个</a></li>
+        <li><a href="#为什么不用文件夹">为什么不用文件夹</a></li>
+        <li><a href="#为什么使用-raindropiohttpraindropio">为什么使用 <a href="http://Raindrop.io">Raindrop.io</a></a></li>
+      </ul>
+    </li>
+    <li><a href="#后续计划">后续计划</a>
+      <ul>
+        <li><a href="#如何更新">如何更新</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">

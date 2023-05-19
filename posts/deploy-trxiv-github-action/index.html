@@ -209,7 +209,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -321,6 +321,51 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#新建github仓库">新建Github仓库</a></li>
+    <li><a href="#创建一个动作元数据文件">创建一个动作元数据文件</a></li>
+    <li><a href="#准备运行的代码">准备运行的代码</a></li>
+    <li><a href="#文件推送到远程仓库">文件推送到远程仓库</a></li>
+    <li><a href="#打包软件">打包软件</a></li>
+    <li><a href="#创建工作流">创建工作流</a></li>
+    <li><a href="#再次将文件推送到远程仓库">再次将文件推送到远程仓库</a></li>
+    <li><a href="#后续更新">后续更新</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">

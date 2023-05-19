@@ -239,7 +239,7 @@
     </nav>
 </header>
 <main class="main">
-
+<div class="grid-layout">
 <article class="post-single">
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
@@ -302,6 +302,57 @@
     </ul>
   </footer>
 </article>
+
+<aside class="tableOfContentContainer">
+  
+  <h3>目录</h3>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#好工具低生产力">好工具，低生产力</a></li>
+    <li><a href="#对低效率的恐惧使效率成为目标">对低效率的恐惧使效率成为目标</a></li>
+    <li><a href="#将效率作为目标会引起哪些问题">将效率作为目标会引起哪些问题</a></li>
+    <li><a href="#如何缓解低效率恐惧">如何缓解低效率恐惧</a>
+      <ul>
+        <li><a href="#确定自己关注的主题和领域">确定自己关注的主题和领域</a></li>
+        <li><a href="#反思对效率工具的使用识别真正的限制因素">反思对效率工具的使用，识别真正的限制因素</a></li>
+        <li><a href="#停止盲目收集调整信息来源">停止盲目收集，调整信息来源</a></li>
+        <li><a href="#重器轻用建立适合自己的工作流">重器轻用，建立适合自己的工作流</a></li>
+        <li><a href="#专注于我们关注的内容本身">专注于我们关注的内容本身</a></li>
+        <li><a href="#刻意花一些时间远离网络">刻意花一些时间远离网络</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+</aside>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">
