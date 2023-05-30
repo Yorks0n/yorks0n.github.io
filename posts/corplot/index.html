@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>相关性绘图 | Yorksite</title>
+<meta name="keywords" content="可视化">
+<meta name="description" content="演示如何复现一张相关性图">
+<meta name="author" content="Yorkson">
+<link rel="canonical" href="https://yorks0n.github.io/posts/corplot/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.067f6e9fffef60aa84e1c1d5f50fcfb9cbab372c5c24c714ce694a3fd90635dc.css" integrity="sha256-Bn9un//vYKqE4cHV9Q/PucurNyxcJMcUzmlKP9kGNdw=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://yorks0n.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://yorks0n.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yorks0n.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://yorks0n.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://yorks0n.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="相关性绘图" />
+<meta property="og:description" content="演示如何复现一张相关性图" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yorks0n.github.io/posts/corplot/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-05-30T09:24:00+08:00" />
+<meta property="article:modified_time" content="2023-05-30T09:24:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="相关性绘图"/>
+<meta name="twitter:description" content="演示如何复现一张相关性图"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://yorks0n.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "相关性绘图",
+      "item": "https://yorks0n.github.io/posts/corplot/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "相关性绘图",
+  "name": "相关性绘图",
+  "description": "演示如何复现一张相关性图",
+  "keywords": [
+    "可视化"
+  ],
+  "articleBody": "前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。\n找了点数字画了个例子，假设数据读进来是这样的两列：\n绘图的部分我用了这些\nleg \u003c- theme(title=element_text(size=15), axis.text.x=element_text(size=14), axis.text.y=element_text(size=14), legend.text=element_text(size=14)) label_text \u003c- paste0(\"r = \", round(cor(subdata$Na,subdata$K),2)) library(ggplot2) ggplot(subdata, aes(x = log(Na), y = log(K))) + geom_point(size = 2,color = \"#31705a\") + stat_smooth(method = \"lm\", color = \"#31705a\")+ theme_classic() + annotate(\"text\", x=5.8, y=9, label= label_text) + leg 以上代码画出来的图如下： 其中各部分的解释如下\nleg \u003c- theme(title=element_text(size=15), axis.text.x=element_text(size=14), axis.text.y=element_text(size=14), legend.text=element_text(size=14)) # 用于指定字体大小等，可以先忽略 label_text \u003c- paste0(\"r = \", round(cor(subdata$Na,subdata$K),2)) # 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本 library(ggplot2) # 用ggplot2包画图 ggplot(subdata, aes(x = log(Na), y = log(K))) + #指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴 geom_point(size = 2,color = \"#31705a\") + #绘制散点部分，点的大小为2，颜色为浅绿色 stat_smooth(method = \"lm\", color = \"#31705a\")+ #绘制拟合线部分，method = \"lm\" 使用线性拟合，颜色同前 theme_classic() + # 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题 annotate(\"text\", x=5.8, y=9, label= label_text) + # 添加上文字标注，类型是\"text\"，位置在x=5.8，y=9 leg # 添加之前指定的字体大小部分，不关键 ",
+  "wordCount" : "113",
+  "inLanguage": "zh",
+  "datePublished": "2023-05-30T09:24:00+08:00",
+  "dateModified": "2023-05-30T09:24:00+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Yorkson"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yorks0n.github.io/posts/corplot/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yorksite",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yorks0n.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://yorks0n.github.io/" accesskey="h" title="Yorksite (Alt + H)">Yorksite</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://yorks0n.github.io/archives/" title="📋 Archive">
+                    <span>📋 Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yorks0n.github.io/tags/" title="🏷 Tags">
+                    <span>🏷 Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yorks0n.github.io/search/" title="🔍 Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍 Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+<div class="grid-layout">
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      相关性绘图
+    </h1>
+    <div class="post-meta"><span title='2023-05-30 09:24:00 +0800 +0800'>五月 30, 2023</span>&nbsp;·&nbsp;Yorkson
+
+</div>
+  </header> 
+  <div class="post-content"><p>前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。</p>
+<p><img loading="lazy" src="/post-images/corplot1.png" alt="demo"  />
+
+找了点数字画了个例子，假设数据读进来是这样的两列：</p>
+<p><img loading="lazy" src="/post-images/corplot2.png" alt="Untitled"  />
+</p>
+<p>绘图的部分我用了这些</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>leg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">theme</span>(title<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>), 
+</span></span><span style="display:flex;"><span>             axis.text.x<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             axis.text.y<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             legend.text<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>))
+</span></span><span style="display:flex;"><span>label_text <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;r = &#34;</span>, <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">cor</span>(subdata<span style="color:#f92672">$</span>Na,subdata<span style="color:#f92672">$</span>K),<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(subdata, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(Na), y <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(K))) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stat_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lm&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>)<span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_classic</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x<span style="color:#f92672">=</span><span style="color:#ae81ff">5.8</span>, y<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>, label<span style="color:#f92672">=</span> label_text) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  leg
+</span></span></code></pre></div><p>以上代码画出来的图如下：
+<img loading="lazy" src="/post-images/corplot3.png" alt="Untitled"  />
+</p>
+<p>其中各部分的解释如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>leg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">theme</span>(title<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>), 
+</span></span><span style="display:flex;"><span>             axis.text.x<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             axis.text.y<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             legend.text<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>)) <span style="color:#75715e"># 用于指定字体大小等，可以先忽略</span>
+</span></span><span style="display:flex;"><span>label_text <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;r = &#34;</span>, <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">cor</span>(subdata<span style="color:#f92672">$</span>Na,subdata<span style="color:#f92672">$</span>K),<span style="color:#ae81ff">2</span>)) <span style="color:#75715e"># 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2) <span style="color:#75715e"># 用ggplot2包画图</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(subdata, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(Na), y <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(K))) <span style="color:#f92672">+</span> <span style="color:#75715e">#指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>) <span style="color:#f92672">+</span> <span style="color:#75715e">#绘制散点部分，点的大小为2，颜色为浅绿色</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stat_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lm&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>)<span style="color:#f92672">+</span> <span style="color:#75715e">#绘制拟合线部分，method = &#34;lm&#34; 使用线性拟合，颜色同前</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_classic</span>() <span style="color:#f92672">+</span> <span style="color:#75715e"># 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x<span style="color:#f92672">=</span><span style="color:#ae81ff">5.8</span>, y<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>, label<span style="color:#f92672">=</span> label_text) <span style="color:#f92672">+</span> <span style="color:#75715e"># 添加上文字标注，类型是&#34;text&#34;，位置在x=5.8，y=9</span>
+</span></span><span style="display:flex;"><span>  leg <span style="color:#75715e"># 添加之前指定的字体大小部分，不关键</span>
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://yorks0n.github.io/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/">可视化</a></li>
+    </ul>
+  </footer>
+</article>
+
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://yorks0n.github.io/">Yorksite</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

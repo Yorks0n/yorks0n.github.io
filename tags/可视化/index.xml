@@ -6,7 +6,16 @@
     <description>Recent content in 可视化 on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Mar 2023 20:40:01 +0000</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 May 2023 09:24:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>相关性绘图</title>
+      <link>https://yorks0n.github.io/posts/corplot/</link>
+      <pubDate>Tue, 30 May 2023 09:24:00 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/corplot/</guid>
+      <description>演示如何复现一张相关性图</description>
+    </item>
+    
     <item>
       <title>1 dataset 100 visualizations 中有意思的可视化</title>
       <link>https://yorks0n.github.io/posts/interesting-1-dataset-100-visualizations/</link>

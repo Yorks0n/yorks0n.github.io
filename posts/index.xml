@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 07 Apr 2023 13:39:20 +0000</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 May 2023 09:24:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>相关性绘图</title>
+      <link>https://yorks0n.github.io/posts/corplot/</link>
+      <pubDate>Tue, 30 May 2023 09:24:00 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/corplot/</guid>
+      <description>演示如何复现一张相关性图</description>
+    </item>
+    
     <item>
       <title>【读文献】单细胞分析最佳实践</title>
       <link>https://yorks0n.github.io/posts/read-single-cell-best-practice/</link>
