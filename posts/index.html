@@ -148,14 +148,18 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>相关性绘图
+    <h2>复现一张相关性图
     </h2>
   </header>
   <div class="entry-content">
-    <p>演示如何复现一张相关性图</p>
+    <p>前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。
+找了点数字画了个例子，假设数据读进来是这样的两列：
+绘图的部分我用了这些
+leg &lt;- theme(title=element_text(size=15), axis.text.x=element_text(size=14), axis.text.y=element_text(size=14), legend.text=element_text(size=14)) label_text &lt;- paste0(&#34;r = &#34;, round(cor(subdata$Na,subdata$K),2)) library(ggplot2) ggplot(subdata, aes(x = log(Na), y = log(K))) &#43; geom_point(size = 2,color = &#34;#31705a&#34;) &#43; stat_smooth(method = &#34;lm&#34;, color = &#34;#31705a&#34;)&#43; theme_classic() &#43; annotate(&#34;text&#34;, x=5.8, y=9, label= label_text) &#43; leg 以上代码画出来的图如下： 其中各部分的解释如下
+leg &lt;- theme(title=element_text(size=15), axis.text.x=element_text(size=14), axis.text.y=element_text(size=14), legend.text=element_text(size=14)) # 用于指定字体大小等，可以先忽略 label_text &lt;- paste0(&#34;r = &#34;, round(cor(subdata$Na,subdata$K),2)) # 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本 library(ggplot2) # 用ggplot2包画图 ggplot(subdata, aes(x = log(Na), y = log(K))) &#43; #指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴 geom_point(size = 2,color = &#34;#31705a&#34;) &#43; #绘制散点部分，点的大小为2，颜色为浅绿色 stat_smooth(method = &#34;lm&#34;, color = &#34;#31705a&#34;)&#43; #绘制拟合线部分，method = &#34;lm&#34; 使用线性拟合，颜色同前 theme_classic() &#43; # 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题 annotate(&#34;text&#34;, x=5....</p>
   </div>
   <footer class="entry-footer"><span title='2023-05-30 09:24:00 +0800 +0800'>五月 30, 2023</span>&nbsp;·&nbsp;Yorkson</footer>
-  <a class="entry-link" aria-label="post link to 相关性绘图" href="https://yorks0n.github.io/posts/corplot/"></a>
+  <a class="entry-link" aria-label="post link to 复现一张相关性图" href="https://yorks0n.github.io/posts/corplot_case/"></a>
 </article>
 
 <article class="post-entry"> 

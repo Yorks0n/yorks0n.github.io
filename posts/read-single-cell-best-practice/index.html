@@ -196,7 +196,7 @@
   <div class="post-content"><h1 id="best-practices-for-single-cell-analysis-across-modalities">Best practices for single-cell analysis across modalities<a hidden class="anchor" aria-hidden="true" href="#best-practices-for-single-cell-analysis-across-modalities">#</a></h1>
 <p>跨模式单细胞分析的最佳实践，于 2023 年 3 月 31 日发表于 nature reviews genetics。最近在研究单细胞分析相关的资料，因此记下这篇笔记。文章中包含了 Transcriptome、Chromatin accessibility、Surface protein expression、空间转录组等多个方面，但就近期关注点而言，只精简记录单细胞转录组部分的笔记。如果有需要，可以<a href="https://www.nature.com/articles/s41576-023-00586-w">阅读原文</a>。</p>
 <hr>
-<p><img loading="lazy" src="/post-images/1680845994088.png" alt=""  />
+<p><img loading="lazy" src="images/1680845994088.png" alt=""  />
 </p>
 <h2 id="从原始计数矩阵到高质量单细胞数据">从原始计数矩阵到高质量单细胞数据<a hidden class="anchor" aria-hidden="true" href="#从原始计数矩阵到高质量单细胞数据">#</a></h2>
 <p>原始计数矩阵是直接从测序数据定量得来的矩阵，一般根据每个细胞 barcode 与 UMI 确定细胞中各种 mRNA 的数量，然而原始数据中包含着各种系统噪声和误差（比如来自建库操作、样本质量、测序批次等），因此在这一预处理过程中试图去除误差。这一过程涉及到<strong>质量控制</strong>、<strong>归一化</strong>、<strong>数据矫正</strong>和<strong>特征选择</strong>等过程，还可能会涉及到消除批次效应以<strong>整合多批次数据</strong>的过程。</p>

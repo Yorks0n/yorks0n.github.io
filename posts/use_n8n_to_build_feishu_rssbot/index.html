@@ -215,7 +215,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-e GENERIC_TIMEZONE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>n8nio/n8n 
 </span></span></code></pre></div><p>稍作等待，等 Docker 安装完成后，如果一切顺利，访问<code>服务器ip地址:5678</code>就能看到 n8n 的运行页面了，初次进入需要创建账号密码。</p>
-<p><img loading="lazy" src="/post-images/Untitled.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled.png" alt="Untitled"  />
 </p>
 <p>点击右上角的 New blank workflow 即可开始创建，也可以从软件提供的 Workflow 示例中，选择自己想部署的自动化流程。</p>
 <p>这里以搭建一个 RSS 更新自动推送到飞书的机器人为例。</p>
@@ -417,28 +417,28 @@
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>粘贴后可以看到如下的界面：</p>
-<p><img loading="lazy" src="/post-images/Untitled%201.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%201.png" alt="Untitled"  />
 </p>
 <p>这里有几处可以配置，第一处是 <strong>Cron</strong>，设置自动化流程触发的频率，每隔 X 时间间隔运行一次，图中设置为每隔一小时运行。在获取 RSS 时，运行频率不宜过高。如果访问过于频繁，一方面会给对方服务器造成较大负担，同时可能被服务器禁止访问。</p>
-<p><img loading="lazy" src="/post-images/Untitled%202.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%202.png" alt="Untitled"  />
 </p>
 <p>第二个是在 <strong>RSS Feed Read</strong> 处，填写想订阅的 RSS 地址，这里以少数派 RSS 为例，填写完后点击Excute node，先运行一次获取数据，方便后续设置。</p>
-<p><img loading="lazy" src="/post-images/Untitled%203.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%203.png" alt="Untitled"  />
 </p>
 <p>第三处（可选）<strong>IF</strong> 处，设置是否需要针对标题或内容等进行过滤，默认不过滤。</p>
-<p><img loading="lazy" src="/post-images/Untitled%204.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%204.png" alt="Untitled"  />
 </p>
 <p>这时先转到飞书，在<strong>飞书桌面端</strong>，打开一个群（建议先创建一个单人的群进行调试），打开<strong>设置</strong>，找到<strong>群机器人</strong>，并点击<strong>添加机器人</strong>，选择自定义机器人加入群聊，详细操作可以参照 <a href="https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN?lang=zh-CN">飞书自定义机器人指南</a>。</p>
-<p><img loading="lazy" src="/post-images/Untitled%205.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%205.png" alt="Untitled"  />
 </p>
 <p>最后在 <strong>HTTP Request</strong> 处填入飞书机器人 webhook 地址。</p>
-<p><img loading="lazy" src="/post-images/Untitled%206.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%206.png" alt="Untitled"  />
 </p>
 <p>填写完成后 Excute node 尝试运行，一切顺利的话就能在飞书中看到推送来的RSS消息了。</p>
-<p><img loading="lazy" src="/post-images/Untitled.jpeg" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled.jpeg" alt="Untitled"  />
 </p>
 <p>这里使用了卡片的形式展示消息，若是想调整消息展示样式，可以参考少数派文章 <a href="https://sspai.com/post/68578">手把手教你用飞书 Webhook 打造一个消息推送 Bot</a>。</p>
-<p><img loading="lazy" src="/post-images/Untitled%207.png" alt="一图流配置"  />
+<p><img loading="lazy" src="images/Untitled%207.png" alt="一图流配置"  />
 </p>
 <p>一图流配置</p>
 <h2 id="消息机器人安全设置">消息机器人安全设置<a hidden class="anchor" aria-hidden="true" href="#消息机器人安全设置">#</a></h2>
@@ -519,10 +519,10 @@
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>将上面新增的两个模块按下图方式进行拖拽连接：</p>
-<p><img loading="lazy" src="/post-images/Untitled%208.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%208.png" alt="Untitled"  />
 </p>
 <p>从飞书机器人设置界面中，勾选<strong>签名校验</strong>得到密钥，填写在 <strong>Set</strong> 模块中。</p>
-<p><img loading="lazy" src="/post-images/Untitled%209.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%209.png" alt="Untitled"  />
 </p>
 <p>接下来将 <strong>Latest Read</strong> 模块中的代码替换为以下内容，储存计算出的签名，方便在请求的时候调用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// JS code in the Latest Read Module
@@ -538,10 +538,10 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">return</span> <span style="color:#960050;background-color:#1e0010">items;</span>
 </span></span></code></pre></div><p>最后在 <strong>HTTP Request</strong> 模块中增加校验用的字段：Body Parameters - Add Parameter，添加两个参数，Name 分别为 <code>timestamp</code> 和 <code>sign</code>，Value 处点击右侧 Add Expression，再分别点击选择传入的两个对应字段的值。</p>
-<p><img loading="lazy" src="/post-images/Untitled%2010.png" alt="Untitled"  />
+<p><img loading="lazy" src="images/Untitled%2010.png" alt="Untitled"  />
 </p>
 <p>这样一番倒腾，给飞书机器人模块增加了签名校验，使得信息推送更加安全。当一切配置妥当后，别忘了点击界面右上角的激活，让工作流开始自动运行。</p>
-<p><img loading="lazy" src="/post-images/Untitled%2011.png" alt="配置密钥验证一图流"  />
+<p><img loading="lazy" src="images/Untitled%2011.png" alt="配置密钥验证一图流"  />
 </p>
 <p>配置密钥验证一图流</p>
 <h2 id="后记">后记<a hidden class="anchor" aria-hidden="true" href="#后记">#</a></h2>
