@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 May 2023 09:24:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Jul 2023 14:01:55 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>单变量异常值检测方法</title>
+      <link>https://yorks0n.github.io/posts/outlier_detection/outlier_detection/</link>
+      <pubDate>Mon, 17 Jul 2023 14:01:55 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/outlier_detection/outlier_detection/</guid>
+      <description>整理一下检测单变量异常值的方法。</description>
+    </item>
+    
     <item>
       <title>复现一张相关性图</title>
       <link>https://yorks0n.github.io/posts/corplot_case/</link>

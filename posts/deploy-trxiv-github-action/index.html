@@ -65,7 +65,27 @@ ncc build index.js -o dist 打包产物会存放于dist/index.">
         }
 
     </style>
-</noscript><meta property="og:title" content="部署预印本追踪 TRxiv 到 Github Action" />
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
+        });
+    });
+</script>
+<meta property="og:title" content="部署预印本追踪 TRxiv 到 Github Action" />
 <meta property="og:description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
 新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
 git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
