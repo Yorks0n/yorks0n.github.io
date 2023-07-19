@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 17 Jul 2023 14:01:55 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Jul 2023 19:05:55 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>数据可视化——基本图形元素及其应用</title>
+      <link>https://yorks0n.github.io/posts/basic_elements_in_data_visualization/basic_elements_in_data_visualization/</link>
+      <pubDate>Wed, 19 Jul 2023 19:05:55 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/basic_elements_in_data_visualization/basic_elements_in_data_visualization/</guid>
+      <description>介绍可视化作图过程中使用的基本元素，简单分析不同数据类型与适合使用的展示方式。</description>
+    </item>
+    
     <item>
       <title>单变量异常值检测方法</title>
       <link>https://yorks0n.github.io/posts/outlier_detection/outlier_detection/</link>
