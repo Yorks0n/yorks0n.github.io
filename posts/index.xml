@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Jul 2023 19:05:55 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Oct 2024 13:00:01 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从Raindrop迁移到了Anybox</title>
+      <link>https://yorks0n.github.io/posts/change_to_anybox/</link>
+      <pubDate>Tue, 22 Oct 2024 13:00:01 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/change_to_anybox/</guid>
+      <description>苦raindrop久矣，终于找到趁手的书签管理工具了</description>
+    </item>
+    
     <item>
       <title>数据可视化——基本图形元素及其应用</title>
       <link>https://yorks0n.github.io/posts/basic_elements_data_vis/</link>
@@ -31,11 +40,42 @@
       <pubDate>Tue, 30 May 2023 09:24:00 +0800</pubDate>
       
       <guid>https://yorks0n.github.io/posts/corplot_case/</guid>
-      <description>前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。
-找了点数字画了个例子，假设数据读进来是这样的两列：
-绘图的部分我用了这些
-leg &amp;lt;- theme(title=element_text(size=15), axis.text.x=element_text(size=14), axis.text.y=element_text(size=14), legend.text=element_text(size=14)) label_text &amp;lt;- paste0(&amp;#34;r = &amp;#34;, round(cor(subdata$Na,subdata$K),2)) library(ggplot2) ggplot(subdata, aes(x = log(Na), y = log(K))) + geom_point(size = 2,color = &amp;#34;#31705a&amp;#34;) + stat_smooth(method = &amp;#34;lm&amp;#34;, color = &amp;#34;#31705a&amp;#34;)+ theme_classic() + annotate(&amp;#34;text&amp;#34;, x=5.8, y=9, label= label_text) + leg 以上代码画出来的图如下： 其中各部分的解释如下
-leg &amp;lt;- theme(title=element_text(size=15), axis.text.x=element_text(size=14), axis.text.y=element_text(size=14), legend.text=element_text(size=14)) # 用于指定字体大小等，可以先忽略 label_text &amp;lt;- paste0(&amp;#34;r = &amp;#34;, round(cor(subdata$Na,subdata$K),2)) # 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本 library(ggplot2) # 用ggplot2包画图 ggplot(subdata, aes(x = log(Na), y = log(K))) + #指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴 geom_point(size = 2,color = &amp;#34;#31705a&amp;#34;) + #绘制散点部分，点的大小为2，颜色为浅绿色 stat_smooth(method = &amp;#34;lm&amp;#34;, color = &amp;#34;#31705a&amp;#34;)+ #绘制拟合线部分，method = &amp;#34;lm&amp;#34; 使用线性拟合，颜色同前 theme_classic() + # 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题 annotate(&amp;#34;text&amp;#34;, x=5.</description>
+      <description>&lt;p&gt;前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/corplot1.png&#34; alt=&#34;demo&#34;  /&gt;
+
+找了点数字画了个例子，假设数据读进来是这样的两列：&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/corplot2.png&#34; alt=&#34;Untitled&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;绘图的部分我用了这些&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;leg &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;theme&lt;/span&gt;(title&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;15&lt;/span&gt;), 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             axis.text.x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             axis.text.y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             legend.text&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;label_text &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;paste0&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r = &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;cor&lt;/span&gt;(subdata&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;Na,subdata&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;K),&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;library&lt;/span&gt;(ggplot2)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;ggplot&lt;/span&gt;(subdata, &lt;span style=&#34;color:#a6e22e&#34;&gt;aes&lt;/span&gt;(x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(Na), y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(K))) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;geom_point&lt;/span&gt;(size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,color &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#31705a&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;stat_smooth&lt;/span&gt;(method &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lm&amp;#34;&lt;/span&gt;, color &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#31705a&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;theme_classic&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;annotate&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;, x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.8&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;, label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; label_text) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  leg
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上代码画出来的图如下：
+&lt;img loading=&#34;lazy&#34; src=&#34;images/corplot3.png&#34; alt=&#34;Untitled&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;其中各部分的解释如下&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;leg &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;theme&lt;/span&gt;(title&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;15&lt;/span&gt;), 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             axis.text.x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             axis.text.y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             legend.text&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;element_text&lt;/span&gt;(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;)) &lt;span style=&#34;color:#75715e&#34;&gt;# 用于指定字体大小等，可以先忽略&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;label_text &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;paste0&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r = &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;cor&lt;/span&gt;(subdata&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;Na,subdata&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;K),&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)) &lt;span style=&#34;color:#75715e&#34;&gt;# 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;library&lt;/span&gt;(ggplot2) &lt;span style=&#34;color:#75715e&#34;&gt;# 用ggplot2包画图&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;ggplot&lt;/span&gt;(subdata, &lt;span style=&#34;color:#a6e22e&#34;&gt;aes&lt;/span&gt;(x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(Na), y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(K))) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;geom_point&lt;/span&gt;(size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,color &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#31705a&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#绘制散点部分，点的大小为2，颜色为浅绿色&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;stat_smooth&lt;/span&gt;(method &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lm&amp;#34;&lt;/span&gt;, color &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#31705a&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#绘制拟合线部分，method = &amp;#34;lm&amp;#34; 使用线性拟合，颜色同前&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;theme_classic&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;annotate&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;, x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.8&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;, label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; label_text) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 添加上文字标注，类型是&amp;#34;text&amp;#34;，位置在x=5.8，y=9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  leg &lt;span style=&#34;color:#75715e&#34;&gt;# 添加之前指定的字体大小部分，不关键&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>
@@ -62,16 +102,38 @@ leg &amp;lt;- theme(title=element_text(size=15), axis.text.x=element_text(size=1
       <pubDate>Fri, 24 Mar 2023 16:30:23 +0000</pubDate>
       
       <guid>https://yorks0n.github.io/posts/deploy-trxiv-github-action/</guid>
-      <description>将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
-新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
-git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
-# action.yml name: &amp;#39;trxiv&amp;#39; description: &amp;#39;Tracking popular bioRxiv and medRxiv preprints&amp;#39; runs: using: &amp;#39;node16&amp;#39; main: &amp;#39;dist/index.js&amp;#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
-# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
-https://www.toptal.com/developers/gitignore
-文件推送到远程仓库 然后push到远程仓库
-git add . git commit -m &amp;#34;Initialize&amp;#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
-npm install @vercel/ncc 然后对index.js 进行打包
-ncc build index.js -o dist 打包产物会存放于dist/index.</description>
+      <description>&lt;p&gt;将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。&lt;/p&gt;
+&lt;h2 id=&#34;新建github仓库&#34;&gt;新建Github仓库&lt;/h2&gt;
+&lt;p&gt;新建一个public仓库，名叫TRxiv，并将远程仓库&lt;code&gt;git clone&lt;/code&gt;到本地。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@github.com:Yorks0n/TRxiv.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd TRxiv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;创建一个动作元数据文件&#34;&gt;创建一个动作元数据文件&lt;/h2&gt;
+&lt;p&gt;要让仓库里能被以Action的形式直接调用，需要在&lt;strong&gt;根目录&lt;/strong&gt;中创建一个&lt;code&gt;action.yml&lt;/code&gt;配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# action.yml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;name: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;trxiv&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;description: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Tracking popular bioRxiv and medRxiv preprints&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;runs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  using: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;node16&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  main: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dist/index.js&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;准备运行的代码&#34;&gt;准备运行的代码&lt;/h2&gt;
+&lt;p&gt;手动将写好的JS脚本拷贝进来，完整代码在此 &lt;a href=&#34;https://github.com/Yorks0n/TRxiv&#34;&gt;Yorkson/TRxiv&lt;/a&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 在这里初始化一下npm&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm init -y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;准备一个&lt;code&gt;.gitignore&lt;/code&gt;文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有&lt;code&gt;node_modules&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.toptal.com/developers/gitignore&#34;&gt;https://www.toptal.com/developers/gitignore&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;文件推送到远程仓库&#34;&gt;文件推送到远程仓库&lt;/h2&gt;
+&lt;p&gt;然后push到远程仓库&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Initialize&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;打包软件&#34;&gt;打包软件&lt;/h2&gt;
+&lt;p&gt;因为前面把&lt;code&gt;node_modules&lt;/code&gt; 从上传的文件列表中忽略了，但脚本&lt;code&gt;index.js&lt;/code&gt;内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用&lt;code&gt;ncc&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install @vercel/ncc
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后对&lt;code&gt;index.js&lt;/code&gt; 进行打包&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncc build index.js -o dist
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;打包产物会存放于&lt;code&gt;dist/index.js&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -143,26 +205,48 @@ ncc build index.js -o dist 打包产物会存放于dist/index.</description>
       <pubDate>Sun, 15 May 2022 18:19:19 +0800</pubDate>
       
       <guid>https://yorks0n.github.io/posts/efficiency_and_life_balance/</guid>
-      <description>前言 这是一篇关于数字健康的文章，旨在探讨为什么会对低效率产生恐惧，这种恐惧会带来什么影响，以及如何缓和这种恐惧。
-本文并非要倡导停止追求高效，也不是否定优秀工具的重要性，而是希望大部分只是希望利用工具辅助完成任务的人，不要过分纠结于寻求完美的工具和高效的方法，却反倒影响了工作目标的实现。
-好工具，低生产力 在赛博朋克主题的作品中，存在一种科学技术高度发达，但是底层人民的生活水平并没有随之提高的现象，被称为『高科技，低生活』。与之相似，我们现在的工作过程也存在一种现象：软件功能愈发齐全，技术方法百花齐放，但我们的生产力并不一定随之提高。
-产生这种现象的原因之一，是我们在努力提高效率的过程中，错把追求高效本身当作了我们的目标，而不是我们实现目标的手段。
-对低效率的恐惧使效率成为目标 类似错失恐惧症（fear of missing out, FOMO），一种担心自己错过可以改善生活的信息、经历的感觉，现在也有一种可称为**低效率恐惧（fear of low efficiency, FOLE）**的现象，又称生产力色情或是效率成瘾。我们担心浪费任何时间，沉迷于优化自己花费时间的方式，然而实际的产出却寥寥无几。这种恐惧甚至会妨碍我们完成重要的事本身，我自己就曾在写作时纠结过是否用了最好的写作软件，在做笔记时担心是否采用了最先进的笔记技巧，而不是专心在自己的内容上。
-正如其他成瘾现象都基于某种奖赏机制，低效率恐惧可能也源于高生产力带来的正向反馈。提高生产力通常能带来直接的好处，比如产出增加或收入提高，这种反馈不断正向强化我们的行为，最终使效率在不经意间成为了我们的目标。
-低效率恐惧可能还源于消费主义试图消费一切的动机。为了促进销售，商家贩卖焦虑，其中也有一种对低效率的焦虑。商家将购买某个工具或某门课程，与高效之间画了连线，给人植入『使用了这个软件，学了这门课程，你就能变得和效率达人一样高效』的印象。我们的消费欲望，来源于我们对想成为的人（idol）的模仿欲。我们期待通过与效率达人们使用相似的工具，模仿他们的工作流程，变得像他们一样高效且成果斐然。
-另一方面，低效率恐惧也是一种拖延的表现。当我们不想工作时，列计划或是阅读提高工作效率的文章，实际上充当了感觉上的替代品。在我们逃避真正工作的同时，给了我们正在从事产出的错觉。
-将效率作为目标会引起哪些问题 效率工具是辅助我们完成任务的手段，完成工作才是真正的目的，但在追求高效的过程中很容易将手段与目的混淆。如果花费过多本属于工作和生活的时间追求效率，整天忙忙碌碌，最终发现产出却寥寥无几，平添焦虑的同时效率不升反降。
-不论技术怎样进步，软件和算法都只能按照它们设计出来的方式运行，它们不能替我们做出决定，也无法承担责任。使用合适的工具可以帮助我们工作，追求完美的工具则是一种猎奇。就像机械键盘，有人花数百上千组装自己的键盘，已经不再只是为了用键盘实现打字的目的，而是把折腾它的过程作为一种乐趣了。
-对错过新工具、新技术的焦虑同样会导致沉迷于用即时的短期满足来缓解焦虑，比如不停地钻研各种效率文章，将工具一个个进行试用比较，甚至可能因为害怕错过提升效率，去参加一些我们并不真正需要的活动，例如报名我们用不上的学习课程。学会了屠龙之技，失去的是本当用于工作的时间，错过的则是我们自己的生活。
-如何缓解低效率恐惧 确定自己关注的主题和领域 知识浩如烟海，如果不清楚自己真正关注什么，便无法针对性地进行积累。如同在海上航行却没有目标，如果不论遇到什么都囫囵地装进口袋，最终得到的只有乱糟糟的收藏夹，并不会促进实质性的能力提升。这里推荐少楠的《P.A.R.A.》方法，将自己所有关注的内容划分成领域、项目、资源等方面。**领域（Area）**是自己日常需要精进的方面，如果搞砸了需要承担对应的责任；**项目（Project）**有明确的起止时间和目标；**资源（Resource）**是自己持续感兴趣，但哪怕放弃，也不会影响他人的事。具体如何实践，可以进一步阅读少楠的文章不知道积累什么知识，是因为你没有自己关注的领域。
-反思对效率工具的使用，识别真正的限制因素 回顾自己使用了哪些效率工具，如何使用，是否朝着自己关注的领域与设定的长期计划前进。当我们做计划或是研究效率技巧的时候，我们是希望籍此辅助自己完成工作，还是在逃避推进工作。识别哪些因素真正妨碍了我们的工作，是工具或者生产力系统的缺陷吗？虽然各种算法和工具可以辅助我们进行思考和决策，但不能依赖工具而忽略了我们自身应当承担的责任。我们记下了许多笔记，但是再好的软件也不能替代我们理解和运用这些知识；相反，如果我们积极地应用这些知识，哪怕手中只有纸笔，也能非常好地掌握知识。
-停止盲目收集，调整信息来源 留意信息的输入途径，如果使用收集箱inbox的形式，让自己的列表中放更多对自己关注的项目/领域/资源有帮助的内容。有些文章当下感到值得一读，便放进了收集箱，过一阵子再看到时觉得读它可有可无，那就应当果断将其删掉，并非一定放进收集箱的东西都非得读完。
-重器轻用，建立适合自己的工作流 与其不断搜寻可以提高生产力的技巧，阅读如何做笔记的文章，不如确定一个适合我们的系统并稳定地使用它。Kenshin在重器轻用就是高效的文章中提到，许多人纠结于选择哪个笔记工具，是因为试图在某一个工具中实现All-in-One，并以为这样就能达到简单高效。然而没有完全满足用户需求的工具存在，因此应当重器轻用，发挥各个工具的长处。Spike112也在其文章工作流的祛魅中指出，在永无止境的探索过程中，新旧工具的迁移消耗了我们大量的时间和精力，应当根据场景识别需求而选择工具，而不是根据某个工具的功能去寻找它的使用场景。这篇文章中也提出，工作流比工具重要，而实践又比工作流和工具更重要，因为真正有用的工作流，是在实践的过程中不断升级优化产生的。就像只有自己整理房间，才更清楚每个工具放在哪里，也只有在整理的过程中，才能思考诸如如何优化工作环境的问题，让自己在之后的工作中更加顺手。
-专注于我们关注的内容本身 关注内容本身，而非如何获取、储存这些内容。花更多的时间与我们收集到的内容呆在一起，思考如何使用它们，而非利用一系列自动化流程将笔记碎片积累到数据库后，囤积在那再也不看。乍看之下，笔记本中满满的笔记摘录很有成就感，但如果从此不再使用，笔记本只能成为笔记的坟场。问一问自己，我积累了这么多的笔记，然后呢？思考我们为什么要记笔记，是为了更好地理解某个概念，学习新领域的知识，通过笔记辅助我们思考和写作，亦或只是为了把玩某种先进的笔记技巧？为自己收集的内容找一个出口，比如写作，将死气沉沉的笔记调动起来，在输出的过程中厘清思路，进而更好地掌握输入的内容。
-刻意花一些时间远离网络 网络上信息无穷无尽，作为个人不可能将其全部吸收。短时间大量的信息输入会助长失控感，引起焦虑。不妨花些时间独自思考，阅读，散步，健身，做些让自己感到放松舒适的事。生活不只有高效的工作，只有保持克制，接受自己和工具的不完美，才能重新出发，以更好的节奏投入新的工作。
-接受系统和工具的不完美，真正重要的是我们做的事本身。
-最后，感谢您的阅读。
-参考资料 放弃纠结、拥抱妥协，重器轻用就是高效 年度征文 | 我是如何艰难地克服「效率成瘾」的？ 工作流的祛魅：从工具、阅读到写作 收藏≠学会，别再让你的收藏夹吃灰了！ Automations, Time spent in the environment, &amp;ldquo;And then what?&amp;rdquo; From FOMO to JOMO: the joy of missing out Productivity addiction: when we become obsessed with productivity </description>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;这是一篇关于数字健康的文章，旨在探讨为什么会对低效率产生恐惧，这种恐惧会带来什么影响，以及如何缓和这种恐惧。&lt;/p&gt;
+&lt;p&gt;本文并非要倡导停止追求高效，也不是否定优秀工具的重要性，而是希望大部分只是希望利用工具辅助完成任务的人，不要过分纠结于寻求完美的工具和高效的方法，却反倒影响了工作目标的实现。&lt;/p&gt;
+&lt;h2 id=&#34;好工具低生产力&#34;&gt;好工具，低生产力&lt;/h2&gt;
+&lt;p&gt;在赛博朋克主题的作品中，存在一种科学技术高度发达，但是底层人民的生活水平并没有随之提高的现象，被称为『高科技，低生活』。与之相似，我们现在的工作过程也存在一种现象：软件功能愈发齐全，技术方法百花齐放，但我们的生产力并不一定随之提高。&lt;/p&gt;
+&lt;p&gt;产生这种现象的原因之一，是我们在努力提高效率的过程中，错把追求高效本身当作了我们的目标，而不是我们实现目标的手段。&lt;/p&gt;
+&lt;h2 id=&#34;对低效率的恐惧使效率成为目标&#34;&gt;对低效率的恐惧使效率成为目标&lt;/h2&gt;
+&lt;p&gt;类似错失恐惧症（fear of missing out, FOMO），一种担心自己错过可以改善生活的信息、经历的感觉，现在也有一种可称为**低效率恐惧（fear of low efficiency, FOLE）**的现象，又称生产力色情或是效率成瘾。我们担心浪费任何时间，沉迷于优化自己花费时间的方式，然而实际的产出却寥寥无几。这种恐惧甚至会妨碍我们完成重要的事本身，我自己就曾在写作时纠结过是否用了最好的写作软件，在做笔记时担心是否采用了最先进的笔记技巧，而不是专心在自己的内容上。&lt;/p&gt;
+&lt;p&gt;正如其他成瘾现象都基于某种奖赏机制，&lt;strong&gt;低效率恐惧可能也源于高生产力带来的正向反馈&lt;/strong&gt;。提高生产力通常能带来直接的好处，比如产出增加或收入提高，这种反馈不断正向强化我们的行为，最终使效率在不经意间成为了我们的目标。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;低效率恐惧可能还源于消费主义试图消费一切的动机&lt;/strong&gt;。为了促进销售，商家贩卖焦虑，其中也有一种对低效率的焦虑。商家将购买某个工具或某门课程，与高效之间画了连线，给人植入『使用了这个软件，学了这门课程，你就能变得和效率达人一样高效』的印象。我们的消费欲望，来源于我们对想成为的人（idol）的模仿欲。我们期待通过与效率达人们使用相似的工具，模仿他们的工作流程，变得像他们一样高效且成果斐然。&lt;/p&gt;
+&lt;p&gt;另一方面，&lt;strong&gt;低效率恐惧也是一种拖延的表现&lt;/strong&gt;。当我们不想工作时，列计划或是阅读提高工作效率的文章，实际上充当了感觉上的替代品。在我们逃避真正工作的同时，给了我们正在从事产出的错觉。&lt;/p&gt;
+&lt;h2 id=&#34;将效率作为目标会引起哪些问题&#34;&gt;将效率作为目标会引起哪些问题&lt;/h2&gt;
+&lt;p&gt;效率工具是辅助我们完成任务的手段，完成工作才是真正的目的，但在追求高效的过程中很容易将手段与目的混淆。如果花费过多本属于工作和生活的时间追求效率，整天忙忙碌碌，最终发现产出却寥寥无几，&lt;strong&gt;平添焦虑的同时效率不升反降&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;不论技术怎样进步，软件和算法都只能按照它们设计出来的方式运行，它们不能替我们做出决定，也无法承担责任。&lt;strong&gt;使用合适的工具可以帮助我们工作，追求完美的工具则是一种猎奇&lt;/strong&gt;。就像机械键盘，有人花数百上千组装自己的键盘，已经不再只是为了用键盘实现打字的目的，而是把折腾它的过程作为一种乐趣了。&lt;/p&gt;
+&lt;p&gt;对错过新工具、新技术的焦虑同样会导致沉迷于用即时的短期满足来缓解焦虑，比如不停地钻研各种效率文章，将工具一个个进行试用比较，甚至可能因为害怕错过提升效率，去参加一些我们并不真正需要的活动，例如报名我们用不上的学习课程。学会了屠龙之技，&lt;strong&gt;失去的是本当用于工作的时间，错过的则是我们自己的生活&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;如何缓解低效率恐惧&#34;&gt;如何缓解低效率恐惧&lt;/h2&gt;
+&lt;h3 id=&#34;确定自己关注的主题和领域&#34;&gt;确定自己关注的主题和领域&lt;/h3&gt;
+&lt;p&gt;知识浩如烟海，如果不清楚自己真正关注什么，便无法针对性地进行积累。如同在海上航行却没有目标，如果不论遇到什么都囫囵地装进口袋，最终得到的只有乱糟糟的收藏夹，并不会促进实质性的能力提升。这里推荐少楠的《P.A.R.A.》方法，将自己所有关注的内容划分成领域、项目、资源等方面。**领域（Area）**是自己日常需要精进的方面，如果搞砸了需要承担对应的责任；**项目（Project）**有明确的起止时间和目标；**资源（Resource）**是自己持续感兴趣，但哪怕放弃，也不会影响他人的事。具体如何实践，可以进一步阅读少楠的文章&lt;a href=&#34;https://mp.weixin.qq.com/s?__biz=MzI0MDA3MjQ2Mg==&amp;amp;mid=2247485941&amp;amp;idx=1&amp;amp;sn=28e92a5f06fb1883e95d6dc14db63d5d&amp;amp;chksm=e9212b94de56a2824cd58114927e2011d71e89b85358bf973c3ba50449ca0eb398b4fa254d55&amp;amp;mpshare=1&amp;amp;scene=1&amp;amp;srcid=0512NCDIBaqvdu4CXusvsg2l&amp;amp;sharer_sharetime=1652338328485&amp;amp;sharer_shareid=6d6f8a7d66e79b9e6c40cbf64b5690df#rd&#34;&gt;不知道积累什么知识，是因为你没有自己关注的领域&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;反思对效率工具的使用识别真正的限制因素&#34;&gt;反思对效率工具的使用，识别真正的限制因素&lt;/h3&gt;
+&lt;p&gt;回顾自己使用了哪些效率工具，如何使用，是否朝着自己关注的领域与设定的长期计划前进。当我们做计划或是研究效率技巧的时候，我们是希望籍此辅助自己完成工作，还是在逃避推进工作。识别哪些因素真正妨碍了我们的工作，是工具或者生产力系统的缺陷吗？虽然各种算法和工具可以辅助我们进行思考和决策，但不能依赖工具而忽略了我们自身应当承担的责任。我们记下了许多笔记，但是再好的软件也不能替代我们理解和运用这些知识；相反，如果我们积极地应用这些知识，哪怕手中只有纸笔，也能非常好地掌握知识。&lt;/p&gt;
+&lt;h3 id=&#34;停止盲目收集调整信息来源&#34;&gt;停止盲目收集，调整信息来源&lt;/h3&gt;
+&lt;p&gt;留意信息的输入途径，如果使用收集箱inbox的形式，让自己的列表中放更多对自己关注的项目/领域/资源有帮助的内容。有些文章当下感到值得一读，便放进了收集箱，过一阵子再看到时觉得读它可有可无，那就应当果断将其删掉，并非一定放进收集箱的东西都非得读完。&lt;/p&gt;
+&lt;h3 id=&#34;重器轻用建立适合自己的工作流&#34;&gt;重器轻用，建立适合自己的工作流&lt;/h3&gt;
+&lt;p&gt;与其不断搜寻可以提高生产力的技巧，阅读如何做笔记的文章，不如确定一个适合我们的系统并稳定地使用它。Kenshin在&lt;a href=&#34;https://sspai.com/post/71576&#34;&gt;重器轻用就是高效&lt;/a&gt;的文章中提到，许多人纠结于选择哪个笔记工具，是因为试图在某一个工具中实现All-in-One，并以为这样就能达到简单高效。然而没有完全满足用户需求的工具存在，因此应当重器轻用，发挥各个工具的长处。Spike112也在其文章&lt;a href=&#34;https://sspai.com/post/71658&#34;&gt;工作流的祛魅&lt;/a&gt;中指出，在永无止境的探索过程中，新旧工具的迁移消耗了我们大量的时间和精力，应当根据场景识别需求而选择工具，而不是根据某个工具的功能去寻找它的使用场景。这篇文章中也提出，工作流比工具重要，而实践又比工作流和工具更重要，因为真正有用的工作流，是在实践的过程中不断升级优化产生的。就像只有自己整理房间，才更清楚每个工具放在哪里，也只有在整理的过程中，才能思考诸如如何优化工作环境的问题，让自己在之后的工作中更加顺手。&lt;/p&gt;
+&lt;h3 id=&#34;专注于我们关注的内容本身&#34;&gt;专注于我们关注的内容本身&lt;/h3&gt;
+&lt;p&gt;关注内容本身，而非如何获取、储存这些内容。花更多的时间与我们收集到的内容呆在一起，思考如何使用它们，而非利用一系列自动化流程将笔记碎片积累到数据库后，囤积在那再也不看。乍看之下，笔记本中满满的笔记摘录很有成就感，但如果从此不再使用，笔记本只能成为笔记的坟场。问一问自己，我积累了这么多的笔记，然后呢？思考我们为什么要记笔记，是为了更好地理解某个概念，学习新领域的知识，通过笔记辅助我们思考和写作，亦或只是为了把玩某种先进的笔记技巧？为自己收集的内容找一个出口，比如写作，将死气沉沉的笔记调动起来，在输出的过程中厘清思路，进而更好地掌握输入的内容。&lt;/p&gt;
+&lt;h3 id=&#34;刻意花一些时间远离网络&#34;&gt;刻意花一些时间远离网络&lt;/h3&gt;
+&lt;p&gt;网络上信息无穷无尽，作为个人不可能将其全部吸收。短时间大量的信息输入会助长失控感，引起焦虑。不妨花些时间独自思考，阅读，散步，健身，做些让自己感到放松舒适的事。生活不只有高效的工作，只有保持克制，接受自己和工具的不完美，才能重新出发，以更好的节奏投入新的工作。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;接受系统和工具的不完美，真正重要的是我们做的事本身。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;最后，感谢您的阅读。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://sspai.com/post/71576&#34;&gt;放弃纠结、拥抱妥协，重器轻用就是高效&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://sspai.com/post/71518&#34;&gt;年度征文 | 我是如何艰难地克服「效率成瘾」的？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://sspai.com/post/71658&#34;&gt;工作流的祛魅：从工具、阅读到写作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://sspai.com/post/72939&#34;&gt;收藏≠学会，别再让你的收藏夹吃灰了！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://buttondown.email/jessmartin/archive/time-spent-in-the-environment-and-then-what/&#34;&gt;Automations, Time spent in the environment, &amp;ldquo;And then what?&amp;rdquo;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://nesslabs.com/jomo&#34;&gt;From FOMO to JOMO: the joy of missing out&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://nesslabs.com/productivity-addiction&#34;&gt;Productivity addiction: when we become obsessed with productivity&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>

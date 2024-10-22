@@ -6,7 +6,16 @@
     <description>Recent content in 折腾 on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Mar 2023 09:30:49 +0000</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Oct 2024 13:00:01 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从Raindrop迁移到了Anybox</title>
+      <link>https://yorks0n.github.io/posts/change_to_anybox/</link>
+      <pubDate>Tue, 22 Oct 2024 13:00:01 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/change_to_anybox/</guid>
+      <description>苦raindrop久矣，终于找到趁手的书签管理工具了</description>
+    </item>
+    
     <item>
       <title>Docker 打包 Shiny App</title>
       <link>https://yorks0n.github.io/posts/docker-pack-shiny-app/</link>
@@ -22,16 +31,38 @@
       <pubDate>Fri, 24 Mar 2023 16:30:23 +0000</pubDate>
       
       <guid>https://yorks0n.github.io/posts/deploy-trxiv-github-action/</guid>
-      <description>将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
-新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
-git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
-# action.yml name: &amp;#39;trxiv&amp;#39; description: &amp;#39;Tracking popular bioRxiv and medRxiv preprints&amp;#39; runs: using: &amp;#39;node16&amp;#39; main: &amp;#39;dist/index.js&amp;#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
-# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
-https://www.toptal.com/developers/gitignore
-文件推送到远程仓库 然后push到远程仓库
-git add . git commit -m &amp;#34;Initialize&amp;#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
-npm install @vercel/ncc 然后对index.js 进行打包
-ncc build index.js -o dist 打包产物会存放于dist/index.</description>
+      <description>&lt;p&gt;将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。&lt;/p&gt;
+&lt;h2 id=&#34;新建github仓库&#34;&gt;新建Github仓库&lt;/h2&gt;
+&lt;p&gt;新建一个public仓库，名叫TRxiv，并将远程仓库&lt;code&gt;git clone&lt;/code&gt;到本地。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@github.com:Yorks0n/TRxiv.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd TRxiv
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;创建一个动作元数据文件&#34;&gt;创建一个动作元数据文件&lt;/h2&gt;
+&lt;p&gt;要让仓库里能被以Action的形式直接调用，需要在&lt;strong&gt;根目录&lt;/strong&gt;中创建一个&lt;code&gt;action.yml&lt;/code&gt;配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# action.yml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;name: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;trxiv&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;description: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Tracking popular bioRxiv and medRxiv preprints&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;runs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  using: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;node16&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  main: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dist/index.js&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;准备运行的代码&#34;&gt;准备运行的代码&lt;/h2&gt;
+&lt;p&gt;手动将写好的JS脚本拷贝进来，完整代码在此 &lt;a href=&#34;https://github.com/Yorks0n/TRxiv&#34;&gt;Yorkson/TRxiv&lt;/a&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 在这里初始化一下npm&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm init -y
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;准备一个&lt;code&gt;.gitignore&lt;/code&gt;文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有&lt;code&gt;node_modules&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.toptal.com/developers/gitignore&#34;&gt;https://www.toptal.com/developers/gitignore&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;文件推送到远程仓库&#34;&gt;文件推送到远程仓库&lt;/h2&gt;
+&lt;p&gt;然后push到远程仓库&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Initialize&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;打包软件&#34;&gt;打包软件&lt;/h2&gt;
+&lt;p&gt;因为前面把&lt;code&gt;node_modules&lt;/code&gt; 从上传的文件列表中忽略了，但脚本&lt;code&gt;index.js&lt;/code&gt;内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用&lt;code&gt;ncc&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install @vercel/ncc
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后对&lt;code&gt;index.js&lt;/code&gt; 进行打包&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncc build index.js -o dist
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;打包产物会存放于&lt;code&gt;dist/index.js&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>

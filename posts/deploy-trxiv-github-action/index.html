@@ -8,18 +8,40 @@
 <title>部署预印本追踪 TRxiv 到 Github Action | Yorksite</title>
 <meta name="keywords" content="折腾">
 <meta name="description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
-新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
-git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
-# action.yml name: &#39;trxiv&#39; description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39; runs: using: &#39;node16&#39; main: &#39;dist/index.js&#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
-# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
+新建Github仓库
+新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
+git clone git@github.com:Yorks0n/TRxiv.git
+
+cd TRxiv
+创建一个动作元数据文件
+要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
+# action.yml
+name: &#39;trxiv&#39;
+description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39;
+
+runs:
+  using: &#39;node16&#39;
+  main: &#39;dist/index.js&#39;
+准备运行的代码
+手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
+# 在这里初始化一下npm
+npm init -y
+准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
 https://www.toptal.com/developers/gitignore
-文件推送到远程仓库 然后push到远程仓库
-git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
-npm install @vercel/ncc 然后对index.js 进行打包
-ncc build index.js -o dist 打包产物会存放于dist/index.">
+文件推送到远程仓库
+然后push到远程仓库
+git add .
+git commit -m &#34;Initialize&#34;
+git push
+打包软件
+因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
+npm install @vercel/ncc
+然后对index.js 进行打包
+ncc build index.js -o dist
+打包产物会存放于dist/index.js">
 <meta name="author" content="Yorkson">
 <link rel="canonical" href="https://yorks0n.github.io/posts/deploy-trxiv-github-action/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.067f6e9fffef60aa84e1c1d5f50fcfb9cbab372c5c24c714ce694a3fd90635dc.css" integrity="sha256-Bn9un//vYKqE4cHV9Q/PucurNyxcJMcUzmlKP9kGNdw=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.a4761ac6be819cc2727984f496745a77a3a452937242de3f86ed63be9a00c39c.css" integrity="sha256-pHYaxr6BnMJyeYT0lnRad6OkUpNyQt4/hu1jvpoAw5w=" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
     onload="hljs.initHighlightingOnLoad();"></script>
 <link rel="icon" href="https://yorks0n.github.io/favicon.ico">
@@ -29,6 +51,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index.">
 <link rel="mask-icon" href="https://yorks0n.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="https://yorks0n.github.io/posts/deploy-trxiv-github-action/">
 <noscript>
     <style>
         #theme-toggle,
@@ -87,15 +110,37 @@ ncc build index.js -o dist 打包产物会存放于dist/index.">
 </script>
 <meta property="og:title" content="部署预印本追踪 TRxiv 到 Github Action" />
 <meta property="og:description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
-新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
-git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
-# action.yml name: &#39;trxiv&#39; description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39; runs: using: &#39;node16&#39; main: &#39;dist/index.js&#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
-# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
+新建Github仓库
+新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
+git clone git@github.com:Yorks0n/TRxiv.git
+
+cd TRxiv
+创建一个动作元数据文件
+要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
+# action.yml
+name: &#39;trxiv&#39;
+description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39;
+
+runs:
+  using: &#39;node16&#39;
+  main: &#39;dist/index.js&#39;
+准备运行的代码
+手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
+# 在这里初始化一下npm
+npm init -y
+准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
 https://www.toptal.com/developers/gitignore
-文件推送到远程仓库 然后push到远程仓库
-git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
-npm install @vercel/ncc 然后对index.js 进行打包
-ncc build index.js -o dist 打包产物会存放于dist/index." />
+文件推送到远程仓库
+然后push到远程仓库
+git add .
+git commit -m &#34;Initialize&#34;
+git push
+打包软件
+因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
+npm install @vercel/ncc
+然后对index.js 进行打包
+ncc build index.js -o dist
+打包产物会存放于dist/index.js" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://yorks0n.github.io/posts/deploy-trxiv-github-action/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-03-24T16:30:23+00:00" />
@@ -104,15 +149,37 @@ ncc build index.js -o dist 打包产物会存放于dist/index." />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="部署预印本追踪 TRxiv 到 Github Action"/>
 <meta name="twitter:description" content="将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。
-新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
-git clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
-# action.yml name: &#39;trxiv&#39; description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39; runs: using: &#39;node16&#39; main: &#39;dist/index.js&#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
-# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
+新建Github仓库
+新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。
+git clone git@github.com:Yorks0n/TRxiv.git
+
+cd TRxiv
+创建一个动作元数据文件
+要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境
+# action.yml
+name: &#39;trxiv&#39;
+description: &#39;Tracking popular bioRxiv and medRxiv preprints&#39;
+
+runs:
+  using: &#39;node16&#39;
+  main: &#39;dist/index.js&#39;
+准备运行的代码
+手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。
+# 在这里初始化一下npm
+npm init -y
+准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules
 https://www.toptal.com/developers/gitignore
-文件推送到远程仓库 然后push到远程仓库
-git add . git commit -m &#34;Initialize&#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
-npm install @vercel/ncc 然后对index.js 进行打包
-ncc build index.js -o dist 打包产物会存放于dist/index."/>
+文件推送到远程仓库
+然后push到远程仓库
+git add .
+git commit -m &#34;Initialize&#34;
+git push
+打包软件
+因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc
+npm install @vercel/ncc
+然后对index.js 进行打包
+ncc build index.js -o dist
+打包产物会存放于dist/index.js"/>
 
 
 <script type="application/ld+json">
@@ -141,7 +208,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
   "@type": "BlogPosting",
   "headline": "部署预印本追踪 TRxiv 到 Github Action",
   "name": "部署预印本追踪 TRxiv 到 Github Action",
-  "description": "将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。\n新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。\ngit clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境\n# action.yml name: \u0026#39;trxiv\u0026#39; description: \u0026#39;Tracking popular bioRxiv and medRxiv preprints\u0026#39; runs: using: \u0026#39;node16\u0026#39; main: \u0026#39;dist/index.js\u0026#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。\n# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules\nhttps://www.toptal.com/developers/gitignore\n文件推送到远程仓库 然后push到远程仓库\ngit add . git commit -m \u0026#34;Initialize\u0026#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc\nnpm install @vercel/ncc 然后对index.js 进行打包\nncc build index.js -o dist 打包产物会存放于dist/index.",
+  "description": "将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。\n新建Github仓库 新建一个public仓库，名叫TRxiv，并将远程仓库git clone到本地。\ngit clone git@github.com:Yorks0n/TRxiv.git cd TRxiv 创建一个动作元数据文件 要让仓库里能被以Action的形式直接调用，需要在根目录中创建一个action.yml配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境\n# action.yml name: \u0026#39;trxiv\u0026#39; description: \u0026#39;Tracking popular bioRxiv and medRxiv preprints\u0026#39; runs: using: \u0026#39;node16\u0026#39; main: \u0026#39;dist/index.js\u0026#39; 准备运行的代码 手动将写好的JS脚本拷贝进来，完整代码在此 Yorkson/TRxiv。\n# 在这里初始化一下npm npm init -y 准备一个.gitignore文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有node_modules\nhttps://www.toptal.com/developers/gitignore\n文件推送到远程仓库 然后push到远程仓库\ngit add . git commit -m \u0026#34;Initialize\u0026#34; git push 打包软件 因为前面把node_modules 从上传的文件列表中忽略了，但脚本index.js内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用ncc\nnpm install @vercel/ncc 然后对index.js 进行打包\nncc build index.js -o dist 打包产物会存放于dist/index.js\n",
   "keywords": [
     "折腾"
   ],
@@ -207,6 +274,8 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
                 </button>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
             </div>
         </div>
         <ul id="menu">
@@ -236,7 +305,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
     <h1 class="post-title">
       部署预印本追踪 TRxiv 到 Github Action
     </h1>
-    <div class="post-meta"><span title='2023-03-24 16:30:23 +0000 UTC'>三月 24, 2023</span>&nbsp;·&nbsp;Yorkson
+    <div class="post-meta">&lt;span title=&#39;2023-03-24 16:30:23 &#43;0000 UTC&#39;&gt;三月 24, 2023&lt;/span&gt;&amp;nbsp;·&amp;nbsp;Yorkson
 
 </div>
   </header> 
@@ -390,7 +459,7 @@ ncc build index.js -o dist 打包产物会存放于dist/index."/>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://yorks0n.github.io/">Yorksite</a></span>
+    <span>&copy; 2024 <a href="https://yorks0n.github.io/">Yorksite</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
