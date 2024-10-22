@@ -81,8 +81,8 @@
 <meta property="og:description" content="论文作图时用得上的配色技巧与工具" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://yorks0n.github.io/posts/color_guide/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-09-20T15:19:19+08:00" />
-<meta property="article:modified_time" content="2022-09-20T15:19:19+08:00" />
+<meta property="article:published_time" content="2022-09-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-09-20T00:00:00+00:00" />
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="论文可视化配色简易指南"/>
@@ -122,8 +122,8 @@
   "articleBody": "注：本文首发于少数派，此处有删改，您可以 前往此处 阅读修订后版本。\n色彩模型 人眼的色彩感知 我们能看到颜色主要与人眼的生理特性有关，视杆细胞和视锥细胞在其中发挥了重要作用。其中，视杆细胞主要负责感受光的明暗，视锥细胞负责感受不同波长的光。大多数人有三种不同类型的视锥细胞，它们各自对不同波长的光有不同的灵敏度：红色、绿色和蓝色。当某些视锥细胞缺失或敏感度发生变化，将导致色觉异常。\n三种视锥细胞对不同光波长的光具有不同的敏感度。来源：\nRGB 模型 RGB 模型绝对称得上是数字时代最为常见的色彩模型，它将红色（R）、绿色（G）、蓝色（B）三种颜色的光，按照不同比例混合，得到各种不同的颜色。RGB 模型如此流行，一方面是因为它符合人眼对色彩的感知过程（对应三种视锥细胞），另一方面，屏幕上的每个像素也都是由红绿蓝三个次级像素组成，直接以此方式编码， 极大地方便了在屏幕上进行显示。\nRGB色彩模型\nHSB/HSV 虽然 RGB 模型既常用又方便理解，但它并不符合人对颜色的直观感受。我们看到某个颜色时，不会把它拆分成红绿蓝三个组分，而是直接感知三种视锥细胞叠加后的效果。因此，后来又出现了称为 HSV 的色彩模型（也称HSB）。\n你也许在选颜色时见到见过这种模型，它仿佛将所有颜色放入了一个倒置的圆锥。\nHSV 模型采用三个维度的数值描述颜色：\n色相（Hue），圆锥的最外围一圈，即它是什么颜色； 饱和度（Saturation），圆锥上某个点到中轴的距离，离中轴越近饱和度越低，颜色也越接近黑白灰； 亮度（Brightness 或 Value），圆锥上点到尖端的距离，越接近尖端，亮度越低（越黑）。 那 HSV 相比 RGB 直观在哪里？举个例子，左边颜色只降低亮度后，可以得到右边的颜色；但要是通过 RGB 来调整，就需要同时调整红绿蓝三种颜色值，颜色很容易一下就偏得没边了。\n为什么要有不同的色彩模型 一个很好的例子是地图制图投影方式和飞行路径图，我们可以将不同的色彩空间模型视为不同的地图投影方式。根据选择地图类型（色彩空间）的不同，同样的飞行路径可能看起来大不一样。\n墨卡托投影地图上从洛杉矶到莫斯科、纽约到莫斯科的飞行路线。\n正射投影\n根据数据类型选择颜色 类别色阶（Categorical color scales） 类别数据使用类别色阶。\n当数据是一组类别时，它们没有内在的顺序，比如不同的分组实验材料。下图中不同的国家，并不会说某个国家比另一个国家排在前面或是后面，就属于类别数据，因此要用类别色阶（Categorical color scales）。\n何为类别色阶？红色、黄色、蓝色，它们适合区分没有内在顺序的类别，其中一种颜色并不比另一种颜色更重要。\n单向色阶（Sequential color scales） 连续色阶是从暗到亮/从亮到暗的颜色渐变，它们适合可视化从低到高变化的数值数据，比如温度、质量或浓度。\nFrom Chroma.js Color Palette Helper\n这时并不是说就不能分组，你依然可以将特定数值划分成一个个区间，对每个区间采用一个颜色。\n或是不划分区间\n注意⚠️：\n在单向的顺序色阶中，只能使用一到两种色调，比如浅蓝色到深蓝色（单色，蓝色），或是从浅黄色到深蓝色（双色，蓝色和黄色）。\n好的顺序色阶中，变化的并不只是颜色的色相（Hue），颜色的亮度（Lightness）与饱和度也在同步变化。\n对低值使用浅色，对高值使用深色（亮度更低、饱和度更高）。使用颜色渐变时，请确保亮色代表低值，而深色代表高值。对于大多数读者来说，这将是最直观的\n双向色阶（Diverging color scales） 双向色阶（Diverging / bipolar / double-ended color scales）与单向色阶类似，但是它不再是亮度或饱和度的从低到高变化，它中间亮度更高，然后向两侧色调与亮度同时变化。\n双向色阶通常用于：\n正值和负值这样两端有明确对立关系的值 有个有意义的中间点，比如0、50%、平均值、选定的阈值 同单向色阶一样，双向色阶也可以再分为分组和不分组两种：\n双向，分组\n双向，不分组\n从色彩集中选择颜色 这里介绍四个工具\nThe Data Viz Color Picker\nColorpicker for data\nCARTOColors - CARTO\nchroma.js palette helper\nData Viz Color Picker PALETTE\nSINGLE HUE\nDIVERGENT COLOR\nColorpicker for data CARTOColors Sequential schemes\nDiverging schemes\nQualitative schemes\n注意事项 色觉异常 前面提到，由于有三种视锥细胞存在，我们可以感知红绿蓝三种颜色极其组合。如果其中某种视锥细胞的灵敏度不够，那么会导致色弱；如果某种细胞完全不起作用，那么就会导致色盲。因此有三种不同类型的色弱，和三种不同类型的色盲。\n在人群中，色弱相比色盲更加常见，大约6-7%的男性有某种色弱，而大约2-3%的男性是色盲。\n因此，某些颜色的组合应当避免，比如红色-绿色-棕色。\n我们比较熟悉的荧光图中也会倡议使用洋红色+绿色的组合，而不是红色和绿色的组合。\n另一方面，在选择颜色时，不仅在色相（Hue）上发生变化，也让饱和度和亮度同时变化，也有助于增加色彩的区分度。一些工具会给出相同配色在不同色觉异常人士眼中的效果。\n还有一种方式，是用颜色和模式同时来表示不同的类别，比如加上阴影，或是采用不同的虚实线段。\nLess is more 如非必要，勿增实体\n是否有替代渐变色的数值表示方式（能不用，就不用）\n比如采用长度（条形图）、位置（点图）或是面积的大小\n避免同时使用过多颜色（能少用，不多用）\n如果图中使用了超过七种颜色，可能要考虑其他的图表类型，或是将类别组合在一起。\n颜色本身是帮助读者区分类别的，但是颜色越多，就越难快速阅读和理解，在读图时将不得不反复在图例和图形间来回查阅。\n更好地分配颜色 对相同变量使用相同颜色，简化理解过程\n配合图例解释颜色指代的内容：图形的大小代表什么、深浅是对应哪个变量，这些都需要解释清晰。\n详略得当地使用颜色，将不重要的元素用灰色或其他非常浅的颜色来表示，可以突出需要重点关注的数据\n保证对比度，避免使用互补色（比如红配绿、橙配蓝）\n避免使用彩虹色渐变\n彩虹色渐变有几个大的问题：\n它的颜色变化并不均匀，其中绿色占据了几乎1/3的范围 各种颜色之间的亮度变化不均一 参考资料 Star:\nColorimetry and the Cartography of Color\n色彩空间\n弄清色彩的作用和表达 - 少数派\n不同的色彩模型\nWhich color scale to use when visualizing data - Datawrapper Blog\n根据数据类型（离散、连续）选择颜色\nWhat to consider when choosing colors for data visualization\n一些颜色安排上的注意事项\nSpectrum, Adobe’s design system\n选择颜色的注意事项\nHow The Rainbow Color Map Misleads\n彩虹色渐变为什么不合适\nHow your colorblind and colorweak readers see your colors - Datawrapper Blog\n色觉异常\nOther:\nWhen to use sequential and when to use diverging color scales - Datawrapper Blog\nWhen to use classed and when to use unclassed color scales - Datawrapper Blog\nYour Friendly Guide to Colors in Data Visualisation\n10 ways to use fewer colors in your data visualizations - Datawrapper Blog\n如何减少使用的颜色数量\nA map from Great Circle Mapper\n大圆航线\nColoring for Colorblindness\n色觉异常的颜色选择\n",
   "wordCount" : "262",
   "inLanguage": "zh",
-  "datePublished": "2022-09-20T15:19:19+08:00",
-  "dateModified": "2022-09-20T15:19:19+08:00",
+  "datePublished": "2022-09-20T00:00:00Z",
+  "dateModified": "2022-09-20T00:00:00Z",
   "author":{
     "@type": "Person",
     "name": "Yorkson"
@@ -212,7 +212,7 @@
     <h1 class="post-title">
       论文可视化配色简易指南
     </h1>
-    <div class="post-meta">&lt;span title=&#39;2022-09-20 15:19:19 &#43;0800 &#43;0800&#39;&gt;九月 20, 2022&lt;/span&gt;&amp;nbsp;·&amp;nbsp;Yorkson
+    <div class="post-meta">&lt;span title=&#39;2022-09-20 00:00:00 &#43;0000 UTC&#39;&gt;九月 20, 2022&lt;/span&gt;&amp;nbsp;·&amp;nbsp;Yorkson
 
 </div>
   </header> 
