@@ -14,6 +14,25 @@
       
       <guid>https://yorks0n.github.io/posts/change_to_anybox/</guid>
       <description>苦raindrop久矣，终于找到趁手的书签管理工具了</description>
+      <content:encoded><![CDATA[<p>长期以来，我一直使用Raindrop作为我的书签管理服务，苦raindrop久矣。从2017年左右，一直用着免费版本的Raindrop，主要因为它那些付费版本的功能我也不太用得上，这些年也在其中积累下来大几百个书签，其中不少还标注了标签和备注方便查找。它倒是也能用，既支持多平台同步，又有网页版，最初免费版不支持创建嵌套的文件夹，后来也支持了，可以说功能上没啥大毛病。</p>
+<p><img loading="lazy" src="images/Snipaste_2024-10-22_13-04-42.jpg" alt="Snipaste_2024-10-22_13-04-42"  />
+</p>
+<p>然而这几年里，总想找机会把它换掉，无他，Raindrop的性能真是太差了。不仅各个平台的App都宛如网页版套壳，各种操作的响应也都非常慢。每次想添加新书签，还要在添加页面等一会儿，确定它同步完了再关闭窗口；搜索的时候，也经常弹不出搜索结果。为此，我一直在尝试各种书签管理工具，想找个满意的替代品，大致需求也不复杂：</p>
+<ul>
+<li>性能良好，添加书签时的反应迅速</li>
+<li>同时支持文件夹和标签两种分类方式，便于分大类和进行筛选</li>
+<li>检索性能优秀</li>
+<li>支持同步功能，需要至少有桌面与手机平台</li>
+<li>最好能有独立App，而非依靠浏览器插件等形式实现</li>
+<li>非订阅制，开源或可以买断</li>
+</ul>
+<p>然而找了好久都没遇到合适的，许多开源项目都没有多端，或是同步起来相当费劲，亦或是书签多了后管理不便。一些付费服务页面fancy，但是性能巨差，或是性能好并且拥抱AI，于是每个月订阅费用感人。我还是希望能将书签管理与稍后读等内容管理分开的，避免混在一起检索起来麻烦，因此那些对内容的快速AI检索我也用不上。</p>
+<p>前几年，也曾多次按月订阅试过Anybox，但最初不支持文件夹，支持Tag但不能手动调顺序，以至按类别检索效率略低。后来虽然更新出了标签嵌套，但截至目前还是不支持手动调整标签顺序，没法像文件夹那样方便。不过在最近的尝试中发现它支持了文件夹，甚至可以直接把Raindrop导出中的文件夹结构保留，解决了我主要的痛点。虽然软件为订阅制，但支持198元永久版买断，总比按月支出来得舒服。于是在又订阅了一个月把书签都导进来试用几天后，果断买断了，删除Raindrop，使用至今非常舒适。不管是软件本身提供的快速检索栏，还是结合了Raycast的插件，都异常丝滑，好好好！</p>
+<p><img loading="lazy" src="images/search.gif" alt="search"  />
+</p>
+<p>甚至现在Anybox还可以将网页版归档下载下来保存，也许之后会把读过想储存的文章也迁移过来？</p>
+<p>要说Anybox现在的缺点，估计就是没有网页版也不支持win吧，但我日常主要用Mac和iOS，倒也完全够用。</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -23,6 +42,195 @@
       
       <guid>https://yorks0n.github.io/posts/basic_elements_data_vis/</guid>
       <description>介绍可视化作图过程中使用的基本元素，简单分析不同数据类型与适合使用的展示方式。</description>
+      <content:encoded><![CDATA[<h2 id="前言">前言</h2>
+<p>本文旨在介绍可视化作图过程中使用的基本元素，简单分析不同数据类型适合使用何种图形进行展示。通过了解这些基本元素，我们可以实现以下两个目的：</p>
+<ul>
+<li>更好地解读图片传递的信息</li>
+<li>判断图表质量的好坏</li>
+</ul>
+<p>在理解了基本元素的基础上，我们能够更好地设计图表，从而更高效直观地向读者传递我们的结论。</p>
+<h2 id="用于数据可视化的基本图形元素">用于数据可视化的基本图形元素</h2>
+<h3 id="marks-and-channels">Marks and Channels</h3>
+<p>一张数据可视化图（特指将数据用图的形式展示出来）中的元素，基本可以分成下面提到的两大类。即使是较为复杂的图，也能拆分成诸多基本元素的组合。</p>
+<p>其中第一类称为 <strong>Mark（标记），是一张图中的基本图形元素。</strong> Mark根据其维度可以细分为三种：</p>
+<p><img loading="lazy" src="images/vis_elements.png" alt="Untitled"  />
+</p>
+<p>第二类元素是 <strong>Channel（通道），指用于控制 Mark 如何呈现在图中的变量。</strong> 通道可以分为以下几种：</p>
+<ul>
+<li>位置</li>
+<li>颜色</li>
+<li>形状</li>
+<li>斜率</li>
+<li>大小（长度、面积、体积）</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements1.png" alt="Untitled"  />
+</p>
+<p>这样讲非常抽象，来几个具体的例子：</p>
+<ul>
+<li>a 图，使用线段作为 Mark（柱状图就是些粗了点的线段），Channel 是长度，所以当我们在看柱状图时，比较的实际是不同线段（柱子）的长度</li>
+<li>b 图，用点作为 Mark，Channel 是点在图上的位置，每个点都有其坐标 (x,y)</li>
+<li>c 图，在 b 图的基础上，增加了一个颜色 Channel，用这个通道将点分成了红蓝两组</li>
+<li>d 图，在 c 图的基础上，又增加了面积作为 Channel 控制点的大小，额外编码了一个变量</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements2.png" alt="Untitled"  />
+</p>
+<p><strong>以此可见，无论复杂还是简单的图，都是通过 Marks 与 Channels 的适当组合得到的。</strong></p>
+<h3 id="channel-rankings">Channel Rankings</h3>
+<p>在画图的时候，一次必然不会用到全部的上述元素。由于各种 Channel 传递信息的效果并不一致，要想让你的图更为直观，需要选择恰当的元素表现方式。</p>
+<p>下图展示了不同类型的数据，用不同 Channel 进行表达时，其效果的优劣，越靠上的 Channel 越便于读者理解。</p>
+<p>有顺序的数据（比如一组有大有小的测量值）应当以左边这组形式呈现，类别数据（比如野生型和突变体这两组材料）应当以右边的形式呈现。</p>
+<p><img loading="lazy" src="images/vis_elements3.png" alt="Untitled"  />
+</p>
+<p>对于两类数据，效果最好的都是空间位置。我们来看一组例子，体会一下不同数值编码方式传递信息的效率差异。</p>
+<p>浏览下面的每一张图，快速判断图中的数据能分为几组。</p>
+<p><img loading="lazy" src="images/vis_elements4.png" alt="Untitled"  />
+</p>
+<ul>
+<li>第一的图，用位置+颜色编码，很容易将点进行分组。</li>
+<li>第二张图，用大小+颜色编码，稍微混乱了一些，但还算可以分辨。</li>
+<li>第三张图，该分成三组还是四组？这张图采用宽度+高度编码，还算可以分辨，但由于我们通常感知面积快于形状，所以矮宽/高瘦的椭圆形可能在直觉上会被归为一组，于是图中四组容易被认作大中小的三组。</li>
+<li>第四张图，只用颜色进行编码，非常混乱，实际也是四组。</li>
+</ul>
+<h2 id="不同数据类型与其适合的展示方式">不同数据类型与其适合的展示方式</h2>
+<h3 id="one-quantitative-value">One quantitative value</h3>
+<p>首先是一维数据，只有一组连续值，我们希望展示这组数据的分布情况。如果只用平均值、标准差来描述，可能会损失很多信息，便可以考虑用直方图或密度图来展示。</p>
+<p><img loading="lazy" src="images/vis_elements5.png" alt="Untitled"  />
+</p>
+<h4 id="直方图histogram">直方图（Histogram）</h4>
+<p>直方图（Histogram）是展示 <strong>连续数据分布情况</strong> 最常用的工具，它划分好一组区间，将落到每个区间中值的个数进行统计并绘图，使用线条的长度来编码数据。由于直方图需要对连续型数据做离散分组，因此它有一个明显的缺点，就是它的形状依赖于分组的端点，例如若有好几个相同的数值正好处在分组端点上，那么我们只要稍微向左或向右移动一下分组端点，这些数据点就会被划分入不同的区间，导致矩形条的高度变化。</p>
+<ul>
+<li>Mark: line</li>
+<li>Channel: length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements6.png" alt="Untitled"  />
+</p>
+<h4 id="密度图density-plot">密度图（Density plot）</h4>
+<p>密度图利用核密度估计，对原始数据估计其密度函数，相比直方图对数据的描述更加准确。然而其边界处可能由于边界效应与实际情况不符。</p>
+<ul>
+<li>Mark: line</li>
+<li>Channel: position</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements7.png" alt="Untitled"  />
+</p>
+<h3 id="two-quantitative-values">Two quantitative values</h3>
+<p>当面对二维连续值的情况，比一维稍微复杂一点，可以用散点图展示它们之间的关系。</p>
+<p><img loading="lazy" src="images/vis_elements8.png" alt="Untitled"  />
+</p>
+<h4 id="散点图scatter-plot">散点图（Scatter plot）</h4>
+<p>散点图展示 <strong>两个变量之间的关系</strong> ，这种关系可能是线性或非线性的。图中每一个点的横纵坐标都分别对应两个变量各自的观测值，因此散点所反映出来的趋势也就是两个变量之间的关系。</p>
+<ul>
+<li>Mark: point</li>
+<li>Channel: position</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements9.png" alt="Untitled"  />
+</p>
+<h3 id="one-key-one-value">One key, one value</h3>
+<p>假如一张表是这样的：</p>
+<ul>
+<li><strong>能够定位到某个表格位置的变量称作 Key</strong>，这通常是我们统计对象的某个属性，比如某个材料的名称；</li>
+<li><strong>表格中某个格中具体的值被称为 Value</strong></li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements10.png" alt="Untitled"  />
+</p>
+<h4 id="柱状图bar-chart">柱状图（Bar chart）</h4>
+<p>柱状图可能是我们最熟悉的图形之一，目前是各种统计图形中应用最广泛的，但柱状图使用统计后的数据（平均值、标准差）进行作图，所能展示的统计量比较贫乏：只能以矩形条的长度展示原始数值，对数据的分布几乎没有任何展示。</p>
+<p>比如在下图中，因为展示的是每个动物的平均质量，如果不加误差线，我们既不能看出它的变异程度，也看不到这些数据的分布。</p>
+<ul>
+<li>Mark: lines</li>
+<li>Channel: position, length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements11.png" alt="Untitled"  />
+</p>
+<h4 id="箱线图box-plot">箱线图（Box plot）</h4>
+<p>统计（平均值、标准差）后画出的柱状图损失了太多信息，相比之下，直接用原始数据画出的箱线图呈现了 <strong>更详细的数据分布情况</strong> ，并允许数据中包含异常值。</p>
+<ul>
+<li>Mark: line, point</li>
+<li>Channel: position, length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements12.png" alt="Untitled"  />
+</p>
+<h4 id="小提琴图violin-plot">小提琴图（Violin plot）</h4>
+<p>小提琴图是密度曲线图的变体，有时也与箱线图一同呈现，能够更清晰地展示数据的分布情况。由于其外形与小提琴的形状相似（尤其展示双峰数据时），所以称为小提琴图。通常要较多的数据量，才能呈现出比较好看的小提琴图。</p>
+<ul>
+<li>Mark: line, point</li>
+<li>Channel: position, length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements13.png" alt="Untitled"  />
+</p>
+<h3 id="one-ordered-key-one-value">One ordered key, one value</h3>
+<p>当我们的数据，其中的 Key 有内在顺序时，其呈现方式又可以有所不同。</p>
+<p><img loading="lazy" src="images/vis_elements14.png" alt="Untitled"  />
+</p>
+<h4 id="折线图line-chart">折线图（Line chart）</h4>
+<p>比方说展示一组随时间（比如年份）变化的数据，一般会用折线图的形式，更容易体现出数据的变化趋势。</p>
+<ul>
+<li>Mark: line, point</li>
+<li>Channel: position</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements15.png" alt="Untitled"  />
+</p>
+<p>各种常见的基本图片类型就讲到这，我在每张图处都表明了作图利用到的 Mark 与 Channel。比较后就会发现，各种图确实都可以抽象为作图元素的适当组合。</p>
+<h2 id="常见问题">常见问题</h2>
+<p>以下介绍一些常见的问题与争议，同时包含一些注意事项。篇幅有限，没法将各种问题逐一分析，如果感兴趣也可以与我深入进行交流。</p>
+<h3 id="选择柱状图还是折线图">选择柱状图还是折线图</h3>
+<p>这个问题一般取决于数据的类型，尤其是其中 Key 的类型。</p>
+<ul>
+<li>如果是<strong>类别数据</strong>，用柱状图</li>
+<li>如果是<strong>有序数据</strong>，用折线图</li>
+</ul>
+<p>需注意，类别数据不应使用折线图来展示，而有序数据也能用柱状图表示。</p>
+<p>下面两张图展示了性别与身高的关系，在这里 Key 为性别，属于类别数据，因此柱状图可以，但是折线图不合适。因为折线图天生带有一种展示趋势的倾向，会错误地传递出一种「从 Female 到 Male 身高存在上升趋势」，但一般来说性别不会逐渐变化，通常也不会出现身高随着性别变化而改变的情况。</p>
+<p><img loading="lazy" src="images/vis_elements16.png" alt="Untitled"  />
+</p>
+<p>再看下面的图，年龄与身高的关系。柱状图展示了不同年龄段的身高差别，折线图展示出从十岁到十二岁儿童身高有上升的趋势，这就非常合理了。</p>
+<p><img loading="lazy" src="images/vis_elements17.png" alt="Untitled"  />
+</p>
+<h3 id="原点是否从0开始">原点是否从0开始</h3>
+<p>一个作图过程中需要注意的问题：原点是否从0开始？在不同图中这个问题存在一些争议，但是 <strong>在柱状图中，原点一定要从0开始。</strong> 我们有时也会见到，为了刻意传递出某种结论而在柱状图中不从零开始展示数据的情况。</p>
+<p>回想一下前面提到柱状图的时候，我们提到<strong>柱状图利用长度来编码数值</strong>。正因如此，长度需要与数值以合适的比例关系进行对应，100 是 50 的两倍，因此在线性坐标轴上，对应 100 的柱子长度就该是 50 的两倍长。</p>
+<p>而<strong>折线图利用位置来编码数值</strong>，所以在一些情况下，为了展示出更清晰的局部变化，可以不从0开始。</p>
+<p><img loading="lazy" src="images/vis_elements18.png" alt="Untitled"  />
+</p>
+<h3 id="雷达图与饼图">雷达图与饼图</h3>
+<p>雷达图实际上是极坐标系中的折线图，<strong>以到中心的距离编码数值</strong>，然而其<strong>可读性非常差</strong>，绝大多数情况下避免使用。</p>
+<ul>
+<li>纵坐标对应的数值不易阅读</li>
+<li>折线的趋势变化不明显</li>
+<li>折线图不应用来表示没有顺序的分组数据</li>
+<li>除非周期性数据，否则一组数据结尾和开始处的连接没有实际含义</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements19.png" alt="Untitled"  />
+</p>
+<p>饼图<strong>用角度编码数值</strong>，给人的感知是角度/面积，<strong>可读性也不好</strong>。因为人眼对角度或面积辨识能力不强，尤其是相似的角度非常多的时候。</p>
+<p><img loading="lazy" src="images/vis_elements20.png" alt="Untitled"  />
+</p>
+<p>回看一下最开始放的排序图，角度与面积都排在了最后，因此请谨慎使用饼图。如果用，对数据进行排序后再画饼图，可以稍稍让读图变得轻松一点。</p>
+<p><img loading="lazy" src="images/vis_elements21.png" alt="Untitled"  />
+</p>
+<h3 id="一些奇怪的图">一些奇怪的图</h3>
+<p>我翻了一些CNS文章，除了热图和树状/网状图，基本都是上面提到的图片类型。其中有些变体形式的图也非常不错，比如下面这张直接展示出原始值及其平均值，又省空间又直观。</p>
+<p><img loading="lazy" src="images/vis_elements22.png" alt="Untitled"  />
+</p>
+<p>或是下面这种（我画了个示意图），相比于柱状图省去了柱子的部分，同样呈现出平均值和误差线，又比柱状图省下不少空间（柱状图的柱子宽度几乎毫无意义）。</p>
+<p><img loading="lazy" src="images/vis_elements23.png" alt="Untitled"  />
+</p>
+<p>再举个例子，说说如何用图片元素的基本知识，帮助我们读一张图，尤其是如今日益花哨的各种组学图。下面是张呈现出转录组数据的火山图（Volcano plot），一眼看上去还挺炫，让我将其中的各种元素拆分一下：</p>
+<ul>
+<li>横坐标与纵坐标都是取 log 后的连续型数值，坐标轴不包括离散（分组）数据，因此这是将（x,y）映射到位置的散点图，每个点代表一个基因</li>
+<li>再看横纵坐标表示的含意，横坐标是 R-NR 数据的比值，因此越靠右表明比值越大，越靠左则比值越小</li>
+<li>图中的两条曲线划定了一定范围，因此作为比较数据的阈值</li>
+<li>数据点还映射到了不同的颜色，灰色是没有达到阈值的数据，黑色点达到阈值，其中又有些选出的基因，被标注以不同颜色，应该是依照某个其他因素进行了分组</li>
+</ul>
+<p>那么，再接下去看看上下文有没有提到这些颜色代表了什么分组，就清楚它是要讲什么了。</p>
+<p><img loading="lazy" src="images/vis_elements24.png" alt="Untitled"  />
+</p>
+<p>好了，这篇文章就写到这，我们下次再见。</p>
+<h2 id="参考资料与延伸阅读">参考资料与延伸阅读</h2>
+<ul>
+<li><a href="https://socviz.co/index.html#preface">Data Visualization - A practical introduction</a></li>
+<li><a href="https://www.cs.ubc.ca/~tmm/talks.html#vad15sydney">Visualization Analysis &amp; Design</a></li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -32,6 +240,134 @@
       
       <guid>https://yorks0n.github.io/posts/outlier_detection/outlier_detection/</guid>
       <description>整理一下检测单变量异常值的方法。</description>
+      <content:encoded><![CDATA[<h2 id="异常值">异常值？</h2>
+<p>首先，什么是异常值，某个特别的值真的是异常值吗？</p>
+<p>在统计学中，异常值（outlier）是与其他观察值显著不同的数据点。它们可能来源于测量方法的变异性，可能指示出新的数据情况，或者也可能是实验误差的产物。然而，判断某个值是否为异常值并不轻松，也没有一劳永逸的方法或是唯一可信的标准，因此这里整理几种常见的单变量异常值检测方法，以供自己或他人将来参考。</p>
+<p>至于如何处理异常值，是原样保留还是剔除它们，往往会随着分析目的等因素发生变化，但请一定三思，avoid <a href="https://en.wikipedia.org/wiki/Cherry_picking">cherry-picking</a>。</p>
+<h2 id="异常值检测">异常值检测</h2>
+<h3 id="three-sigma-rule">three-sigma rule</h3>
+<p>首先计算数据的平均值mu，与标准差std</p>
+<p>three-sigma 法则将任何 $abs(x - µ) &gt; 3 * std$ 的值作为异常值，这里的3也可以根据情况进行调整</p>
+<p>这种方式与另一种Z-score方法实际是一致的：对数据进行Z-score变换，就是在计算数据的Z统计量</p>
+<p>$$
+z = (x-µ)/σ
+$$</p>
+<p>对应于three-sigma方法中，就是这里的 $abs(z) &gt; 3$会被视为异常值。</p>
+<p>这里划定异常值的系数取3，实际已经是一个非常极端的值了，我们假设Z-score变换后的数据符合标准正态分布，此时置信区间内的概率$p(|z| &gt; 3) = 0.9973$，即数据落在这个区间外的概率只有0.0027。</p>
+<p>我们假设随机来一组数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#a6e22e">set.seed</span>(<span style="color:#ae81ff">2501</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成一组10个符合正态分布的随机数，µ = 100，σ = 10</span>
+</span></span><span style="display:flex;"><span>random_numbers_1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">rnorm</span>(<span style="color:#ae81ff">10</span>, mean <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>, sd <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 99 104 103  91 106 100  96  90 110  99</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 再添加几个值，分别为68,220</span>
+</span></span><span style="display:flex;"><span>data_1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(random_numbers_1, <span style="color:#ae81ff">68</span>, <span style="color:#ae81ff">220</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 99 104 103  91 106 100  96  90 110  99  68 220</span>
+</span></span></code></pre></div><p>此时样本均值和标准差分别为</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span>mu_1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span>(data_1)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 107.17</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sigma_1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">sd</span>(data_1)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 37.13</span>
+</span></span></code></pre></div><p>此时 three-sigma的区间为$mu \pm 3*sigma = (-4.23, 218.57)$，是个大到离谱的区间了。上面的数据中只有220会被这个方式定义为异常值。这个范围对应初始的 $N(100,10^2)$ 中的概率为 $1 - 9.7^{-26}$，即有真实值落在区间外的概率为$9.7^{-26}$，因此是一个区间范围非常大，非常宽松的方法。其原因一方面是选择 3 作为系数，因此可以视情况将其调整为其他值，比如 2.5 等。</p>
+<p>但是，计算置信区间的方式相对比较繁琐，一种更直观的是对所有数据直接计算 z 统计量</p>
+<p>$$
+|z| = \left|\frac{X - \bar{X}}{s}\right|
+$$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#a6e22e">abs</span>(<span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">scale</span>(data_1)[,<span style="color:#ae81ff">1</span>],<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 0.22 0.09 0.11 0.44 0.03 0.19 0.30 0.46 0.08 0.22 1.05 3.04</span>
+</span></span></code></pre></div><p>其中68的z变量为1.05，220的z变量为3.04，如果以3为标准就可以将其作为异常值。</p>
+<p>另一方面，该方法本身涉及到计算平均值和标准偏差，这两个值都受异常值影响很大，尤其是标准偏差，假设上面额外增加的 220 改成 200，这种方法的区间就会成为 $(10.54, 200.45)$，这时 200 落在了边界附近，却刚好不会被视为异常值。</p>
+<h3 id="iqr-方法">IQR 方法</h3>
+<p>有时也称为箱线图方法，通过计算数据的分位数判断异常值，大概方式如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span>Q25 <span style="color:#f92672">=</span> <span style="color:#ae81ff">25</span>th_percentile
+</span></span><span style="display:flex;"><span>Q75 <span style="color:#f92672">=</span> <span style="color:#ae81ff">75</span>th_percentile
+</span></span><span style="display:flex;"><span>IQR <span style="color:#f92672">=</span> Q75 <span style="color:#f92672">-</span> Q25         <span style="color:#f92672">//</span> inter<span style="color:#f92672">-</span>quartile range
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">IF </span>(x <span style="color:#f92672">&lt;</span> Q25 <span style="color:#f92672">-</span> <span style="color:#ae81ff">1.5</span><span style="color:#f92672">*</span>IQR) <span style="color:#a6e22e">OR </span>(Q75 <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.5</span><span style="color:#f92672">*</span>IQR <span style="color:#f92672">&lt;</span> x) THEN  x is a mild outlier
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">IF </span>(x <span style="color:#f92672">&lt;</span> Q25 <span style="color:#f92672">-</span> <span style="color:#ae81ff">3.0</span><span style="color:#f92672">*</span>IQR) <span style="color:#a6e22e">OR </span>(Q75 <span style="color:#f92672">+</span> <span style="color:#ae81ff">3.0</span><span style="color:#f92672">*</span>IQR <span style="color:#f92672">&lt;</span> x) THEN  x is an extreme outlier
+</span></span></code></pre></div><p>IQR 方法的好处在于，去掉异常值前后，其他值的中位数和 IQR 基本是不变的。</p>
+<p>同样用上面的数据，计算一下这种方式的区间：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#a6e22e">quantile</span>(data_1, probs <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0.25</span>,<span style="color:#ae81ff">0.75</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Q25 = 94.75</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Q75 = 104.50</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># IQR = 9.75</span>
+</span></span></code></pre></div><p>此时1.5倍IQR的区间为，相对还是个比较窄的范围，后添加进去的 68 和 220 在此情况下都会被视为异常值。</p>
+<p>$$
+(Q25-1.5\cdot IQR, Q75+1.5\cdot IQR) = (80.12, 119.12)
+$$</p>
+<p>3 倍 IQR 的范围则为 $(65.5, 133.75)$ 相对会宽一些，此时只有220会被作为异常值。</p>
+<p>$$
+(Q25-3\cdot IQR, Q75+3\cdot IQR) = (65.5, 133.75)
+$$</p>
+<p><strong>这种方式的一个好处就是分位数对异常值不太敏感</strong>，如果把220变为200，这个区间依然是不会变的。</p>
+<p>1.5 倍 IQR 的区间$(80.12, 119.12)$放到原始的分布中去大致对应于概率 95% 的正态区间；3 倍 IQR 的区间对应 99.94% 的概率，真实值落入这个区间外的概率也足够低了；当然相比于 three-sigma，还是严格了一些。</p>
+<p>因此，IQR 方法更容易检测出异常值，当然也更有可能把真实值视为异常值，因此需要谨慎选择 IQR 区间的倍数。</p>
+<h2 id="中位数绝对偏差-mad">中位数绝对偏差 MAD</h2>
+<p>上面的方法可能会遇到一些问题，包括</p>
+<ul>
+<li>均值和标准差的计算依赖于所有数值，因此离群值可能会对均值和标准差产生较大影响</li>
+<li>three-sigma、IQR等方法对于小样本不一定合适（？</li>
+</ul>
+<p>还有另一种可以衡量变异程度的统计量，中位数绝对偏差（Median absolute deviation，MAD）</p>
+<p>其计算也相当简便：</p>
+<p>对于一组数据$X_1, X_2, X_3, &hellip;, X_n$ ，其中位数为$\tilde{X} = median(X)$</p>
+<p>MAD是各个数据与其中位数绝对偏差的中位数：</p>
+<p>$$
+MAD = median(|X_i - \tilde{X}|)
+$$</p>
+<p>MAD 相比方差更能适应数据集中的异常值：在标准偏差中，与均值的距离是平方的，因此大偏差的权重更大，因此离群值会严重影响它；在 MAD 中，由于中位数天生受异常值影响较小，少数异常值的偏差几乎不影响MAD。</p>
+<p>上面 three-sigma 使用标准方差 σ 衡量变异程度，IQR 方法使用 IQR 衡量变异，类似的，在这里使用 MAD 衡量数据的变异幅度。MAD 的使用方式类似Z-score变换中将表标准差应用于平均值的过程，为了将 MAD 作为与标准偏差 σ 一致的估计量，需要有</p>
+<p>$$
+\hat{\sigma} = k \cdot MAD
+$$</p>
+<p>其中 k 是一个比例系数，取决于分布。对于正态分布的数据，k 被认为是</p>
+<p>$$
+k = 1/\Phi^{-1}(3/4) \approx 1.4826
+$$</p>
+<p>即标准正态分布$Z = (X-\mu)/\sigma$的分位数函数$\Phi^{-1}$（也称累积分布函数，R中计算使用 qnorm）的倒数。</p>
+<p>用一开始的数据计算</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#75715e"># 99 104 103  91 106 100  96  90 110  99  68 220</span>
+</span></span><span style="display:flex;"><span>mad_1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">median</span>(<span style="color:#a6e22e">abs</span>(data_1 <span style="color:#f92672">-</span> <span style="color:#a6e22e">median</span>(data_1)))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mad_1 = 5.5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">abs</span>((data_1 <span style="color:#f92672">-</span> <span style="color:#a6e22e">median</span>(data_1)) <span style="color:#f92672">/</span> (mad_1<span style="color:#f92672">*</span><span style="color:#ae81ff">1.4826</span>)), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0.06</span>  <span style="color:#ae81ff">0.55</span>  <span style="color:#ae81ff">0.43</span>  <span style="color:#ae81ff">1.04</span>  <span style="color:#ae81ff">0.80</span>  <span style="color:#ae81ff">0.06</span>  <span style="color:#ae81ff">0.43</span>  <span style="color:#ae81ff">1.17</span>  <span style="color:#ae81ff">1.29</span>  <span style="color:#ae81ff">0.06</span>  <span style="color:#ae81ff">3.86</span> <span style="color:#ae81ff">14.78</span>
+</span></span></code></pre></div><p>类似，视情况选择合适的值作为阈值，即可检出异常值。如果选择 3，对应的区间为 (75.04, 123.96)，概率范围为98.5%；如果选择 4，对应的区间为 (58.73, 140.27)，概率范围为99.89%。</p>
+<p>k 的推导过程如下</p>
+<p>为了使 $\pm k*MAD$ 的区间落在概率为 $p_0$ 的标准正态分布中区间内，有以下公式</p>
+<p>$$
+p_0 = P(|X - µ| \le k \cdot MAD) = P\left( \left|\frac{X - µ}{σ}\right| \le \frac{k \cdot MAD}{σ}\right) = P\left( |Z| \le \frac{k \cdot MAD}{σ} \right)
+$$</p>
+<p>因此就有</p>
+<p>$$
+\Phi(k \cdot MAD/\sigma) - \Phi(-k \cdot MAD/\sigma) = p_0
+$$</p>
+<p>又因为</p>
+<p>$$
+\Phi(-k\cdot MAD/\sigma)=1-\Phi(k \cdot MAD/\sigma)
+$$</p>
+<p>所以</p>
+<p>$$
+\Phi(k \cdot MAD/\sigma)= \frac{1 + p_0}{2}
+$$</p>
+<p>令 $p_0 = 0.5$，即 50% 正态分布区间时，</p>
+<p>$$
+k = \frac{\sigma}{MAD} = \frac{1}{\Phi^{-1}(3/4)} \approx 1.4826
+$$</p>
+<p>这里选择 0.5 是因为，对于均值为零的对称分布，总体 MAD 是分布的第 75 个百分位数，因此标准正态分布的总体 MAD 刚好等于$\Phi^{-1}(3/4)$。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>
+<p><a href="https://stackoverflow.com/questions/2303510/recommended-anomaly-detection-technique-for-simple-one-dimensional-scenario">Recommended anomaly detection technique for simple, one-dimensional scenario?</a></p>
+</li>
+<li>
+<p><a href="https://towardsdatascience.com/5-ways-to-detect-outliers-that-every-data-scientist-should-know-python-code-70a54335a623">5 Ways to Detect Outliers/Anomalies That Every Data Scientist Should Know </a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">Median absolute deviation</a></p>
+</li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -76,6 +412,42 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;annotate&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;, x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.8&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;, label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; label_text) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 添加上文字标注，类型是&amp;#34;text&amp;#34;，位置在x=5.8，y=9&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  leg &lt;span style=&#34;color:#75715e&#34;&gt;# 添加之前指定的字体大小部分，不关键&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <content:encoded><![CDATA[<p>前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。</p>
+<p><img loading="lazy" src="images/corplot1.png" alt="demo"  />
+
+找了点数字画了个例子，假设数据读进来是这样的两列：</p>
+<p><img loading="lazy" src="images/corplot2.png" alt="Untitled"  />
+</p>
+<p>绘图的部分我用了这些</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>leg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">theme</span>(title<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>), 
+</span></span><span style="display:flex;"><span>             axis.text.x<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             axis.text.y<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             legend.text<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>))
+</span></span><span style="display:flex;"><span>label_text <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;r = &#34;</span>, <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">cor</span>(subdata<span style="color:#f92672">$</span>Na,subdata<span style="color:#f92672">$</span>K),<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(subdata, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(Na), y <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(K))) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stat_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lm&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>)<span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_classic</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x<span style="color:#f92672">=</span><span style="color:#ae81ff">5.8</span>, y<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>, label<span style="color:#f92672">=</span> label_text) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  leg
+</span></span></code></pre></div><p>以上代码画出来的图如下：
+<img loading="lazy" src="images/corplot3.png" alt="Untitled"  />
+</p>
+<p>其中各部分的解释如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>leg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">theme</span>(title<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>), 
+</span></span><span style="display:flex;"><span>             axis.text.x<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             axis.text.y<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             legend.text<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>)) <span style="color:#75715e"># 用于指定字体大小等，可以先忽略</span>
+</span></span><span style="display:flex;"><span>label_text <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;r = &#34;</span>, <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">cor</span>(subdata<span style="color:#f92672">$</span>Na,subdata<span style="color:#f92672">$</span>K),<span style="color:#ae81ff">2</span>)) <span style="color:#75715e"># 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2) <span style="color:#75715e"># 用ggplot2包画图</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(subdata, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(Na), y <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(K))) <span style="color:#f92672">+</span> <span style="color:#75715e">#指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>) <span style="color:#f92672">+</span> <span style="color:#75715e">#绘制散点部分，点的大小为2，颜色为浅绿色</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stat_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lm&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>)<span style="color:#f92672">+</span> <span style="color:#75715e">#绘制拟合线部分，method = &#34;lm&#34; 使用线性拟合，颜色同前</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_classic</span>() <span style="color:#f92672">+</span> <span style="color:#75715e"># 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x<span style="color:#f92672">=</span><span style="color:#ae81ff">5.8</span>, y<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>, label<span style="color:#f92672">=</span> label_text) <span style="color:#f92672">+</span> <span style="color:#75715e"># 添加上文字标注，类型是&#34;text&#34;，位置在x=5.8，y=9</span>
+</span></span><span style="display:flex;"><span>  leg <span style="color:#75715e"># 添加之前指定的字体大小部分，不关键</span>
+</span></span></code></pre></div>]]></content:encoded>
     </item>
     
     <item>
@@ -85,6 +457,93 @@
       
       <guid>https://yorks0n.github.io/posts/read-single-cell-best-practice/</guid>
       <description>Best practices for single-cell analysis across modalities</description>
+      <content:encoded><![CDATA[<h1 id="best-practices-for-single-cell-analysis-across-modalities">Best practices for single-cell analysis across modalities</h1>
+<p>跨模式单细胞分析的最佳实践，于 2023 年 3 月 31 日发表于 nature reviews genetics。最近在研究单细胞分析相关的资料，因此记下这篇笔记。文章中包含了 Transcriptome、Chromatin accessibility、Surface protein expression、空间转录组等多个方面，但就近期关注点而言，只精简记录单细胞转录组部分的笔记。如果有需要，可以<a href="https://www.nature.com/articles/s41576-023-00586-w">阅读原文</a>。</p>
+<hr>
+<p><img loading="lazy" src="images/1680845994088.png" alt=""  />
+</p>
+<h2 id="从原始计数矩阵到高质量单细胞数据">从原始计数矩阵到高质量单细胞数据</h2>
+<p>原始计数矩阵是直接从测序数据定量得来的矩阵，一般根据每个细胞 barcode 与 UMI 确定细胞中各种 mRNA 的数量，然而原始数据中包含着各种系统噪声和误差（比如来自建库操作、样本质量、测序批次等），因此在这一预处理过程中试图去除误差。这一过程涉及到<strong>质量控制</strong>、<strong>归一化</strong>、<strong>数据矫正</strong>和<strong>特征选择</strong>等过程，还可能会涉及到消除批次效应以<strong>整合多批次数据</strong>的过程。</p>
+<h3 id="滤低质量细胞和噪声校正-filtering-low-quality-cells-and-noise-correction">滤低质量细胞和噪声校正 Filtering low-quality cells and noise correction</h3>
+<p>大多数分析过程假定每个单细胞液滴中都包含来自单个完整细胞的 RNA。细胞质量差（比如死细胞）、溶液中破裂细胞产生的 RNA 污染、同时捕获多个细胞的情况违反这一假设，因此需要在进一步分析之前去除这部分数据。</p>
+<ul>
+<li>
+<p><strong>低质量细胞</strong>：检测基因数量过少、深度过低或是线粒体计数（植物还有叶绿体）过多的细胞都被认为是低质量细胞。一般通过手动设置的阈值来进行识别和过滤，可以参照<a href="https://doi.org/10.15252%2Fmsb.20188746">先前文章</a>或是基于中值绝对偏差数对样本进行过滤。需要综合考虑过滤的指标，同时注意<strong>质量控制是在样本水平上进行的</strong>，因为样本之间的阈值可能会有很大差异。</p>
+<ul>
+<li>
+<p>中值绝对偏差数（Median Absolute Deviation, MAD）</p>
+<p>基于中值绝对偏差数（Median Absolute Deviation, MAD）的样本自动过滤是一种统计方法，用于识别和剔除数据集中的离群值。这种方法主要有以下几个步骤：</p>
+<ol>
+<li>计算数据集的中位数（median）。</li>
+<li>对每个数据点，计算其与中位数的偏差绝对值。</li>
+<li>计算这些绝对偏差的中位数，得到MAD值。</li>
+<li>选择一个阈值，通常是MAD的某个倍数（例如3倍MAD），用于判断数据点是否为离群值。</li>
+<li>剔除大于阈值的数据点，即被认为是离群值的数据点。</li>
+</ol>
+<p>这种基于MAD的方法对于处理非正态分布的数据集具有较好的鲁棒性，而且相对标准差受异常值影响更小，因此可以有效地识别和过滤异常值。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>无细胞游离 RNA</strong>：通常存在于溶液中，并在建库过程中分配给每个细胞，产生一种类似背景值的效果。如果是细胞类群特异性标志物的 RNA 污染了其他细胞，后续分析中可能将不同的细胞群混合在一起。流行的 SoupX 等方法根据样本中「空液滴」的表达情况去除污染；CellBender 将环境 RNA 的去除制定为无监督贝叶斯模型，该模型不需要细胞类型特异性基因表达谱的先验知识。应当尽量不忽略去除环境 RNA 这一步，以提升下游分析的质量。</p>
+</li>
+<li>
+<p><strong>空液滴和双联体液滴</strong>（包含两个细胞的液滴）：由不同细胞类型形成的双联体很难注释，并可能导致细胞类型标注错误。常见的双峰检测方法随机抽取两个细胞组合成模拟双联体，并将其与其他细胞测量结果进行比较。scDblFinder 采用此方法， 并在多项测试中准确性和计算效率优于其他方法。还可以应用多种不同检测方法并比较结果以提高准确性。</p>
+</li>
+</ul>
+<h3 id="归一化和方差稳定化-normalization-and-variance-stabilization">归一化和方差稳定化 Normalization and variance stabilization</h3>
+<p>不同细胞的 mRNA 含量不同，加上测序过程随机误差，将导致细胞有不同的初始计数。归一化可以矫正测序深度的差异，使不同细胞具有可比性。随后稳定方差以确保少数离群值对整体数据影响不会太大。</p>
+<p><strong>shifted logarithm transformation</strong>：使用缩放系数s的 log(𝑦/𝑠+1) 表现良好，但不应使用 CPM（counts per million）作为输入。</p>
+<blockquote>
+<p>should not be used with counts per million as an input, as it reflects an unrealistically large overdispersion.
+原文如此，但没看懂为什么，待补充。</p>
+</blockquote>
+<p>通过使用一个公因数缩放所有基因，会假定由于细胞大小导致的测序深度差异可以忽略不计。然而对于异质性较大的数据集，其中包含了特性不同的各种细胞，其本身基因表达差异就较大，难以对每个基因找到一个合适所有细胞的系数。</p>
+<p>此外还有 <strong>Scran</strong> 标准化和 <strong>Pearson</strong> 残差方法。shifted logarithm transformation 被证明可以更好地稳定方差以进行后续降维，Scran 在批量校正任务中表现良好，Pearson 残差更适合生物变异基因的选择和稀有细胞身份的识别。</p>
+<h3 id="消除混杂的变异来源-removing-confounding-sources-of-variation">消除混杂的变异来源 Removing confounding sources of variation</h3>
+<p>混杂变异可以来源于技术和生物，并且应该分开处理。</p>
+<ul>
+<li><strong>批次效应</strong>：多个样本的数据集可能会由于技术产生的批次效应，需要恰当的数据整合方法。canonical correlation analysis 与 Harmony 等线性嵌入模型在处理不同批次的简单整合上表现良好；在复杂任务重， atlas、scANVI、scVI、scGen等深度学习方法，及 Scanorama 等显性嵌入模型表现较好。scIB 包可用于使用上述基准的评估指标来评估整合效果。</li>
+<li><strong>生物因素</strong>：细胞周期等因素同样会引入误差，使得细胞间差异来源于细胞周期而非细胞类型。可以使用 Scanpy 或 Seurat 中内置的细胞周期标记与校正函数作为基础；Tricycle 等更复杂的方法对细胞异质性高的数据集表现良好。</li>
+</ul>
+<h3 id="选择信息特征和降维-selecting-informative-features-and-reducing-dimensionality">选择信息特征和降维 Selecting informative features and reducing dimensionality</h3>
+<p>理想情况下，特征选择方法应优先选择在亚群间（而非亚群内）变化的基因，并且不影响亚群内更小亚群的可识别性。</p>
+<p>通过拟合基因模型获得 deviance 来识别信息量大的基因，模型假定所有细胞基因表达一致，然后检验哪些基因违反假设，从而选择基因。此外，按此方法利用了原始计数对基因进行排序，不依赖归一化，不会因为数值中零值过多产生误差（zero inflation）。选择特征后可以通过 PCA 等方式进一步降低数据集维度，同时 PCA 结果可以进一步作为输入应用 t-SNE、UMAP、PHATE 等可视化降维方法。注意，最近有研究表明，仅仅依靠2D嵌入可能会导致对细胞之间关系的错误解读。因此，结果不应仅基于对结果的视觉检查来制定，而应结合其他定量评估。</p>
+<h2 id="为细胞集群确定亚群身份-from-clusters-to-cell-identities">为细胞集群确定亚群身份 From clusters to cell identities</h2>
+<h3 id="从单个细胞到集群-from-single-cells-to-clusters">从单个细胞到集群 From single cells to clusters</h3>
+<p>识别细胞群的第一步是将表达模式相似的细胞聚类成组，推荐使用 Leiden 算法进行聚类。</p>
+<h3 id="为细胞集群确定细胞身份-mapping-cell-clusters-to-cell-identities">为细胞集群确定细胞身份 Mapping cell clusters to cell identities</h3>
+<p>建议分三步进行：自动注释 → 手动注释 → 验证。</p>
+<ul>
+<li><strong>自动注释</strong>：分为基于分类器的方法和基于参考数据集的映射方法。分类器可以参考 CellTypist 和 Clustifyr，两者利用先前注释过的数据集进行训练并参考大量基因进行分类；映射方法有 scArches、Symphony 或 Azimuth。这两类方法都依赖于参考数据的质量+模型质量+参考数据集对新数据的适用性。</li>
+<li><strong>手动注释</strong>：利用细胞群的特异性标志基因进行注释。</li>
+<li><strong>验证</strong>：需要仔细设计验证试验，并且对于复杂数据或稀有亚群，可能没有资料可供参考。</li>
+</ul>
+<h3 id="伪时间分析从离散状态到连续过程-from-discrete-states-to-continuous-processes">伪时间分析——从离散状态到连续过程 From discrete states to continuous processes</h3>
+<p>根据细胞表达模式的相似性，沿着轨迹对细胞进行排序的模型被称为轨迹推断或伪时间分析。这类分析的效果取决于数据集中存在的轨迹类型，Slingshot 对简单结构表现良好，PAGA 和 RaceID/StemID 对复杂结构表现更好，建议使用 <a href="http://guidelines.dynverse.org/">dynguidelines</a> 选择适用的方法。当预期结构未知时，应采用不同假设通过多种方法确认轨迹和假设。推断出的轨迹不一定有生物学意义。</p>
+<p>利用 RNA velocity （mRNA 剪切、未剪切、降解的比例），比如考虑模型剪接动力学的 <strong>velocyto</strong> 和 <strong>scVelo</strong>，可以根据未剪接和剪接片段确定 RNA velocity：如果一个基因被激活了，未剪切的 RNA 会先于剪切的 RNA 产生。获得的 RNA velocity 输入 <strong>CellRank</strong> 来估计细胞命运。</p>
+<p><strong>谱系追踪</strong>根据细胞中观察到的变异（例如自然发生的基因突变）来推断其谱系模型，判断克隆群体中的细胞分裂历史，可以使用 <strong>Cassiopeia</strong> 提供的多种算法进行分析，建议对比多种算法的结果。同时还有能处理更加复杂谱系的 <strong>LineageOT</strong> 工具，以及追踪静态条形码的 <strong>CoSpar</strong>。</p>
+<h2 id="揭示机制-revealing-mechanisms">揭示机制 Revealing mechanisms</h2>
+<p>对数据进行注释后，可选的分析变得多样，根据研究问题选择要进行的后续分析。</p>
+<h3 id="差异基因表达分析-differential-gene-expression-analysis">差异基因表达分析 Differential gene expression analysis</h3>
+<p>目前单细胞的差异表达分析从两个思路进行：</p>
+<ul>
+<li><strong>样本层面的方法</strong>：将单个样本中的多个细胞细胞读数合并，生成人工合成的批量样本，再利用常规的转录组差异表达分析工具，比如 edgeR、DESeq2 或是 limma。</li>
+<li><strong>细胞层面的方法</strong>：利用广义混合效应模型（比如 MAST)，对单个细胞进行建模。</li>
+</ul>
+<p>各个工具之间的一致性和稳健性较低，但相对而言，<strong>为常规 DEG 设计的工具表现良好</strong>，而单细胞特异性的方法通常会低估基因表达的变异程度，因此倾向于将高表达的基因错误标记为差异表达基因。因此推荐 limma、edgeR 或 DESeq2。</p>
+<h3 id="基因集富集分析-gene-set-enrichment-analysis">基因集富集分析 Gene set enrichment analysis</h3>
+<p>常见的数据库包括 MSigDB、Gene Ontology、KEGG 与 Reactome 等，此外还有用于癌症信号通路的 PROGENy 和转录因子的 DoRothEA。一般采用超几何分布检验、GSEA 或 GSVA 进行富集分析。研究发现富集分析对基因集的选择敏感性大于统计方法，因此应当谨慎选择数据库。decoupleR 等框架提供了多个不同数据库的访问方法。为常规转录组开发的方法可以用于单细胞数据，但一些基于单细胞的方法（比如 Pagoda2），效果可能优于前者。</p>
+<h3 id="检测细胞组成的变化-deciphering-changes-in-cell-composition">检测细胞组成的变化 Deciphering changes in cell composition</h3>
+<p>成分分析比较的是不同细胞类型的相对丰度。单变量统计模型，比如泊松回归或是 Wilcoxon 秩和检验可能将部分细胞类型误报为有显著差异，而实际只是样本组成引起的假象。有专门为单细胞设计的 scDC、scCODA 和 tascCODA 测试方法。</p>
+<h3 id="推断扰动效应-inferring-perturbation-effects">推断扰动效应 Inferring perturbation effects</h3>
+<p>利用细胞培养体系，同时进行大规模多重条件处理细胞的方法称为扰动（perturbations），perturb-seq 或 CROP-seq 等最新技术允许使用多模态数据、全基因组扰动和组合扰动对混池 CRISPR–Cas9 筛选进行分析。</p>
+<h3 id="细胞通讯分析-communication-events-across-cells">细胞通讯分析 Communication events across cells</h3>
+<p>细胞通讯分析利用配体、受体及其相互作用的数据库来预测细胞间相互作用。推荐使用 LIANA，它提供了多种方法和数据库。此外还有CellChat、CellPhoneDB、SingleCellSignalR；提供细胞内活动的补充估计的 Nichenet 和 Cytotalk。</p>
+<h2 id="原文">原文</h2>
+<p>原文中还有关于单细胞 ATAC、单细胞蛋白组、空间转录组等内容，但目前还不太关注，就先不记录了。如果有需要还请阅读原文。</p>
+<p><a href="https://www.nature.com/articles/s41576-023-00586-w">Best practices for single-cell analysis across modalities</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -94,6 +553,79 @@
       
       <guid>https://yorks0n.github.io/posts/docker-pack-shiny-app/</guid>
       <description>介绍了如何将 Shiny App 打包成 Docker 格式，方便在不同设备环境下托管</description>
+      <content:encoded><![CDATA[<h2 id="文件准备">文件准备</h2>
+<p>将Shiny用到的<code>server.R</code>和<code>ui.R</code>一起放在<code>app</code>文件夹中</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./app:
+</span></span><span style="display:flex;"><span>server.R ui.R
+</span></span></code></pre></div><p>写个<code>Dockerfile</code>，把用到的包都写在 <code>install.r</code> 后面</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>FROM rocker/r-base:latest
+</span></span><span style="display:flex;"><span>LABEL maintainer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email &lt;example@mail.com&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>RUN apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y --no-install-recommends <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    sudo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcurl4-gnutls-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcairo2-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libxt-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssl-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssh2-1-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span style="display:flex;"><span>RUN install.r shiny shinyBS dplyr stringr
+</span></span><span style="display:flex;"><span>RUN echo <span style="color:#e6db74">&#34;local(options(shiny.port = 3838, shiny.host = &#39;0.0.0.0&#39;))&#34;</span> &gt; /usr/lib/R/etc/Rprofile.site
+</span></span><span style="display:flex;"><span>RUN addgroup --system app <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> adduser --system --ingroup app app
+</span></span><span style="display:flex;"><span>WORKDIR /home/app
+</span></span><span style="display:flex;"><span>COPY app .
+</span></span><span style="display:flex;"><span>RUN chown app:app -R /home/app
+</span></span><span style="display:flex;"><span>USER app
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#ae81ff">3838</span>
+</span></span><span style="display:flex;"><span>CMD <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;R&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;shiny::runApp(&#39;/home/app&#39;)&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>按以下方式进行构建</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># name of the image</span>
+</span></span><span style="display:flex;"><span>export IMAGE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;yorks0n/trxiv_shiny&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># build image</span>
+</span></span><span style="display:flex;"><span>docker build -t $IMAGE .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># run and test locally</span>
+</span></span><span style="display:flex;"><span>docker run -p 8080:3838 $IMAGE
+</span></span></code></pre></div><p>居然就行了！</p>
+<h2 id="部署在-railway-上">部署在 Railway 上</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>brew install railway
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 登录</span>
+</span></span><span style="display:flex;"><span>railway login
+</span></span></code></pre></div><p>创建一个项目，并输入项目名称</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>➜ railway init
+</span></span><span style="display:flex;"><span>&gt; Project Name TRxiv_shiny
+</span></span><span style="display:flex;"><span>Created project TRxiv_shiny on Personal
+</span></span></code></pre></div><p>虽然当前目录下有个 <code>Dockerfile</code> 了，但是这 XX 的 railway 部署时候端口和默认 docker 的不太一样，或者我没找到哪里设置，所以如果要部署在 railway 上，还需要改一下 <code>Dockerfile</code>。虽然在这指定了<code>ENV PORT=3838</code>，但实际上 railway 每次开的端口都不太一样，所以标准 docker 的写法不太行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>FROM rocker/r-base:latest
+</span></span><span style="display:flex;"><span>LABEL maintainer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Yorkson &lt;yorks0n@qq.com&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>RUN apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y --no-install-recommends <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    sudo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcurl4-gnutls-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcairo2-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libxt-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssl-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssh2-1-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span style="display:flex;"><span>RUN install.r shiny shinyBS dplyr stringr
+</span></span><span style="display:flex;"><span>RUN addgroup --system app <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> adduser --system --ingroup app app
+</span></span><span style="display:flex;"><span>WORKDIR /home/app
+</span></span><span style="display:flex;"><span>COPY app .
+</span></span><span style="display:flex;"><span>RUN chown app:app -R /home/app
+</span></span><span style="display:flex;"><span>USER app
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#ae81ff">3838</span>
+</span></span><span style="display:flex;"><span>ENV PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">3838</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 研究后发现，这里以获取PORT的方式，才能在 Railway 中部署</span>
+</span></span><span style="display:flex;"><span>CMD <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;R&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;shiny::runApp(&#39;/home/app&#39;, host = &#39;0.0.0.0&#39;, port=as.numeric(Sys.getenv(&#39;PORT&#39;)))&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>railway up
+</span></span></code></pre></div><h2 id="参考资料">参考资料</h2>
+<p><a href="https://blog.csdn.net/douerw/article/details/121256642">在Windows系统下，基于WLS从零开始部署我的 R shiny项目到 Docker 中，并将镜像发布到 Docker Hub（内附详细操作流程）_douerw的博客-CSDN博客</a></p>
+<p><a href="https://hosting.analythium.io/dockerizing-shiny-applications/">Dockerizing Shiny Applications</a></p>
+<p><a href="https://hosting.analythium.io/dockerized-shiny-apps-with-dependencies/">Dockerized Shiny Apps with Dependencies</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -134,6 +666,98 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后对&lt;code&gt;index.js&lt;/code&gt; 进行打包&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncc build index.js -o dist
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;打包产物会存放于&lt;code&gt;dist/index.js&lt;/code&gt;&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。</p>
+<h2 id="新建github仓库">新建Github仓库</h2>
+<p>新建一个public仓库，名叫TRxiv，并将远程仓库<code>git clone</code>到本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone git@github.com:Yorks0n/TRxiv.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd TRxiv
+</span></span></code></pre></div><h2 id="创建一个动作元数据文件">创建一个动作元数据文件</h2>
+<p>要让仓库里能被以Action的形式直接调用，需要在<strong>根目录</strong>中创建一个<code>action.yml</code>配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># action.yml</span>
+</span></span><span style="display:flex;"><span>name: <span style="color:#e6db74">&#39;trxiv&#39;</span>
+</span></span><span style="display:flex;"><span>description: <span style="color:#e6db74">&#39;Tracking popular bioRxiv and medRxiv preprints&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>runs:
+</span></span><span style="display:flex;"><span>  using: <span style="color:#e6db74">&#39;node16&#39;</span>
+</span></span><span style="display:flex;"><span>  main: <span style="color:#e6db74">&#39;dist/index.js&#39;</span>
+</span></span></code></pre></div><h2 id="准备运行的代码">准备运行的代码</h2>
+<p>手动将写好的JS脚本拷贝进来，完整代码在此 <a href="https://github.com/Yorks0n/TRxiv">Yorkson/TRxiv</a>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 在这里初始化一下npm</span>
+</span></span><span style="display:flex;"><span>npm init -y
+</span></span></code></pre></div><p>准备一个<code>.gitignore</code>文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有<code>node_modules</code></p>
+<p><a href="https://www.toptal.com/developers/gitignore">https://www.toptal.com/developers/gitignore</a></p>
+<h2 id="文件推送到远程仓库">文件推送到远程仓库</h2>
+<p>然后push到远程仓库</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Initialize&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><h2 id="打包软件">打包软件</h2>
+<p>因为前面把<code>node_modules</code> 从上传的文件列表中忽略了，但脚本<code>index.js</code>内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用<code>ncc</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm install @vercel/ncc
+</span></span></code></pre></div><p>然后对<code>index.js</code> 进行打包</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncc build index.js -o dist
+</span></span></code></pre></div><p>打包产物会存放于<code>dist/index.js</code></p>
+<h2 id="创建工作流">创建工作流</h2>
+<p>在本地创建<code>.github/workflows/main.yml</code>，这个文件实际确定了 Github Action 的行为，此<code>yml</code>格式文件一定要注意正确的缩进。</p>
+<p>配置文件内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># main.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 动作的名称</span>
+</span></span><span style="display:flex;"><span>name: <span style="color:#e6db74">&#39;TRxiv update&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 触发条件</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 条件1，代码push进仓库</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 条件2，定时任务，在UTC 10和22点，即北京时间18点和6点运行</span>
+</span></span><span style="display:flex;"><span>on:
+</span></span><span style="display:flex;"><span>  push:
+</span></span><span style="display:flex;"><span>  schedule:
+</span></span><span style="display:flex;"><span>    - cron: <span style="color:#e6db74">&#39;0 10,22 * * *&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># jobs 定义了要执行的一系列任务 </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>jobs:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## 这个job的名称</span>
+</span></span><span style="display:flex;"><span>  TRxiv_update_job:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## runs-on 内置运行任务的server类型</span>
+</span></span><span style="display:flex;"><span>    runs-on: ubuntu-latest
+</span></span><span style="display:flex;"><span>    name: Update the csv file
+</span></span><span style="display:flex;"><span>    steps: 
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 必须有这一步，让运行的文件夹成为一个git repo</span>
+</span></span><span style="display:flex;"><span>      - uses: actions/checkout@v3
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 运行脚本，指向我们的repo</span>
+</span></span><span style="display:flex;"><span>      - name: <span style="color:#e6db74">&#39;run script&#39;</span>
+</span></span><span style="display:flex;"><span>        uses: Yorks0n/TRxiv@main
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 运行完后，把运行产生在本地的data.csv更新回仓库中</span>
+</span></span><span style="display:flex;"><span>      - name: Commit files
+</span></span><span style="display:flex;"><span>        run: |
+</span></span><span style="display:flex;"><span>         git config --local user.email <span style="color:#e6db74">&#34;github email adress&#34;</span>
+</span></span><span style="display:flex;"><span>         git config --local user.name <span style="color:#e6db74">&#34;github user name&#34;</span>
+</span></span><span style="display:flex;"><span>         git pull
+</span></span><span style="display:flex;"><span>         git add README.md
+</span></span><span style="display:flex;"><span>         git add data.csv
+</span></span><span style="display:flex;"><span>         git commit -m <span style="color:#e6db74">&#34;update data.csv&#34;</span>
+</span></span><span style="display:flex;"><span>        shell: bash
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 使用秘钥确认具有上传权限，同时以秘钥方式提交不会触发push action，避免陷入loop</span>
+</span></span><span style="display:flex;"><span>      - name: Push changes
+</span></span><span style="display:flex;"><span>        uses:  ad-m/github-push-action@master
+</span></span><span style="display:flex;"><span>        with:
+</span></span><span style="display:flex;"><span>         github_token: <span style="color:#e6db74">${</span>{ secrets.MY_GIT_TOKEN <span style="color:#e6db74">}</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>         branch: main
+</span></span></code></pre></div><h2 id="再次将文件推送到远程仓库">再次将文件推送到远程仓库</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Update Workflow&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><h2 id="后续更新">后续更新</h2>
+<p>每次想更新修改前，先在目录中把最新版的环境拉下来</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull
+</span></span></code></pre></div><p><strong>修改过脚本后，要重新打包用到的代码</strong>：<code>ncc build index.js --license licenses.txt</code></p>
+<p>然后再提交回仓库</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://www.freecodecamp.org/news/build-your-first-javascript-github-action/">How to Build Your First JavaScript GitHub Action</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/354188341">如何使用 Github Actions 自动抓取每日必应壁纸?</a></p>
+<p><a href="https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot">Permission denied to github-actions[bot]</a></p>
+<p><a href="https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action">Creating a JavaScript action - GitHub Docs</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -143,6 +767,13 @@
       
       <guid>https://yorks0n.github.io/posts/hello-again/</guid>
       <description>我为什么又开始写 Blog 了？</description>
+      <content:encoded><![CDATA[<p>兜兜转转又开始写 Blog 了，之前几次都没写过多少文章。实际花在折腾 Blog 的时间，远比真正写东西的时间更多。因为没啥值得看的内容，页面无法访问了也一直没有去解决。</p>
+<p>但这次再开博客，倒不是有了汩汩冒出的表达欲，而是自一年前在少数派开始写点文章后，逐渐感受到了输出的重要。之前学习各种东西的过程中一直在输入，会记下不少笔记，但很少整理，几乎就堆在各种笔记软件中。时隔很久再去看，也还是最初的样子，往往看的时候已经不太记得当初某一步为什么要这样设置，或是做了哪些没有记录下来的操作。因此，准备把自己折腾过的东西整理成可以复现的形式，也是更好掌握和回顾知识的过程。</p>
+<p>另一方面，在这几年的学习过程中，几乎都是通过搜索引擎与自学研究各种东西，看到高质量的内容中，除了诸多官方提供的教程，就是许多人在博客中记录的学习心得，受益良多。因此，假如能进行一定输出，说不定也能在未来的哪一天帮上其他人的忙。</p>
+<p>最后，从去年年底开始，以 ChatGPT 为首的大语言模型，不由分说地闯进了人们的生活中。目前，我也几乎每天都会用到它，但几乎只局限在遇到不懂问题时候的 Q&amp;A。但 LLM 的一大限制因素就在于优质内容的输入，在内容工厂的摧残下，中文互联网的内容良莠不齐。因此也希望我写的文章，能在将来的某一天，为模型输出更好的结果贡献一点微小的概率。</p>
+<hr>
+<p>又及，还没有想好怎么对文章进行分类，索性先写起来。同时会把以前写过的东西也都整理到一起，因此日期早于这篇文章的内容，都应该是在其他地方已经发过的。整理搬运过程估计还会持续很久，但已经发现 Gridea 插入图片不太趁手了，估计迟早会再换种部署方式，也许是 Hugo 吧。</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -152,6 +783,37 @@
       
       <guid>https://yorks0n.github.io/posts/interesting-1-dataset-100-visualizations/</guid>
       <description>分享最近看到的一组有意思的数据可视化</description>
+      <content:encoded><![CDATA[<p>分享最近看到的一组有意思的数据可视化。
+由 ferdio 出品的，主题为「1 dataset 100 visualizations」。他们选用了一组非常简单的数据，用一百种不同的图进行可视化，借此「展示数据可视化的多样性和复杂性，以及如何使用有限的视觉元素来讲述不同的故事」。尽管使用了相同的原始数据，但每张图都有其独特的重点，传递出的信息也不尽相同。
+<img loading="lazy" src="images/1680530087246.png" alt=""  />
+</p>
+<p>我计划从中选几个有代表性的图，并尝试解读这种可视化突出了数据怎样的特点。
+先从比较常见的开始，下面两张图都是将数值编码成了长度，算是最常见的柱状图了。依照组合顺序的不同，左图将相同年份的数据摆在一起，更能突出相同年度中，几个国家之间谁的数量更多；右边的图将同一国家两个年度的数据放在一起展示，更能体现出每个国家世界遗产数量都在上升这个趋势。
+<img loading="lazy" src="images/1680530106670.png" alt=""  />
+
+与此同时，假如使用堆积柱状图，则突出的是两个年度，这三个国家世界遗产总量的增长趋势。
+<img loading="lazy" src="images/1680530119989.png" alt=""  />
+
+另外，上面几张图中还有一个特点，它们都将各个部分的具体数值直接标注在了对应的区域。这种方式蛮好，可以减轻看图时「视线需要在坐标轴和数据间反复切换，估算数值」所产生的负担。在这样处理的图中，即使完全删去纵坐标轴也不影响数据解读。</p>
+<p>下面这两张图则是让我比较眼前一亮的（尤其是下面第二张），仔细去看，它们虽然形状不太相似，但实际是几乎一样的两张图——用在一条直线上的位置标记多个数据点的数值。我觉得它们好在以下几个方面：</p>
+<ul>
+<li>清晰明了，无论是比较同一年度各个国家的数值（点的位置），还是增长幅度（两点间的连线长度）都一目了然</li>
+<li>节约空间，如果把第二张图放平，只占据柱状图单个柱子的空间，就足以展示六条柱子所传达的信息</li>
+<li>可以体现出跨越性的增长与压倒性的优势：丹麦（橙色）的世界遗产数量从04年的不如挪威（深蓝色），到22年超越挪威，这种跨越性的增长趋势在这两张图中一目了然，反观上面的几个柱状图，都需要在柱子长度间反复多次比较数值，才能观察到这种变化；另一方面，瑞典（蓝色）无论哪个年度的数量都远超另外两个人国家，这个结论在前面的图中也能通过比较得出，但在这张图中尤其清晰。
+究其原因，这两张图将本身分散的长度、位置信息合并在了同一条线上，使得相互间的比较更为容易。但它也有一些缺点：</li>
+<li>假如是多个时间点，比如三个年度，在这张图中就容易造成混乱</li>
+<li>这批数据的变化趋势一致，都是22年的数值高于04年，假如在不同国家间，有的数量增加，有的数量减少，可能就需要带箭头的线段才能表示年份间的变化趋势。
+<img loading="lazy" src="images/1680530135444.png" alt=""  />
+
+同样，假如不放在一条直线上，而是按位置分开的图也有，比如下面这张图。上面提到的一些优点，比如增长幅度的大小、丹麦超越性的增长、瑞典压倒性的数量也都可以看到，但少了在原位的国家名称与数量标注，感觉就没那么醒目了。但这张图也有它的优点：使用颜色来表示年份而不是国家，假如有国家的数量下降了，在这张图上就会很好地展现出来。
+<img loading="lazy" src="images/1680530144415.png" alt=""  />
+
+这次就先写这些，溜了溜了。
+如果对更多可视化感兴趣，或是想找找新的画图思路，可以直接去原网站查看可视化结果。</li>
+</ul>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://100.datavizproject.com/#">1 dataset. 100 visualizations.</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -161,6 +823,214 @@
       
       <guid>https://yorks0n.github.io/posts/color_guide/</guid>
       <description>论文作图时用得上的配色技巧与工具</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，此处有删改，您可以 <a href="https://sspai.com/post/75989">前往此处</a> 阅读修订后版本。</p>
+<h2 id="色彩模型">色彩模型</h2>
+<h3 id="人眼的色彩感知">人眼的色彩感知</h3>
+<p>我们能看到颜色主要与人眼的生理特性有关，视杆细胞和视锥细胞在其中发挥了重要作用。其中，视杆细胞主要负责感受光的明暗，视锥细胞负责感受不同波长的光。大多数人有三种不同类型的视锥细胞，它们各自对不同波长的光有不同的灵敏度：红色、绿色和蓝色。当某些视锥细胞缺失或敏感度发生变化，将导致色觉异常。</p>
+<p><img loading="lazy" src="images/color_selection.png" alt="三种视锥细胞对不同光波长的光具有不同的敏感度。来源："  />
+</p>
+<p>三种视锥细胞对不同光波长的光具有不同的敏感度。来源：</p>
+<h3 id="rgb-模型">RGB 模型</h3>
+<p>RGB 模型绝对称得上是数字时代最为常见的色彩模型，它将红色（R）、绿色（G）、蓝色（B）三种颜色的光，按照不同比例混合，得到各种不同的颜色。RGB 模型如此流行，一方面是因为它符合人眼对色彩的感知过程（对应三种视锥细胞），另一方面，屏幕上的每个像素也都是由红绿蓝三个次级像素组成，直接以此方式编码， 极大地方便了在屏幕上进行显示。</p>
+<p><img loading="lazy" src="images/color_selection%201.png" alt="RGB色彩模型"  />
+</p>
+<p>RGB色彩模型</p>
+<h3 id="hsbhsv">HSB/HSV</h3>
+<p>虽然 RGB 模型既常用又方便理解，但它并不符合人对颜色的直观感受。我们看到某个颜色时，不会把它拆分成红绿蓝三个组分，而是直接感知三种视锥细胞叠加后的效果。因此，后来又出现了称为 HSV 的色彩模型（也称HSB）。</p>
+<p><img loading="lazy" src="images/color_selection%202.png" alt="color_selection"  />
+</p>
+<p>你也许在选颜色时见到见过这种模型，它仿佛将所有颜色放入了一个倒置的圆锥。</p>
+<p>HSV 模型采用三个维度的数值描述颜色：</p>
+<ul>
+<li>色相（Hue），圆锥的最外围一圈，即它是什么颜色；</li>
+<li>饱和度（Saturation），圆锥上某个点到中轴的距离，离中轴越近饱和度越低，颜色也越接近黑白灰；</li>
+<li>亮度（Brightness 或 Value），圆锥上点到尖端的距离，越接近尖端，亮度越低（越黑）。</li>
+</ul>
+<p>那 HSV 相比 RGB 直观在哪里？举个例子，左边颜色只降低亮度后，可以得到右边的颜色；但要是通过 RGB 来调整，就需要同时调整红绿蓝三种颜色值，颜色很容易一下就偏得没边了。</p>
+<p><img loading="lazy" src="images/color_selection%203.png" alt="color_selection"  />
+</p>
+<h3 id="为什么要有不同的色彩模型">为什么要有不同的色彩模型</h3>
+<p>一个很好的例子是地图制图投影方式和飞行路径图，我们可以将不同的色彩空间模型视为不同的地图投影方式。根据选择地图类型（色彩空间）的不同，同样的飞行路径可能看起来大不一样。</p>
+<p><img loading="lazy" src="images/color_selection%204.png" alt="墨卡托投影地图上从洛杉矶到莫斯科、纽约到莫斯科的飞行路线。"  />
+</p>
+<p>墨卡托投影地图上从洛杉矶到莫斯科、纽约到莫斯科的飞行路线。</p>
+<p><img loading="lazy" src="images/color_selection%205.png" alt="正射投影"  />
+</p>
+<p>正射投影</p>
+<h2 id="根据数据类型选择颜色">根据数据类型选择颜色</h2>
+<p><img loading="lazy" src="images/color_selection%206.png" alt="color_selection"  />
+</p>
+<h3 id="类别色阶categorical-color-scales">类别色阶（<strong>Categorical color scales</strong>）</h3>
+<p>类别数据使用类别色阶。</p>
+<p>当数据是一组类别时，它们没有内在的顺序，比如不同的分组实验材料。下图中不同的国家，并不会说某个国家比另一个国家排在前面或是后面，就属于<strong>类别数据，因此要用类别色阶</strong>（<strong>Categorical color scales</strong>）。</p>
+<p>何为类别色阶？红色、黄色、蓝色，它们适合区分没有内在顺序的类别，其中一种颜色并不比另一种颜色更重要。</p>
+<p><img loading="lazy" src="images/color_selection%207.png" alt="color_selection"  />
+</p>
+<h3 id="单向色阶sequential-color-scales">单向色阶（<strong>Sequential color scales）</strong></h3>
+<p>连续色阶是<strong>从暗到亮/从亮到暗的颜色渐变</strong>，它们适合可视化从低到高变化的数值数据，比如温度、质量或浓度。</p>
+<p><img loading="lazy" src="images/color_selection%208.png" alt="From Chroma.js Color Palette Helper"  />
+</p>
+<p>From <strong><strong>Chroma.js Color Palette Helper</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%209.png" alt="color_selection"  />
+</p>
+<p>这时并不是说就不能分组，你依然可以将特定数值划分成一个个区间，对每个区间采用一个颜色。</p>
+<p><img loading="lazy" src="images/color_selection%2010.png" alt="color_selection"  />
+</p>
+<p>或是不划分区间</p>
+<p><img loading="lazy" src="images/color_selection%2011.png" alt="color_selection"  />
+</p>
+<p>注意⚠️：</p>
+<ul>
+<li>
+<p>在单向的顺序色阶中，只能使用一到两种色调，比如浅蓝色到深蓝色（单色，蓝色），或是从浅黄色到深蓝色（双色，蓝色和黄色）。</p>
+</li>
+<li>
+<p>好的顺序色阶中，变化的并不只是颜色的色相（Hue），颜色的亮度（Lightness）与饱和度也在同步变化。</p>
+</li>
+<li>
+<p>对低值使用浅色，对高值使用深色（亮度更低、饱和度更高）。使用颜色渐变时，请确保亮色代表低值，而深色代表高值。对于大多数读者来说，这将是最直观的</p>
+<p><img loading="lazy" src="images/color_selection%2012.png" alt="color_selection"  />
+</p>
+</li>
+</ul>
+<h3 id="双向色阶diverging-color-scales">双向色阶（<strong>Diverging color scales</strong>）</h3>
+<p>双向色阶（Diverging / bipolar / double-ended color scales）与单向色阶类似，但是它不再是亮度或饱和度的从低到高变化，它中间亮度更高，然后向两侧色调与亮度同时变化。</p>
+<p><img loading="lazy" src="images/color_selection%2013.png" alt="color_selection"  />
+</p>
+<p>双向色阶通常用于：</p>
+<ul>
+<li>正值和负值这样两端有明确对立关系的值</li>
+<li>有个有意义的中间点，比如0、50%、平均值、选定的阈值</li>
+</ul>
+<p><img loading="lazy" src="images/color_selection%2014.png" alt="color_selection"  />
+</p>
+<p>同单向色阶一样，双向色阶也可以再分为分组和不分组两种：</p>
+<p><img loading="lazy" src="images/color_selection%2015.png" alt="双向，分组"  />
+</p>
+<p>双向，分组</p>
+<p><img loading="lazy" src="images/color_selection%2016.png" alt="双向，不分组"  />
+</p>
+<p>双向，不分组</p>
+<h2 id="从色彩集中选择颜色">从色彩集中选择颜色</h2>
+<p>这里介绍四个工具</p>
+<p><a href="https://www.learnui.design/tools/data-color-picker.html#palette">The Data Viz Color Picker</a></p>
+<p><a href="https://tristen.ca/hcl-picker/#/hlc/6/1/15534C/E2E062">Colorpicker for data</a></p>
+<p><a href="https://carto.com/carto-colors/">CARTOColors - CARTO</a></p>
+<p><a href="https://vis4.net/palettes/#/9%7Cs%7C00429d,96ffea,ffffe0%7Cffffe0,ff005e,93003a%7C1%7C1">chroma.js palette helper</a></p>
+<h3 id="data-viz-color-picker">Data Viz Color Picker</h3>
+<p><strong><strong>PALETTE</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2017.png" alt="color_selection"  />
+</p>
+<p><strong><strong>SINGLE HUE</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2018.png" alt="color_selection"  />
+</p>
+<p><strong><strong>DIVERGENT COLOR</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2019.png" alt="color_selection"  />
+</p>
+<h3 id="colorpicker-for-data"><strong><strong>Colorpicker for data</strong></strong></h3>
+<p><img loading="lazy" src="images/color_selection%2020.png" alt="color_selection"  />
+</p>
+<h3 id="cartocolors"><strong>CARTOColors</strong></h3>
+<p><strong><strong>Sequential schemes</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2021.png" alt="color_selection"  />
+</p>
+<p><strong><strong>Diverging schemes</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2022.png" alt="color_selection"  />
+</p>
+<p><strong><strong>Qualitative schemes</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2023.png" alt="color_selection"  />
+</p>
+<h2 id="注意事项">注意事项</h2>
+<h3 id="色觉异常">色觉异常</h3>
+<p>前面提到，由于有三种视锥细胞存在，我们可以感知红绿蓝三种颜色极其组合。如果其中某种视锥细胞的灵敏度不够，那么会导致色弱；如果某种细胞完全不起作用，那么就会导致色盲。因此有三种不同类型的色弱，和三种不同类型的色盲。</p>
+<p>在人群中，色弱相比色盲更加常见，大约6-7%的男性有某种色弱，而大约2-3%的男性是色盲。</p>
+<p><img loading="lazy" src="images/color_selection%2024.png" alt="color_selection"  />
+</p>
+<p>因此，某些颜色的组合应当避免，比如红色-绿色-棕色。</p>
+<p><img loading="lazy" src="images/color_selection%2025.png" alt="color_selection"  />
+</p>
+<p>我们比较熟悉的荧光图中也会倡议使用洋红色+绿色的组合，而不是红色和绿色的组合。</p>
+<p><img loading="lazy" src="images/%E6%B4%8B%E7%BA%A2%E8%89%B2.png" alt="洋红色.png"  />
+</p>
+<p>另一方面，在选择颜色时，不仅在色相（Hue）上发生变化，也让饱和度和亮度同时变化，也有助于增加色彩的区分度。一些工具会给出相同配色在不同色觉异常人士眼中的效果。</p>
+<p><img loading="lazy" src="images/color_selection%2026.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2027.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2028.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2029.png" alt="color_selection"  />
+</p>
+<p>还有一种方式，是用颜色和模式同时来表示不同的类别，比如加上阴影，或是采用不同的虚实线段。</p>
+<p><img loading="lazy" src="images/color_selection%2030.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2031.png" alt="color_selection"  />
+</p>
+<h3 id="less-is-more">Less is more</h3>
+<p>如非必要，勿增实体</p>
+<ul>
+<li>
+<p>是否有替代渐变色的数值表示方式（能不用，就不用）</p>
+<p>比如采用长度（条形图）、位置（点图）或是面积的大小</p>
+<p><img loading="lazy" src="images/color_selection%2032.png" alt="color_selection"  />
+</p>
+</li>
+<li>
+<p>避免同时使用过多颜色（能少用，不多用）</p>
+<p>如果图中使用了超过七种颜色，可能要考虑其他的图表类型，或是将类别组合在一起。</p>
+<p>颜色本身是帮助读者区分类别的，但是颜色越多，就越难快速阅读和理解，在读图时将不得不反复在图例和图形间来回查阅。</p>
+<p><img loading="lazy" src="images/color_selection%2033.png" alt="color_selection"  />
+</p>
+</li>
+</ul>
+<h3 id="更好地分配颜色">更好地分配颜色</h3>
+<p>对相同变量使用相同颜色，简化理解过程</p>
+<p><img loading="lazy" src="images/color_selection%2034.png" alt="color_selection"  />
+</p>
+<p>配合图例解释颜色指代的内容：图形的大小代表什么、深浅是对应哪个变量，这些都需要解释清晰。</p>
+<p><img loading="lazy" src="images/color_selection%2035.png" alt="color_selection"  />
+</p>
+<p>详略得当地使用颜色，将不重要的元素用灰色或其他非常浅的颜色来表示，可以突出需要重点关注的数据</p>
+<p><img loading="lazy" src="images/color_selection%2036.png" alt="color_selection"  />
+</p>
+<p>保证对比度，避免使用互补色（比如红配绿、橙配蓝）</p>
+<p><img loading="lazy" src="images/color_selection%2037.png" alt="color_selection"  />
+</p>
+<p>避免使用彩虹色渐变</p>
+<p>彩虹色渐变有几个大的问题：</p>
+<ul>
+<li>它的颜色变化并不均匀，其中绿色占据了几乎1/3的范围</li>
+<li>各种颜色之间的亮度变化不均一</li>
+</ul>
+<p><img loading="lazy" src="images/color_selection%2038.png" alt="color_selection"  />
+</p>
+<h2 id="参考资料">参考资料</h2>
+<p><strong>Star:</strong></p>
+<p><a href="https://medium.com/thinking-design/colorimetry-and-the-cartography-of-color-415ef5315c0a">Colorimetry and the Cartography of Color</a></p>
+<p>色彩空间</p>
+<p><a href="https://sspai.com/post/72510">弄清色彩的作用和表达 - 少数派</a></p>
+<p>不同的色彩模型</p>
+<p><a href="https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/">Which color scale to use when visualizing data - Datawrapper Blog</a></p>
+<p>根据数据类型（离散、连续）选择颜色</p>
+<p><a href="https://blog.datawrapper.de/colors/">What to consider when choosing colors for data visualization</a></p>
+<p>一些颜色安排上的注意事项</p>
+<p><a href="https://spectrum.adobe.com/page/color-for-data-visualization/">Spectrum, Adobe&rsquo;s design system</a></p>
+<p>选择颜色的注意事项</p>
+<p><a href="https://eagereyes.org/basics/rainbow-color-map">How The Rainbow Color Map Misleads</a></p>
+<p>彩虹色渐变为什么不合适</p>
+<p><a href="https://blog.datawrapper.de/colorblindness-part1/">How your colorblind and colorweak readers see your colors - Datawrapper Blog</a></p>
+<p>色觉异常</p>
+<p><strong>Other:</strong></p>
+<p><a href="https://blog.datawrapper.de/diverging-vs-sequential-color-scales/">When to use sequential and when to use diverging color scales - Datawrapper Blog</a></p>
+<p><a href="https://blog.datawrapper.de/classed-vs-unclassed-color-scales/">When to use classed and when to use unclassed color scales - Datawrapper Blog</a></p>
+<p><a href="https://blog.datawrapper.de/colorguide/">Your Friendly Guide to Colors in Data Visualisation</a></p>
+<p><a href="https://blog.datawrapper.de/10-ways-to-use-fewer-colors-in-your-data-visualizations/">10 ways to use fewer colors in your data visualizations - Datawrapper Blog</a></p>
+<p>如何减少使用的颜色数量</p>
+<p><a href="http://www.gcmap.com/mapui?P=svo-lax&amp;MS=bm&amp;DU=mi&amp;SG=0.82&amp;SU=mach">A map from Great Circle Mapper</a></p>
+<p>大圆航线</p>
+<p><a href="https://davidmathlogic.com/colorblind/#%23000000-%23E69F00-%2356B4E9-%23009E73-%23F0E442-%230072B2-%23D55E00-%23CC79A7">Coloring for Colorblindness</a></p>
+<p>色觉异常的颜色选择</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -170,6 +1040,133 @@
       
       <guid>https://yorks0n.github.io/posts/karabiner/</guid>
       <description>如何借助 Goku 书写 Karabiner 配置文件</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，您可以 <a href="https://sspai.com/post/73827">前往此处</a> 阅读修订后版本。</p>
+<p>Karabiner 全称 Karabiner-Elements[^下文简称为 Karabiner]，是 macOS 上的一款功能强劲的改键工具，可以将键盘上的按键映射成其他一个或多个按键组合。然而，Karabiner 使用JSON 作为配置文件，非常繁琐且不易理解，给上手带来了很高的门槛。</p>
+<p><img loading="lazy" src="images/carbon.png" alt="上图展示了 Karabiner 中与 Goku 中，实现相同效果所需要的写法差异。"  />
+</p>
+<p>上图展示了 Karabiner 中与 Goku 中，实现相同效果所需要的写法差异。</p>
+<p>于是，有人专门为其制作了一个工具「Goku」，借助 <a href="https://github.com/yqrashawn/GokuRakuJoudo">Goku</a> 可以方便地为 Karabiner 进行配置。</p>
+<p><strong>准备工作：</strong></p>
+<ul>
+<li>Karabiner-Elements 可以从<a href="https://karabiner-elements.pqrs.org/">官网</a>进行下载</li>
+<li>Goku 使用 Homebrew 进行安装：<code>brew install yqrashawn/goku/goku</code></li>
+<li>在 Karabiner 中确保配置文件 Profiles 选择默认的 Default</li>
+<li>前往 <code>~/.config/</code>目录，创建名为 <code>karabiner.edn</code> 的 Goku 配置文件</li>
+<li>参考下文进行配置文件的编辑，每次编辑完后在终端中执行 <code>goku</code> 使修改生效</li>
+</ul>
+<h2 id="将-caps-lock-变为键盘功能的中枢">将 Caps Lock 变为键盘功能的中枢</h2>
+<p>通常，我们将<code>⌃Control + ⌥Option + ⇧Shift + ⌘Command</code> 同时按下的组合称为 Hyper 键，因为程序内置的快捷键不会预设这么复杂的组合，因此使用 Hyper 键设定快捷键，能最大程度上避免与预设发生冲突。</p>
+<p>大写锁定键 <code>Caps Lock</code> 位于键盘左侧中间，用起来很顺手，但我只用它切换输入法，输入大写字母靠 <code>⇧shift</code>，因此这里先对它下手，你也可以选择其他顺手且不常用的按键。</p>
+<p>以下的 Goku 配置文件 <code>karabiner.edn</code> 写法，可以将大写锁定键修改为 Hyper 键，这时只需要按下这一个键，就可以发挥 <code>⌃Control + ⌥Option + ⇧Shift + ⌘Command</code> 同时按下的效果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;caps_lock -&gt; hyper&#34;</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [
+</span></span><span style="display:flex;"><span>                 [<span style="color:#960050;background-color:#1e0010">:</span><span style="color:#f92672">##</span>caps_lock <span style="color:#e6db74">:!CTOleft_shift</span>]
+</span></span><span style="display:flex;"><span>                 ]}
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然而，如果只是将 <code>Caps Lock</code> 转化为 Hyper 键，它会失去本身切换输入法的效果。幸好 Karabiner 支持在按键单独按下与组合按下时，为触发不同的效果。</p>
+<p>以下写法可以让 <code>Caps Lock</code> 与其他键一同按下时变为 hyper 键，单独按下时触发 <code>Control+Space</code> 切换输入法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;caps_lock -&gt; Ctrl+space(alone) and caps_lock -&gt; hyper&#34;</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [
+</span></span><span style="display:flex;"><span>                 [<span style="color:#960050;background-color:#1e0010">:</span><span style="color:#f92672">##</span>caps_lock <span style="color:#e6db74">:!CTOleft_shift</span> nil {<span style="color:#e6db74">:alone</span> <span style="color:#e6db74">:!Tspacebar</span>}]
+</span></span><span style="display:flex;"><span>                 ]}
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以下是一些常用按键在 Goku 中的简化写法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>    <span style="color:#75715e">;; !  | means mandatory -   modifier(s) alone when pressend change behavior</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; #  | means optional  -   modifiers are optional (but at least one necessary)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; :!Ca is keycode :a and prefix a with !C</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; C  | left_command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; T  | left_control</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; O  | left_option</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; S  | left_shift</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; F  | fn</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; Q  | right_command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; W  | right_control</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; E  | right_option</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; R  | right_shift</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; ## | optional any</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; !! | command + control + optional + shift (hyper)</span>
+</span></span></code></pre></div><p>而要知道键盘上每个按键各叫什么名字，可以使用 Karabiner 配套的 Karabiner-EventViewer 进行查看。</p>
+<h2 id="结合-keyboard-maestro-实现快速搜索">结合 Keyboard Maestro 实现快速搜索</h2>
+<p>单靠 Karabiner 只能发挥其一半的功力，要想发挥其全部实力，还是要与 Keyboard Maestro（下称 KM）或是 Alfred 这些支持自动化的工具搭配，才能达到强强联合的效果。这里以 KM 为例，实现快速搜索选中的内容。</p>
+<p>在 KM 中创建如下图的 Macro，为其指定 <code>Hyper + S</code> 的组合键，这样只需要选中想搜索的内容，按下快捷键即可使用 Google 进行搜索。</p>
+<p><img loading="lazy" src="images/karabiner.png" alt="karabiner"  />
+</p>
+<p>同时，借助 KM 独特的冲突调色盘功能，当你为多个 Macro 设定了相同快捷键，按下快捷键后会触发选择界面，借此只需记忆一个快捷键，便可触发多种不同的搜索功能。</p>
+<p><img loading="lazy" src="images/karabiner%201.png" alt="karabiner"  />
+</p>
+<h2 id="hyper--字母实现程序快速切换">Hyper + 字母实现程序快速切换</h2>
+<p>日常使用时，常常需要在不同的应用间来回切换。cmd + tab 虽然可行，但每次的应用顺序不固定，还要找到想切换到的程序，甚至因此诞生了一些专门为切换应用而生的工具。利用 Karabiner 搭配 Keyboard Maestro，即可实现 <code>Hyper + 字母</code> 一键切换应用。</p>
+<p>在 Keyboard Maestro 中添加 Macro， 选择 <code>Activate a Specific Application</code> 即可，配置成如下图即可在激活此 Macro 时切换到 Chrome。</p>
+<p><img loading="lazy" src="images/karabiner%202.png" alt="karabiner"  />
+</p>
+<p>这时，如果在 KM 中将 New Trigger 设置为按键的 <code>Hyper + c</code>，即可在按下此组合键时快速切换到 Chrome。</p>
+<p>但这毕竟是一篇介绍 Karabiner 的文章，因此我演示一下如何在 Karabiner 的配置文件中，直接激活特定的 Macro。</p>
+<p>以下配置文件可以实现 <code>Hyper + C</code> 切换到 Chrome 的效果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:templates</span> {<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;osascript -e &#39;tell application \&#34;Keyboard Maestro Engine\&#34; to do script \&#34;%s\&#34;&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;caps_lock -&gt; Ctrl+space(alone) and caps_lock -&gt; hyper&#34;</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [
+</span></span><span style="display:flex;"><span>                 [<span style="color:#960050;background-color:#1e0010">:</span><span style="color:#f92672">##</span>caps_lock <span style="color:#e6db74">:!CTOleft_shift</span> nil {<span style="color:#e6db74">:alone</span> <span style="color:#e6db74">:!Tspacebar</span>}]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                 [<span style="color:#e6db74">:!!c</span> [<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;open: chrome&#34;</span>] ] <span style="color:#75715e">;;caps+c open Chrome</span>
+</span></span><span style="display:flex;"><span>                 
+</span></span><span style="display:flex;"><span>                 ]}
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我在前面模板的基础上增加了两部分：</p>
+<ul>
+<li>开头利用 <code>:templates</code> 创建了一个名为 <code>:km</code> 的脚本，可以快速激活 KM 中的Macro；</li>
+<li>在 <code>:rules</code> 中新增加了一行规则，<code>:!!c</code> 表示 <code>Hyper + C</code> 的组合键[^这里 !! 是 hyper 键的缩写写法]，<code>:km &quot;open: chrome&quot;</code> 则表示调用前面创建的 <code>km</code> 脚本，并执行 <code>&quot;open: chrome&quot;</code> 这个 Macro。</li>
+</ul>
+<h2 id="进阶让每个键都能成为修饰键">进阶，让每个键都能成为修饰键</h2>
+<p><code>Hyper</code> 键只有一颗，用久了总有因为键位冲突感到不够的那天，比如我既想用 <code>S</code> 键触发 Search，又想用它激活 Sorted 3。这部分我将介绍如何利用层（layer）的概念，让键盘上的每个键都能成为独一无二的修饰键。</p>
+<p>所谓层，可以理解为按下某个键后，键盘上其他键的功能随之发生变化，例如下图就是按下 <code>option</code> 键后键盘的变化，我们可以称之为 option 层。</p>
+<p><img loading="lazy" src="images/Kapture_2022-06-15_at_21.39.24.gif" alt="Kapture 2022-06-15 at 21.39.24.gif"  />
+</p>
+<p>如下规则定义了一个称为「semicolon-mode」的层，在这里我将使用频率较低的分号<code>;</code>定义为触发按键：</p>
+<ul>
+<li><code>:semicolon [&quot;semicolon-mode&quot; 1]</code> 指按下分号「semicolon」后，将变量 <code>semicolon-mode</code> 设置为 1，即进入「semicolon-mode」层；</li>
+<li><code>:afterup [&quot;semicolon-mode&quot; 0]</code> 指松开分号后，将变量 <code>semicolon-mode</code> 设置为 0，即退出「semicolon-mode」层；</li>
+<li>单独按下依然为分号本身 <code>:alone :semicolon</code> 。</li>
+</ul>
+<p>在 <code>[:hyphen [:km &quot;insert: underline&quot;] [&quot;semicolon-mode&quot; 1]]</code> 这里，我定义了按下减号<code>-</code> ，触发 KM 中名为 <code>&quot;insert: underline&quot;</code> 的 Macro，输出一个下划线，这个规则只在<code>[&quot;semicolon-mode&quot; 1]</code> 时（即按住分号时）才有效。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:templates</span> {<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;osascript -e &#39;tell application \&#34;Keyboard Maestro Engine\&#34; to do script \&#34;%s\&#34;&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;This is the semicolon-mode&#34;</span> 
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [[<span style="color:#e6db74">:semicolon</span> [<span style="color:#e6db74">&#34;semicolon-mode&#34;</span> <span style="color:#ae81ff">1</span>]  nil {<span style="color:#e6db74">:afterup</span> [<span style="color:#e6db74">&#34;semicolon-mode&#34;</span> <span style="color:#ae81ff">0</span>] 
+</span></span><span style="display:flex;"><span>                                                 <span style="color:#e6db74">:alone</span> <span style="color:#e6db74">:semicolon</span>}] 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                [<span style="color:#e6db74">:hyphen</span> [<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;insert: underline&#34;</span>] [<span style="color:#e6db74">&#34;semicolon-mode&#34;</span> <span style="color:#ae81ff">1</span>]]  <span style="color:#75715e">;; semicolon - to insert _(underline)</span>
+</span></span><span style="display:flex;"><span>        ]}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="结语">结语</h2>
+<p>「花一些时间，折腾一点小东西，收获一个没多大用的成果，感到巨大的快乐」，这是我对摸鱼的定义。摸鱼摸得久了，总能折腾出些有意思的东西。目前，我每天都用这些快捷键输入一些常用短语，切换程序或是快速搜索，省下的时间可能并没有多少，但是有种莫名的快乐，我觉得这就足够了。</p>
+<h2 id="相关文章">相关文章</h2>
+<p><a href="https://sspai.com/post/46184">macOS 改键利器：Karabiner-Elements 使用详解 - 少数派</a></p>
+<p><a href="https://sspai.com/post/47659">使用 Karabiner 改善 Poker 键盘体验 - 少数派</a></p>
+<p><a href="https://sspai.com/post/42921">让键盘变成你想要的样子：改键利器 Karabiner-Elements - 少数派</a></p>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://medium.com/@nikitavoloboev/karabiner-god-mode-7407a5ddc8f6">Karabiner God Mode</a></p>
+<p><a href="https://einverne.github.io/post/2020/08/use-goku-config-karabiner.html">使用 Goku 配置 Karabiner</a></p>
+<p><a href="https://github.com/yqrashawn/GokuRakuJoudo/blob/master/tutorial.md#advance3">yqrashawn/GokuRakuJoudo</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -179,6 +1176,34 @@
       
       <guid>https://yorks0n.github.io/posts/my-bioinfomatics-db-collection-ver20220528/</guid>
       <description>这是我日常会用到，整理出来的主要与植物学、基因组学有关的在线数据库集合。</description>
+      <content:encoded><![CDATA[<h2 id="what">What</h2>
+<p>这是我日常会用到，所以整理出来的主要与<strong>植物学、基因组学</strong>有关的在线数据库集合。</p>
+<p>链接在此：<a href="https://raindrop.io/Yorks0n/database-23820830/search">database</a></p>
+<p><img loading="lazy" src="images/1680599742462.png" alt=""  />
+</p>
+<h2 id="how-to">How-to</h2>
+<p>我利用了「#标签」的形式对链接进行分类，因此在检索的时候，可以直接点击下面的标签进行选择，也可以在搜索框中以「#标签名」的形式输入一个或多个标签进行筛选，多个标签之间使用空格隔开。</p>
+<p><img loading="lazy" src="images/1680599748401.png" alt=""  />
+</p>
+<p>举个例子，假如想寻找和拟南芥蛋白有关的数据库，则可以在下面的标签中依次点击「#拟南芥」和「#蛋白」，也可以直接在搜索框中输入这两个标签。</p>
+<p><img loading="lazy" src="images/1680599753486.png" alt=""  />
+</p>
+<p>补充说明：</p>
+<ul>
+<li>如果这个数据库只包含一个物种的数据，我会给它打上「#物种名」的标签，但如果它同时带有多物种内容，比如 NCBI 或是 Ensembl plants，我就不会给它打物种名的标签。</li>
+<li>有些数据库我也没有想好怎样用最简短的标签进行概括，所以标签描述不一定完备，也欢迎提修改意见。</li>
+</ul>
+<h2 id="why-and-why">Why and why</h2>
+<h3 id="为什么要做这个">为什么要做这个</h3>
+<p>知识共享也好，流动着的知识才是好知识也好，可能就是我觉得有意思吧。</p>
+<h3 id="为什么不用文件夹">为什么不用文件夹</h3>
+<p>文件夹组成的是一种树状结构，然而每个数据库的属性并不是整齐的树状。比如一个数据库，即可以带有「拟南芥」的属性，表明它主要是一个拟南芥的数据库，同时它还可能带有一个「蛋白」的属性，表明其是蛋白质结构、或是蛋白修饰的数据库，因此这样的数据库并不能单一地根据物种或是数据类型进行分类。</p>
+<h3 id="为什么使用-raindropiohttpraindropio">为什么使用 <a href="http://Raindrop.io">Raindrop.io</a></h3>
+<p>我使用了书签管理服务 Raindrop，直接对其中一个文件夹进行共享，因为一方面发现它很方便，不论是检索还是发布；另一方面，我也想过用 Notion 或是飞书的在线文档形式，可能会更稳定一点，但是我懒，不想再一条条输一遍了，也许之后发布方式会改吧。</p>
+<h2 id="后续计划">后续计划</h2>
+<h3 id="如何更新">如何更新</h3>
+<p>欢迎提意见和建议，包括如何改进标签，更准确地描述数据库；有哪些新的数据库值得加入进来，<em>Et cetera</em>。可以留言或直接与我联系。</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -188,6 +1213,362 @@
       
       <guid>https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/</guid>
       <description>本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，您可以 <a href="https://sspai.com/post/73255">前往此处</a> 阅读修订后版本。</p>
+<h2 id="前言">前言</h2>
+<p>本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。</p>
+<p>文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。</p>
+<p>阅读本文可能需要一定 Linux 基础知识。</p>
+<h2 id="n8n-是什么">n8n 是什么</h2>
+<p>n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。</p>
+<h2 id="利用-docker-安裝-n8n">利用 Docker 安裝 n8n</h2>
+<p>n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。</p>
+<p>这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 <a href="https://docs.n8n.io/hosting/installation/">Installation guides for n8n</a>。</p>
+<p>假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建数据储存文件夹</span>
+</span></span><span style="display:flex;"><span>mkdir ~/n8n-data
+</span></span></code></pre></div><p>复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开<code>5678</code>的 TCP 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 利用Docker安装运行n8n</span>
+</span></span><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--name n8n --restart unless-stopped <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-p 5678:5678 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-v ~/n8n-data:/home/node/.n8n <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-e GENERIC_TIMEZONE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>n8nio/n8n 
+</span></span></code></pre></div><p>稍作等待，等 Docker 安装完成后，如果一切顺利，访问<code>服务器ip地址:5678</code>就能看到 n8n 的运行页面了，初次进入需要创建账号密码。</p>
+<p><img loading="lazy" src="images/Untitled.png" alt="Untitled"  />
+</p>
+<p>点击右上角的 New blank workflow 即可开始创建，也可以从软件提供的 Workflow 示例中，选择自己想部署的自动化流程。</p>
+<p>这里以搭建一个 RSS 更新自动推送到飞书的机器人为例。</p>
+<h2 id="搭建飞书-rss-推送机器人">搭建飞书 RSS 推送机器人</h2>
+<p>以下是我配置好的一个流程模板，复制以下内容粘贴到 n8n 新建 workflow 的页面。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;url&#34;</span>: <span style="color:#e6db74">&#34;https://sspai.com/feed&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;RSS Feed Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.rssFeedRead&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">160.5</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;conditions&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;number&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value1&#34;</span>: <span style="color:#e6db74">&#34;={{new Date($node[\&#34;Latest Read\&#34;].data[\&#34;latestRead\&#34;]).getTime()}}&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value2&#34;</span>: <span style="color:#e6db74">&#34;={{new Date($node[\&#34;RSS Feed Read\&#34;].data[\&#34;isoDate\&#34;]).getTime()}}&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ],
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;boolean&#34;</span>: [],
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;string&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value1&#34;</span>: <span style="color:#e6db74">&#34;={{$json[\&#34;title\&#34;]}}&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;operation&#34;</span>: <span style="color:#e6db74">&#34;contains&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;IF&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.if&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">560</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;functionCode&#34;</span>: <span style="color:#e6db74">&#34;const staticData = this.getWorkflowStaticData(&#39;global&#39;);\n\nif (items.length &gt; 0) {\n  staticData.latestRead = items[0].json.isoDate || staticData.latestRead;\n}\n\n\nreturn items;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Write Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.function&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">760</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {},
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;NoOp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.noOp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">750</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">580</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;triggerTimes&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;item&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;mode&#34;</span>: <span style="color:#e6db74">&#34;everyX&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Cron&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.cron&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-40</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;requestMethod&#34;</span>: <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;options&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;batchInterval&#34;</span>: <span style="color:#ae81ff">3000</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;batchSize&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;bodyParametersUi&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;parameter&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;msg_type&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;interactive&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;card&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={\n  \&#34;config\&#34;: {\n    \&#34;wide_screen_mode\&#34;: true\n  },\n  \&#34;header\&#34;: {\n    \&#34;template\&#34;: \&#34;black\&#34;,\n    \&#34;title\&#34;: {\n      \&#34;content\&#34;: \&#34;{{$json[\&#34;title\&#34;]}}\&#34;,\n      \&#34;tag\&#34;: \&#34;plain_text\&#34;\n    }\n  },\n  \&#34;elements\&#34;: [\n    {\n      \&#34;tag\&#34;: \&#34;div\&#34;,\n      \&#34;text\&#34;: {\n        \&#34;content\&#34;: \&#34;{{$json[\&#34;contentSnippet\&#34;]}}\&#34;,\n        \&#34;tag\&#34;: \&#34;lark_md\&#34;\n      }\n    },\n    {\n      \&#34;tag\&#34;: \&#34;hr\&#34;\n    },\n    {\n      \&#34;elements\&#34;: [\n        {\n          \&#34;content\&#34;: \&#34;[阅读原文]({{$json[\&#34;link\&#34;]}})\&#34;,\n          \&#34;tag\&#34;: \&#34;lark_md\&#34;\n        }\n      ],\n      \&#34;tag\&#34;: \&#34;note\&#34;\n    }\n  ]\n}&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;headerParametersUi&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;parameter&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Content-Type&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;application/json&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;HTTP Request&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.httpRequest&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1000</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;functionCode&#34;</span>: <span style="color:#e6db74">&#34;const staticData = this.getWorkflowStaticData(&#39;global&#39;);\n\nlatestRead = staticData.latestRead;\n\nfor (let item of items) {\n  item.json.latestRead = latestRead || &#39;2022-05-05&#39;;\n  //item.json[\&#34;content:encodedSnippet\&#34;] = item.json[\&#34;content:encodedSnippet\&#34;].replace(/[\\r\\n]/g,\&#34;\\\\n\&#34;);\n}\n\nreturn items;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.function&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">360</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;connections&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;RSS Feed Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;IF&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Write Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;NoOp&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Write Latest Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;HTTP Request&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Cron&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;RSS Feed Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Latest Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;IF&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>粘贴后可以看到如下的界面：</p>
+<p><img loading="lazy" src="images/Untitled%201.png" alt="Untitled"  />
+</p>
+<p>这里有几处可以配置，第一处是 <strong>Cron</strong>，设置自动化流程触发的频率，每隔 X 时间间隔运行一次，图中设置为每隔一小时运行。在获取 RSS 时，运行频率不宜过高。如果访问过于频繁，一方面会给对方服务器造成较大负担，同时可能被服务器禁止访问。</p>
+<p><img loading="lazy" src="images/Untitled%202.png" alt="Untitled"  />
+</p>
+<p>第二个是在 <strong>RSS Feed Read</strong> 处，填写想订阅的 RSS 地址，这里以少数派 RSS 为例，填写完后点击Excute node，先运行一次获取数据，方便后续设置。</p>
+<p><img loading="lazy" src="images/Untitled%203.png" alt="Untitled"  />
+</p>
+<p>第三处（可选）<strong>IF</strong> 处，设置是否需要针对标题或内容等进行过滤，默认不过滤。</p>
+<p><img loading="lazy" src="images/Untitled%204.png" alt="Untitled"  />
+</p>
+<p>这时先转到飞书，在<strong>飞书桌面端</strong>，打开一个群（建议先创建一个单人的群进行调试），打开<strong>设置</strong>，找到<strong>群机器人</strong>，并点击<strong>添加机器人</strong>，选择自定义机器人加入群聊，详细操作可以参照 <a href="https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN?lang=zh-CN">飞书自定义机器人指南</a>。</p>
+<p><img loading="lazy" src="images/Untitled%205.png" alt="Untitled"  />
+</p>
+<p>最后在 <strong>HTTP Request</strong> 处填入飞书机器人 webhook 地址。</p>
+<p><img loading="lazy" src="images/Untitled%206.png" alt="Untitled"  />
+</p>
+<p>填写完成后 Excute node 尝试运行，一切顺利的话就能在飞书中看到推送来的RSS消息了。</p>
+<p><img loading="lazy" src="images/Untitled.jpeg" alt="Untitled"  />
+</p>
+<p>这里使用了卡片的形式展示消息，若是想调整消息展示样式，可以参考少数派文章 <a href="https://sspai.com/post/68578">手把手教你用飞书 Webhook 打造一个消息推送 Bot</a>。</p>
+<p><img loading="lazy" src="images/Untitled%207.png" alt="一图流配置"  />
+</p>
+<p>一图流配置</p>
+<h2 id="消息机器人安全设置">消息机器人安全设置</h2>
+<p>由于采用 Webhook 的形式，请务必保管好 Webhook 链接，如果泄露可能会导致被推送垃圾信息。为了进一步加道保险，飞书提供了三种安全设置方式，分别是自定义关键词、IP 白名单和签名校验。</p>
+<p>前两种方式非常好理解，也都很好设置。自定义关键词是只有当消息中至少含有一个预设的关键词时，才会进行消息推送；IP 白名单则是只推送名单中来源的 IP 所发送的请求。但是这两种方式也有一定的局限性：</p>
+<ul>
+<li>关键词有时使消息不够简洁</li>
+<li>部署在本地树莓派等设备上时，IP 地址不固定，无法指定</li>
+<li>关键词和 IP 白名单各自最多只能添加十个条目</li>
+</ul>
+<p>因此这里详细介绍一下在 n8n 中进行签名校验的配置方式。</p>
+<p>飞书的签名需要将「timestamp + &ldquo;\n&rdquo; + 密钥」组合起来当作签名密钥，采用 Hmac SHA256 算法计算签名，再进行 Base64 编码。在发送消息请求时，需要增加对应的<code>timestamp</code>和<code>sign</code> 字段。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// 开启签名验证后发送文本消息的请求示例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#e6db74">&#34;1599360473&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;sign&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxxxxxxxxxxxxxxx&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;msg_type&#34;</span>: <span style="color:#e6db74">&#34;text&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;content&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;text&#34;</span>: <span style="color:#e6db74">&#34;The message content is here&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 n8n 中，可以使用 <strong>Crypto</strong> 模块利用密钥生成签名，复制以下代码粘贴到配置界面，可以得到生成飞书签名用的模块组合。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;hmac&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;SHA256&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={{&#39;&#39;}}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;dataPropertyName&#34;</span>: <span style="color:#e6db74">&#34;sign&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;secret&#34;</span>: <span style="color:#e6db74">&#34;={{$json[\&#34;timestamp\&#34;]+&#39;\\n&#39;+$json[\&#34;secret\&#34;]}}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;base64&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-80</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;values&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;string&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;timestamp&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={{Math.round(new Date().getTime()/1000)}}&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;options&#34;</span>: {}
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Set&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.set&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-280</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;connections&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Set&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>将上面新增的两个模块按下图方式进行拖拽连接：</p>
+<p><img loading="lazy" src="images/Untitled%208.png" alt="Untitled"  />
+</p>
+<p>从飞书机器人设置界面中，勾选<strong>签名校验</strong>得到密钥，填写在 <strong>Set</strong> 模块中。</p>
+<p><img loading="lazy" src="images/Untitled%209.png" alt="Untitled"  />
+</p>
+<p>接下来将 <strong>Latest Read</strong> 模块中的代码替换为以下内容，储存计算出的签名，方便在请求的时候调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// JS code in the Latest Read Module
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">const</span> <span style="color:#960050;background-color:#1e0010">staticData</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">this.getWorkflowStaticData(&#39;global&#39;);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">latestRead</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">staticData.latestRead;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">for</span> <span style="color:#960050;background-color:#1e0010">(let</span> <span style="color:#960050;background-color:#1e0010">item</span> <span style="color:#960050;background-color:#1e0010">of</span> <span style="color:#960050;background-color:#1e0010">items)</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.latestRead</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">latestRead</span> <span style="color:#960050;background-color:#1e0010">||</span> <span style="color:#960050;background-color:#1e0010">&#39;2022-05-05&#39;;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.timestamp</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">$item(</span><span style="color:#f92672">&#34;0&#34;</span><span style="color:#960050;background-color:#1e0010">).$node</span>[<span style="color:#e6db74">&#34;Crypto&#34;</span>]<span style="color:#960050;background-color:#1e0010">.json</span>[<span style="color:#e6db74">&#34;timestamp&#34;</span>]<span style="color:#960050;background-color:#1e0010">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.sign</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">$item(</span><span style="color:#e6db74">&#34;0&#34;</span><span style="color:#960050;background-color:#1e0010">).$node</span>[<span style="color:#e6db74">&#34;Crypto&#34;</span>]<span style="color:#960050;background-color:#1e0010">.json</span>[<span style="color:#e6db74">&#34;sign&#34;</span>]<span style="color:#960050;background-color:#1e0010">;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">return</span> <span style="color:#960050;background-color:#1e0010">items;</span>
+</span></span></code></pre></div><p>最后在 <strong>HTTP Request</strong> 模块中增加校验用的字段：Body Parameters - Add Parameter，添加两个参数，Name 分别为 <code>timestamp</code> 和 <code>sign</code>，Value 处点击右侧 Add Expression，再分别点击选择传入的两个对应字段的值。</p>
+<p><img loading="lazy" src="images/Untitled%2010.png" alt="Untitled"  />
+</p>
+<p>这样一番倒腾，给飞书机器人模块增加了签名校验，使得信息推送更加安全。当一切配置妥当后，别忘了点击界面右上角的激活，让工作流开始自动运行。</p>
+<p><img loading="lazy" src="images/Untitled%2011.png" alt="配置密钥验证一图流"  />
+</p>
+<p>配置密钥验证一图流</p>
+<h2 id="后记">后记</h2>
+<p>本文介绍了如何用 n8n 打造一个飞书 RSS 推送机器人。订阅什么样的 RSS 来源，可以是网站自身提供的 RSS 地址，也可以利用 RSShub 将各种奇怪的网站转化为 RSS，甚至是利用 kill-the-newsletter 将任意 Newsletter 邮件转化为 RSS 进行追踪。</p>
+<p>同时，实现类似工作流的手段还有很多。对于 n8n 这部分，可以使用 IFTTT、Integrately，或是 Github Action 等，实现工作流中「监控 RSS 更新并发送 Webhook 请求」这部分；对于接收提醒，文中利用了飞书作为展示消息的界面，而 n8n 也支持连接到 Telegram、Slack 等通讯软件，或是通过 Send Email 模块实现邮件通知，以及发送到 Cubox、flomo 等各种支持 Webhook 的工具中。</p>
+<p>更多功能，更多组合，尽请探索，把闲置的云服务器或是积灰的树莓派等折腾起来吧。</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -197,6 +1578,99 @@
       
       <guid>https://yorks0n.github.io/posts/history_of_hash/</guid>
       <description>当看到「#」时，你会想到什么？</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，您可以 <a href="https://sspai.com/post/73345">前往此处</a> 阅读修订后版本。</p>
+<h2 id="千变万化的">千变万化的「#」</h2>
+<p>当看到「#」时，你会想到什么？</p>
+<p>如果你下国际象棋，它可能代表着一局对决的终结<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>；如果你是程序员，它可能是被 <code>#!</code> 指定的解释器，或是一行注释的开始；如果你刷微博，它可能是当前最热的话题。中文里，「#」通常称为「井字」或「井号」，在日语中称为「番号记号」或「井桁」，英式英语中则通常称之为「hash」。</p>
+<p>「#」的大部分名称来源于其形状，含义却随着上下文发生变化。对大部分人而言，与「#」的第一次会面，大概是电话拨号盘角落中那个不起眼的方块。</p>
+<h2 id="libra-pondo-的千年的漫步"><em>libra pondo</em> 的千年的漫步</h2>
+<p>先将时间拨回罗马时期，那时「一磅重」被称为「<em>libra pondo</em>」，其中 <em>libra</em> 意思是尺度或是平衡；<em>pondo</em> 则来自于动词 <em>pendere</em>，表示「称重」。从这两个词根中，「#」得到了它最早的形状与名称。</p>
+<p>十四世纪晚期，来源于 <em>libra</em> 的「lb」进入了英语中，同时配上了一条表明缩写的短线「~」，即 ℔。</p>
+<p>由于 ℔ 在当时的广泛使用，部分早期印刷机开始把它作为了一个单独的字符进行印刷。</p>
+<figure class="align-center ">
+    <img loading="lazy" src="images/hashtag.png#center"
+         alt="左图是 Isaac Newton 所写下的 ℔ 符号，右图是它出现在 1698 年印刷品中的样子。"/> <figcaption>
+            <p>左图是 Isaac Newton 所写下的 ℔ 符号，右图是它出现在 1698 年印刷品中的样子。</p>
+        </figcaption>
+</figure>
+
+<p>随着之后的发展，℔ 逐渐演变成了两个不同的形式：</p>
+<ul>
+<li>来源于抄写员潦草笔记的「#」</li>
+<li>没有短线修饰代表磅的「lb」</li>
+</ul>
+<p>而这个符号本身，却则淹没在时间长河中。</p>
+<p>与此同时，它的老搭档 <em>pondo</em> 也开始了独自的演变之路。它先以 <em>pund</em> 的形式出现在古英语中，又在现代英语中成为 pound。历经数千年，<em>libra</em> 与 <em>pondo</em>，这一对古老的搭档，最终又重新连接在一起。[^在美式英语中，# 被称为 pound sign]</p>
+<p>如果不是偶然的经历，也许「#」将一直存在于生活不起眼的角落，默默无闻地行使它最初的功能。</p>
+<h2 id="拨号盘一隅">拨号盘一隅</h2>
+<p>在电话出现的早期，拨号数字利用脉冲拨号（Pulse dialing）进行传输。在这种技术中，每个数字对应一到十次脉冲信号。上世纪40年代末，贝尔实验室发明了一种新的拨号系统。新系统在每个数字被按下的时候，发出一个独特的声音信号，被称为双音多频（Dual-Tone Multi-Frequency）。然而直到1968年，电话上的拨号键还只有 0-9 的按键。</p>
+<figure class="align-center ">
+    <img loading="lazy" src="images/Snipaste_2023-05-18_21-10-40.png#center"
+         alt="左图，早期使用脉冲拨号的转拨盘式电话；右图，贝尔实验室于 1963 年推出的世界第一台按键电话 WE 1500"/> <figcaption>
+            <p>左图，早期使用脉冲拨号的转拨盘式电话；右图，贝尔实验室于 1963 年推出的世界第一台按键电话 WE 1500</p>
+        </figcaption>
+</figure>
+
+<p>1968年，为了实现菜单选择等更多功能，贝尔实验室计划在数字 0 按键的两侧添加两个新的按键。在设计拨号盘新样式的过程中，曾诞生过一系列尝试性设计，比如在 0 的两侧分别增加带有五角星与菱形符号的按键。然而这些字符在当时标准的打字机键盘上并不存在，导致记录时会产生障碍。</p>
+<p>此时，负责新拨号系统设计的贝尔实验室的工程师 Douglas A. Kerr，被任命选择更加合适的符号替代它们。</p>
+<figure class="align-center ">
+    <img loading="lazy" src="images/hashtag%202.png#center"
+         alt="Douglas A. Kerr"/> <figcaption>
+            <p>Douglas A. Kerr</p>
+        </figcaption>
+</figure>
+
+<p>Douglas Kerr 曾经担任设计美国信息交换标准代码（ASCII）的委员会负责人。基于过去的工作经验，也考虑到打字机的键盘设计，他与团队最终选择了包含在 ASCII 字符集中的「*」与「#」作为新的按键符号。</p>
+<p>这个决定，使得「#」以前所未有的姿态进入了世界上绝大多数人的生活，它也将比历史上任何时候都更为人所熟悉。</p>
+<h2 id="来聊天吧">来「#」聊天吧</h2>
+<p>1988年，Jarkko Oikarinen 创建 Internet Relay Chat (IRC)，这是一个基于文本的即时聊天系统。它被设计用于以组群的形式进行多人聊天，许多人可以加入同一个称为频道（channel）的组群中，频道的名称以「#」开头，用户可以用 <code>/join #channelname</code> 的方式加入某一个频道。</p>
+<figure class="align-center ">
+    <img loading="lazy" src="images/354f6753b4f984b446c521dac65c9297.png#center"
+         alt="IRC 客户端 HexChat 截图"/> <figcaption>
+            <p>IRC 客户端 HexChat 截图</p>
+        </figcaption>
+</figure>
+
+<p>2007年，曾经在 Google 和 Uber 担任开发主管的 Chris Messina 在 Twitter 上提议，可以用一个类似的系统来标记网络上感兴趣的主题，并发出了第一条倡议使用「#标签」的推文。然而这一建议并没有立刻得到广泛认可，Twitter 联合创始人 Evan Williams 甚至告诉 Messina，这个概念永远都不会流行。</p>
+<p><img loading="lazy" src="images/hashtag%203.png" alt="hashtag"  />
+</p>
+<p>Messina 没有放弃这个概念，他甚至写了一篇 <a href="https://factoryjoe.com/2007/08/25/groups-for-twitter-or-a-proposal-for-twitter-tag-channels/">Groups for Twitter; or A Proposal for Twitter Tag hannels</a> 来详细阐释其使用方式。在当年的圣地亚哥大火期间，他联系了在 Twitter 上直播事件的加州居民 Nate Ritter，并建议后者在所有相关推文中带上 <code>#SanDiegoFire</code> 的标签。Twitter 这才逐渐认识到到这是对内容进行分组的有效方式。终于，2009 年 Twitter 官方将标签系统加入搜索工具中。次年，热门话题功能出现，将时下最流行的话题展示在所有用户面前。</p>
+<p>2014 年，牛津词典将其作为一个新的条目，添加到当年的更新中：</p>
+<blockquote>
+<p><strong>hashtag</strong> <em>n.</em>(on social media web sites and applications) a word or phrase preceded by a hash and used to identify messages relating to a specific topic; (also) the hash symbol itself, when used in this way.
+在推特等社交网络媒介中，出现在 # 符号后用来标注主题的词语。</p>
+</blockquote>
+<h2 id="的今天与明天">「#」的今天与明天</h2>
+<p>如今，「#」已经很少用来表示重量，也只有偶然间才在通话时被按下，但它依旧活跃在互联网弄潮儿的指尖。如果要用一个词形容现在的它，那或许是「主题」。在用 Markdown 写作时，它界定着层级的标题，在文章开头结尾打下标签，以最简洁的方式描述着文章的主题；在媒体上，一个个标签引导着时下最流行的趋势，却也在看不见的地方暗流涌动。相同的标签，连接不同的内容，把彼此独立的信息编织成网，同一个标签下，聚集着相似的人们。那么，是否一切都可以打上标签？标签网络之中，是否也隐藏着我们的未来？</p>
+<figure class="align-center ">
+    <img loading="lazy" src="images/hashtag%204.png#center"
+         alt="Google Ngram 统计的「#」在 1800-2019 年英文文献中出现的频率"/> <figcaption>
+            <p>Google Ngram 统计的「#」在 1800-2019 年英文文献中出现的频率</p>
+        </figcaption>
+</figure>
+
+<blockquote>
+<p>在你眼中，「#」代表什么？</p>
+</blockquote>
+<h2 id="图片来源">图片来源</h2>
+<p><a href="https://www.newyorker.com/books/page-turner/the-ancient-roots-of-punctuation">https://www.newyorker.com/books/page-turner/the-ancient-roots-of-punctuation</a></p>
+<p><a href="https://www.smashingmagazine.com/2016/01/why-i-moved-from-a-square-to-a-circle-calculator-interface-design/">https://www.smashingmagazine.com/2016/01/why-i-moved-from-a-square-to-a-circle-calculator-interface-design/</a></p>
+<p><a href="https://zh.m.wikipedia.org/zh-hans/%E8%84%89%E5%86%B2%E6%8B%A8%E5%8F%B7">https://zh.m.wikipedia.org/zh-hans/脉冲拨号</a></p>
+<p><a href="http://dougkerr.net/Pumpkin/AboutAuthor.htm">http://dougkerr.net/Pumpkin/AboutAuthor.htm</a></p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><em><a href="https://shadycharacters.co.uk/">Shady Characters : the Secret Life of Punctuation, Symbols, &amp; Other Typographical Marks</a></em></li>
+<li><a href="https://www.copypress.com/blog/the-hashtag-a-history-deeper-than-twitter/">Hashtag History: From Typewriters to Twitter Trends</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hashtag">Hashtag - Wikipedia</a></li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></li>
+</ol>
+</div>
+]]></content:encoded>
     </item>
     
     <item>
@@ -247,6 +1721,49 @@
 &lt;li&gt;&lt;a href=&#34;https://nesslabs.com/jomo&#34;&gt;From FOMO to JOMO: the joy of missing out&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://nesslabs.com/productivity-addiction&#34;&gt;Productivity addiction: when we become obsessed with productivity&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description>
+      <content:encoded><![CDATA[<h2 id="前言">前言</h2>
+<p>这是一篇关于数字健康的文章，旨在探讨为什么会对低效率产生恐惧，这种恐惧会带来什么影响，以及如何缓和这种恐惧。</p>
+<p>本文并非要倡导停止追求高效，也不是否定优秀工具的重要性，而是希望大部分只是希望利用工具辅助完成任务的人，不要过分纠结于寻求完美的工具和高效的方法，却反倒影响了工作目标的实现。</p>
+<h2 id="好工具低生产力">好工具，低生产力</h2>
+<p>在赛博朋克主题的作品中，存在一种科学技术高度发达，但是底层人民的生活水平并没有随之提高的现象，被称为『高科技，低生活』。与之相似，我们现在的工作过程也存在一种现象：软件功能愈发齐全，技术方法百花齐放，但我们的生产力并不一定随之提高。</p>
+<p>产生这种现象的原因之一，是我们在努力提高效率的过程中，错把追求高效本身当作了我们的目标，而不是我们实现目标的手段。</p>
+<h2 id="对低效率的恐惧使效率成为目标">对低效率的恐惧使效率成为目标</h2>
+<p>类似错失恐惧症（fear of missing out, FOMO），一种担心自己错过可以改善生活的信息、经历的感觉，现在也有一种可称为**低效率恐惧（fear of low efficiency, FOLE）**的现象，又称生产力色情或是效率成瘾。我们担心浪费任何时间，沉迷于优化自己花费时间的方式，然而实际的产出却寥寥无几。这种恐惧甚至会妨碍我们完成重要的事本身，我自己就曾在写作时纠结过是否用了最好的写作软件，在做笔记时担心是否采用了最先进的笔记技巧，而不是专心在自己的内容上。</p>
+<p>正如其他成瘾现象都基于某种奖赏机制，<strong>低效率恐惧可能也源于高生产力带来的正向反馈</strong>。提高生产力通常能带来直接的好处，比如产出增加或收入提高，这种反馈不断正向强化我们的行为，最终使效率在不经意间成为了我们的目标。</p>
+<p><strong>低效率恐惧可能还源于消费主义试图消费一切的动机</strong>。为了促进销售，商家贩卖焦虑，其中也有一种对低效率的焦虑。商家将购买某个工具或某门课程，与高效之间画了连线，给人植入『使用了这个软件，学了这门课程，你就能变得和效率达人一样高效』的印象。我们的消费欲望，来源于我们对想成为的人（idol）的模仿欲。我们期待通过与效率达人们使用相似的工具，模仿他们的工作流程，变得像他们一样高效且成果斐然。</p>
+<p>另一方面，<strong>低效率恐惧也是一种拖延的表现</strong>。当我们不想工作时，列计划或是阅读提高工作效率的文章，实际上充当了感觉上的替代品。在我们逃避真正工作的同时，给了我们正在从事产出的错觉。</p>
+<h2 id="将效率作为目标会引起哪些问题">将效率作为目标会引起哪些问题</h2>
+<p>效率工具是辅助我们完成任务的手段，完成工作才是真正的目的，但在追求高效的过程中很容易将手段与目的混淆。如果花费过多本属于工作和生活的时间追求效率，整天忙忙碌碌，最终发现产出却寥寥无几，<strong>平添焦虑的同时效率不升反降</strong>。</p>
+<p>不论技术怎样进步，软件和算法都只能按照它们设计出来的方式运行，它们不能替我们做出决定，也无法承担责任。<strong>使用合适的工具可以帮助我们工作，追求完美的工具则是一种猎奇</strong>。就像机械键盘，有人花数百上千组装自己的键盘，已经不再只是为了用键盘实现打字的目的，而是把折腾它的过程作为一种乐趣了。</p>
+<p>对错过新工具、新技术的焦虑同样会导致沉迷于用即时的短期满足来缓解焦虑，比如不停地钻研各种效率文章，将工具一个个进行试用比较，甚至可能因为害怕错过提升效率，去参加一些我们并不真正需要的活动，例如报名我们用不上的学习课程。学会了屠龙之技，<strong>失去的是本当用于工作的时间，错过的则是我们自己的生活</strong>。</p>
+<h2 id="如何缓解低效率恐惧">如何缓解低效率恐惧</h2>
+<h3 id="确定自己关注的主题和领域">确定自己关注的主题和领域</h3>
+<p>知识浩如烟海，如果不清楚自己真正关注什么，便无法针对性地进行积累。如同在海上航行却没有目标，如果不论遇到什么都囫囵地装进口袋，最终得到的只有乱糟糟的收藏夹，并不会促进实质性的能力提升。这里推荐少楠的《P.A.R.A.》方法，将自己所有关注的内容划分成领域、项目、资源等方面。**领域（Area）**是自己日常需要精进的方面，如果搞砸了需要承担对应的责任；**项目（Project）**有明确的起止时间和目标；**资源（Resource）**是自己持续感兴趣，但哪怕放弃，也不会影响他人的事。具体如何实践，可以进一步阅读少楠的文章<a href="https://mp.weixin.qq.com/s?__biz=MzI0MDA3MjQ2Mg==&amp;mid=2247485941&amp;idx=1&amp;sn=28e92a5f06fb1883e95d6dc14db63d5d&amp;chksm=e9212b94de56a2824cd58114927e2011d71e89b85358bf973c3ba50449ca0eb398b4fa254d55&amp;mpshare=1&amp;scene=1&amp;srcid=0512NCDIBaqvdu4CXusvsg2l&amp;sharer_sharetime=1652338328485&amp;sharer_shareid=6d6f8a7d66e79b9e6c40cbf64b5690df#rd">不知道积累什么知识，是因为你没有自己关注的领域</a>。</p>
+<h3 id="反思对效率工具的使用识别真正的限制因素">反思对效率工具的使用，识别真正的限制因素</h3>
+<p>回顾自己使用了哪些效率工具，如何使用，是否朝着自己关注的领域与设定的长期计划前进。当我们做计划或是研究效率技巧的时候，我们是希望籍此辅助自己完成工作，还是在逃避推进工作。识别哪些因素真正妨碍了我们的工作，是工具或者生产力系统的缺陷吗？虽然各种算法和工具可以辅助我们进行思考和决策，但不能依赖工具而忽略了我们自身应当承担的责任。我们记下了许多笔记，但是再好的软件也不能替代我们理解和运用这些知识；相反，如果我们积极地应用这些知识，哪怕手中只有纸笔，也能非常好地掌握知识。</p>
+<h3 id="停止盲目收集调整信息来源">停止盲目收集，调整信息来源</h3>
+<p>留意信息的输入途径，如果使用收集箱inbox的形式，让自己的列表中放更多对自己关注的项目/领域/资源有帮助的内容。有些文章当下感到值得一读，便放进了收集箱，过一阵子再看到时觉得读它可有可无，那就应当果断将其删掉，并非一定放进收集箱的东西都非得读完。</p>
+<h3 id="重器轻用建立适合自己的工作流">重器轻用，建立适合自己的工作流</h3>
+<p>与其不断搜寻可以提高生产力的技巧，阅读如何做笔记的文章，不如确定一个适合我们的系统并稳定地使用它。Kenshin在<a href="https://sspai.com/post/71576">重器轻用就是高效</a>的文章中提到，许多人纠结于选择哪个笔记工具，是因为试图在某一个工具中实现All-in-One，并以为这样就能达到简单高效。然而没有完全满足用户需求的工具存在，因此应当重器轻用，发挥各个工具的长处。Spike112也在其文章<a href="https://sspai.com/post/71658">工作流的祛魅</a>中指出，在永无止境的探索过程中，新旧工具的迁移消耗了我们大量的时间和精力，应当根据场景识别需求而选择工具，而不是根据某个工具的功能去寻找它的使用场景。这篇文章中也提出，工作流比工具重要，而实践又比工作流和工具更重要，因为真正有用的工作流，是在实践的过程中不断升级优化产生的。就像只有自己整理房间，才更清楚每个工具放在哪里，也只有在整理的过程中，才能思考诸如如何优化工作环境的问题，让自己在之后的工作中更加顺手。</p>
+<h3 id="专注于我们关注的内容本身">专注于我们关注的内容本身</h3>
+<p>关注内容本身，而非如何获取、储存这些内容。花更多的时间与我们收集到的内容呆在一起，思考如何使用它们，而非利用一系列自动化流程将笔记碎片积累到数据库后，囤积在那再也不看。乍看之下，笔记本中满满的笔记摘录很有成就感，但如果从此不再使用，笔记本只能成为笔记的坟场。问一问自己，我积累了这么多的笔记，然后呢？思考我们为什么要记笔记，是为了更好地理解某个概念，学习新领域的知识，通过笔记辅助我们思考和写作，亦或只是为了把玩某种先进的笔记技巧？为自己收集的内容找一个出口，比如写作，将死气沉沉的笔记调动起来，在输出的过程中厘清思路，进而更好地掌握输入的内容。</p>
+<h3 id="刻意花一些时间远离网络">刻意花一些时间远离网络</h3>
+<p>网络上信息无穷无尽，作为个人不可能将其全部吸收。短时间大量的信息输入会助长失控感，引起焦虑。不妨花些时间独自思考，阅读，散步，健身，做些让自己感到放松舒适的事。生活不只有高效的工作，只有保持克制，接受自己和工具的不完美，才能重新出发，以更好的节奏投入新的工作。</p>
+<blockquote>
+<p>接受系统和工具的不完美，真正重要的是我们做的事本身。</p>
+</blockquote>
+<p>最后，感谢您的阅读。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://sspai.com/post/71576">放弃纠结、拥抱妥协，重器轻用就是高效</a></li>
+<li><a href="https://sspai.com/post/71518">年度征文 | 我是如何艰难地克服「效率成瘾」的？</a></li>
+<li><a href="https://sspai.com/post/71658">工作流的祛魅：从工具、阅读到写作</a></li>
+<li><a href="https://sspai.com/post/72939">收藏≠学会，别再让你的收藏夹吃灰了！</a></li>
+<li><a href="https://buttondown.email/jessmartin/archive/time-spent-in-the-environment-and-then-what/">Automations, Time spent in the environment, &ldquo;And then what?&rdquo;</a></li>
+<li><a href="https://nesslabs.com/jomo">From FOMO to JOMO: the joy of missing out</a></li>
+<li><a href="https://nesslabs.com/productivity-addiction">Productivity addiction: when we become obsessed with productivity</a></li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -256,6 +1773,132 @@
       
       <guid>https://yorks0n.github.io/posts/basic-about-paper-figures/</guid>
       <description>参考几个期刊的投稿指南，整理了一些论文作图时会遇到的基本概念及要求。</description>
+      <content:encoded><![CDATA[<p>本文参考了 Nature、Science、Plant Cell 等期刊的图片指南整理而成，旨在介绍一些作图前后会遇到的基本概念及要求。应注意的是，本文只能作为参考，<strong>具体的作图要求会依据期刊发生变化，应遵循期刊提供的投稿指南</strong>。</p>
+<h3 id="科研论文绘图的特点">科研论文绘图的特点</h3>
+<p>相比于文字描述，<strong>论文中的图表通常是最快传递大量复杂信息的手段</strong>。</p>
+<ul>
+<li>高质量的图片结果会传递出<strong>专业性</strong>，给读者良好的第一印象</li>
+<li>许多人在阅读时也会从图片开始，因此应保证图片<strong>清晰准确地传递信息</strong></li>
+<li>图片也是吸引读者进一步阅读文章内容的基础，因此条件允许时<strong>适当兼顾艺术性</strong></li>
+</ul>
+<h3 id="本文包含什么">本文包含什么</h3>
+<p>本文包含许多在作图前后，尤其是完成单张结果图后，进行进一步图片组合时所需了解的基本概念与注意事项。</p>
+<h3 id="本文不包含什么">本文不包含什么</h3>
+<p>本文不是指导投稿某个期刊时的作图规范，一切具体标准与要求仍以各期刊自己的投稿指南为准。</p>
+<hr>
+<h2 id="创建画布">创建画布</h2>
+<h3 id="图片格式">图片格式</h3>
+<p>图片格式可以分成<a href="https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide">位图与矢量图</a>两种：</p>
+<p>位图（Bitmap），又称栅格图（Raster graphics），指使用像素点组成的阵列来表示的图像，通过定义每个像素点的位置及其颜色来生成图片，比如JPG、TIFF等。
+矢量图（Vector）是用点、直线或多边形等基于数学方程的几何元素表示的图像，如PDF、EPS等。</p>
+<p><img loading="lazy" src="images/1680600531904.jpeg" alt=""  />
+</p>
+<p>由于矢量图记录的是形状的计算方式，其经过放大也不会变得模糊，因此是作图时首选的图片格式。</p>
+<p>期刊主要接受的位图格式为TIFF，接受PDF等矢量图；其中PDF中可以同时储存位图与矢量图，因而成为更加通用的格式；尽量避免使用PowerPoint储存图像。</p>
+<h3 id="画布尺寸">画布尺寸</h3>
+<p>由于出版时版面宽度限制，期刊通常会对图片的尺寸有所要求，为了更好地排列每张Figure中的图片大小及位置，同时匹配字号和图片尺寸，最好在新建画布时就设定好尺寸。</p>
+<p>每个期刊对于图片尺寸的要求各不相同，一般会区分单栏或双栏的布局方式。
+<img loading="lazy" src="images/1680600541142.png" alt=""  />
+
+部分期刊的图片尺寸要求如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>期刊  </th>
+          <th>单栏（cm） </th>
+          <th>双栏（cm）  </th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Nature</td>
+          <td>9</td>
+          <td>18</td>
+      </tr>
+      <tr>
+          <td>Plant Cell</td>
+          <td>8.25</td>
+          <td>16.5</td>
+      </tr>
+      <tr>
+          <td>Science</td>
+          <td>5.5</td>
+          <td>12</td>
+      </tr>
+  </tbody>
+</table>
+<p>图片的高度一般没有明确要求，PC建议最大图片高度20 cm，Nature建议最大图片高度17 cm，以尽量保证图片和图例在同一页范围内。</p>
+<h3 id="颜色模式">颜色模式</h3>
+<p>颜色模式是数字图像中表示颜色的算法，期刊中常见要求有<a href="https://99designs.ca/blog/tips/correct-file-formats-rgb-and-cmyk/">RGB模式与CMYK模式</a>。
+<img loading="lazy" src="images/1680600551809.png" alt=""  />
+</p>
+<ul>
+<li>RGB模式：利用红（R）、绿（G）、蓝（B）三种颜色的加法混合，产生各种各样的颜色。</li>
+<li>CMYK模式：将三原色叠加生成的四种颜色，即青色（C）、洋红色（M）、黄色（Y）与黑色（K），利用减法混合，形成CMYK颜色。</li>
+</ul>
+<p>不同期刊对于投稿图片中的颜色模式的要求也各有不同，比如Science要求CMYK，Plant Cell则要求RGB。
+不用担心，这两种颜色模式可以相互转换，但每次都会损失一点数据，所以最好先用RGB处理好图像，一旦有需要，再将其转换为CMYK模式。</p>
+<h2 id="字体">字体</h2>
+<p>衬线，是指笔画末端的装饰线，是区分不同英文字体最显著的特征。有衬线的字体叫做<strong>衬线字体</strong>（Serif），而没有的则是<strong>非衬线</strong>（Sans-Serif）。（「Serif」意为「衬线」，「Sans」在法文中意为「没有」）
+<img loading="lazy" src="images/1680600561146.jpeg" alt=""  />
+
+常见期刊一般要求使用非衬线字体，如Arial或Helvetica，且不同期刊对于图片中的字体大小也有要求：</p>
+<table>
+  <thead>
+      <tr>
+          <th>期刊  </th>
+          <th>最小字号（pt） </th>
+          <th>最大字号（pt）  </th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Nature</td>
+          <td>5</td>
+          <td>7</td>
+      </tr>
+      <tr>
+          <td>Science</td>
+          <td>5</td>
+          <td>7</td>
+      </tr>
+      <tr>
+          <td>Plant Cell</td>
+          <td>6</td>
+          <td>8</td>
+      </tr>
+  </tbody>
+</table>
+<p>要注意的是组合多张图片时，通常图片会被缩放，这时实际显示出的字号会发生变化，应以最终缩放后的字号为准；多张图片的标注（即标注 A, B, C, D 时），应采用大写加粗，具体字号另各有要求。</p>
+<h2 id="颜色">颜色</h2>
+<p>图片中的颜色应当差异明显且视觉效果良好。期刊都会要求考虑到色觉障碍人士，因而要求避免使用诸如红色与绿色这样的颜色组合作为对比（改为使用洋红色与绿色），尤其是在荧光显微照片中。
+<img loading="lazy" src="images/1680600567695.png" alt=""  />
+</p>
+<h2 id="分辨率">分辨率</h2>
+<p>在涉及到位图的时候，就要考虑分辨率，通常以ppi作为单位（pixels per inch）。分辨率过低会导致图片在放大时边缘模糊。
+在纯线条与文字组成的图片中（如化学式），分辨率尤其重要。一个好的方法是将图片放大至400%（至少200%），观察其边缘是否依然锐利清晰。
+<img loading="lazy" src="images/1680600572700.png" alt=""  />
+
+纯矢量图不需要考虑分辨率；如果导出位图则照片尽量达到300 ppi。</p>
+<h2 id="图片布局">图片布局</h2>
+<p>一大原则就是避免空间浪费，但应保证不同的照片边缘有明显分界线；同时图片边缘尽量对齐。</p>
+<p><img loading="lazy" src="images/1680600577500.png" alt=""  />
+</p>
+<h2 id="额外注意事项">额外注意事项</h2>
+<p>务必整理好所有作图过程中使用过的原始图片，尽量保证其分辨率，最好是原始格式的原始文件，因为部分杂志会要求提供原始图片。</p>
+<p>相比于文中提到的要求，不同期刊对于图片都会有各自的额外要求，一切应以期刊提供的投稿指南为准。比如<a href="https://www.nature.com/nature/for-authors/initial-submission">Nature</a>要求所有图片中的文字可编辑；<a href="https://www.science.org/content/page/instructions-preparing-initial-manuscript">Science</a>要求避免使用灰度图等。</p>
+<hr>
+<p>推荐进一步阅读<a href="https://academic.oup.com/plcell/pages/general-instructions">Plant Cell</a>提供的<em>Detailed Figure Guidelines</em>，里面不但有杂志自身的投稿要求，还对许多基本概念有详细介绍，同时对一些可能犯的错误提供了修改意见。</p>
+<h3 id="references">References</h3>
+<ul>
+<li>位图与矢量图: <em><a href="https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide">https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide</a></em></li>
+<li>RGB模式与CMYK模式: <em><a href="https://99designs.ca/blog/tips/correct-file-formats-rgb-and-cmyk/">https://99designs.ca/blog/tips/correct-file-formats-rgb-and-cmyk/</a></em></li>
+<li>Nature: <em><a href="https://www.nature.com/nature/for-authors/initial-submission">https://www.nature.com/nature/for-authors/initial-submission</a></em></li>
+<li>Science: <em><a href="https://www.science.org/content/page/instructions-preparing-initial-manuscript">https://www.science.org/content/page/instructions-preparing-initial-manuscript</a></em></li>
+<li>Plant Cell: <em><a href="https://academic.oup.com/plcell/pages/general-instructions">https://academic.oup.com/plcell/pages/general-instructions</a></em></li>
+<li>Figures and tables - springer: <em><a href="https://www.springer.com/gp/authors-editors/authorandreviewertutorials/writing-a-journal-manuscript/figures-and-tables/10285530">https://www.springer.com/gp/authors-editors/authorandreviewertutorials/writing-a-journal-manuscript/figures-and-tables/10285530</a></em></li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -265,6 +1908,82 @@
       
       <guid>https://yorks0n.github.io/posts/why_dont_we_love_study/</guid>
       <description>读书笔记 ——《为什么学生不喜欢上学?》</description>
+      <content:encoded><![CDATA[<p>最近读完了 Daniel T. Willingham 所写的《为什么学生不喜欢上学?》。这是介绍教育原理的书，旨在给教师提供教学意见。其中的许多内容直观地解释了「学习」这个过程中所运用到的「认知原理」。我们自然没有提升教学水平的任务，但它同样能为我们学习或向他人有效传递信息提供参考。</p>
+<hr>
+<h2 id="认知原理">认知原理</h2>
+<p>全书共提到了9个认知原理，分别是：</p>
+<ol>
+<li>人类具有好奇心，但大脑会尽力避免思考</li>
+<li>事实性的知识先于技能</li>
+<li>记忆是思考的残留物</li>
+<li>我们依靠已知内容理解新的内容</li>
+<li>练习才能熟练掌握</li>
+<li>学习早期的认知力与晚期的截然不同</li>
+<li>学生在学习方面相似多过差异</li>
+<li>学生智力上的差异可以通过更持久的努力改变</li>
+<li>教学水平也需要通过练习提高</li>
+</ol>
+<p>此处并不期待制作出这本书的知识总结，而是摘取部分我觉得较为实用的要点进行回顾。</p>
+<h2 id="我们如何思考">我们如何思考</h2>
+<p>下图是一张简化的大脑运作模型，我们从环境（外部信息源）获取信息进入工作记忆（工作区），利用工作记忆进行思考；我们还会从长期记忆（内部信息源）提取与工作相关的信息到工作区，协助处理信息。<strong>工作记忆的空间有限</strong>，且没有什么已知的好办法扩展它。一旦工作记忆变得过于拥挤，思考就会异常艰难。因此，思考的成功取决于四个方面：</p>
+<ul>
+<li>环境中的信息</li>
+<li>长期记忆中的信息</li>
+<li>长期记忆中的步骤</li>
+<li>工作记忆的空间大小</li>
+</ul>
+<p><img loading="lazy" src="images/4fa357a4-45aa-44c8-84df-f8e8a6336e5e.png" alt="4fa357a4-45aa-44c8-84df-f8e8a6336e5e.png"  />
+</p>
+<p>简化的大脑运作模式图</p>
+<blockquote>
+<p>工作记忆的空间大小不是由内容的文字多少决定，而是由有意义的片段决定</p>
+</blockquote>
+<blockquote>
+<p>长期记忆中的背景知识可以帮助把大块的内容合并成有意义的信息单元</p>
+</blockquote>
+<blockquote>
+<p>背景知识使合并成为可能，它使得片段间的联系变得容易，提高了工作记忆的空间利用效率，最终使理解变得容易。</p>
+</blockquote>
+<h2 id="只有好奇并不使人思考">只有好奇并不使人思考</h2>
+<p>这并不是说好奇不重要，好奇心依然是我们最好的老师。大脑天生懒惰，当我们能侥幸通过某种方式完成任务时，便不会再去积极思考，反而会依赖记忆，在下次任务出现时依照记忆行动。思考的过程耗费相当的精力，只有<strong>当我们明白解决某一问题后会带来愉悦感时，我们才会喜欢思考</strong>。太过简单或太过困难的问题都不会让人开心，因此只有恰当地依照对方的背景知识，提出合适的问题，才能促成对方积极思考。</p>
+<h2 id="背景知识帮助我们思考">背景知识帮助我们思考</h2>
+<p>思考是以新的方式组合信息，这既包含随时可以从外部查询的信息，又包含长期记忆中的信息。外界直接获取的信息储存在短期的工作记忆中。我们<strong>熟悉的信息不会占用太多工作记忆</strong>，因为大脑可以根据长期记忆将信息组合成新的单元进行暂时存放；<strong>不熟悉的新内容则会占据大量工作记忆</strong>，<strong>导致难以思考</strong>。但如果能在查找时，将新获得的信息与之前的信息建立关联，可以帮助记忆，减少在工作记忆的空间占用。</p>
+<p><strong>背景信息还帮助我们进行交流</strong>。在与他人沟通时，为了避免过度冗长，我们通常会适当省略一些信息。事无巨细将每个细节讲出来会导致啰嗦，也会令听者失去耐心；相反，如果过度省略信息，在双方知识不对等的情况下，会导致无法互相理解，反而加剧交流障碍。</p>
+<h2 id="记忆是思考的残留">记忆是思考的残留</h2>
+<p>如果我们仔细地思考过一件事情，就更有可能之后再次想起它，思考让大脑明白某件事是应该被存储的。记忆不是我们想要记住或尝试记住的事，<strong>记忆是我们所思考的事</strong>。</p>
+<h2 id="我们在已知的环境中理解新事物">我们在已知的环境中理解新事物</h2>
+<p>学习知识的过程在于用相关联的事实来解释一个中心概念，而不是建立事实性的知识点清单。思考的过程就是在为知识点建立<strong>联系</strong>，这与记住知识点本身同样重要；理解一个新的概念就是让恰当的已有概念进入工作记忆，并加以重新组合，因此<strong>理解其实就是记忆</strong>。</p>
+<p><img loading="lazy" src="images/53bd5968-aa78-457d-961b-e821427134a7.png" alt="53bd5968-aa78-457d-961b-e821427134a7.png"  />
+</p>
+<p>可以通过类比等方法帮助理解抽象的概念，但类比也需要恰当地选择例子，如果受众对于例子过于不了解，那么此类比也难以帮助其理解问题。</p>
+<p>一个问题通常具有表层结构和深层结构。表层的结构是直观的，但对于解决问题可能帮助不大；正确辨别问题的深层结构有助于解决问题，然而一个问题可能有多种深层结构，因而难以正确处理它。</p>
+<p>将抽象概念利用类比转化成一个具象事件的过程，实际上是在把问题的<strong>深层结构</strong>与一个好理解的<strong>表层结构</strong>建立联系。</p>
+<blockquote>
+<p>何为「表层结构」与「深层结构」：以小学奥数题为例，一个水池一边排水一边进水，问多久水池能装满。如果只看到表层结构中的水池、水龙头，是不会将它与先前例题中牛吃草的吃草速度、牧草生长速度联系起来的；而这个问题的深层结构是「速度差」，即进水与排水的速度差，或是吃草与长草的速度差，只有把握了这一深层结构，才能解决这一类而非这一个具体的问题；因为表层结构是多变的，而深层结构间可能有共通之处。</p>
+</blockquote>
+<p>因此在不能把问题正确地由表层结构连结到恰当的深层结构上时，便无法利用已有知识解决问题。</p>
+<p>通过接触更多例子，或是比较不同的例子，可以帮助我们建立对深层结构（抽象概念）的理解，此即<strong>练习</strong>的作用。</p>
+<h2 id="练习还是练习">练习，还是练习</h2>
+<p>练习使得在进行底层的基础过程时，得以不假思索，为更高级更深入的过程提供思考所需的空间；不恰当的练习设计会磨灭积极性，所以需要恰当选择练习的内容与形式。</p>
+<blockquote>
+<p>何为「基础过程」：所谓基础也就是人在某一个领域一遍又一遍重复的事情，通过练习使其达到自动化，它们为日后更高级的工作奠定了基础。例如乒乓球员练习发球，通过练习使其几乎不占用额外的精力，让注意力得以更多地转移到比赛的其他过程。</p>
+</blockquote>
+<p>由于工作空间区域有限且无法通过某种方式扩展，因此就得：</p>
+<ul>
+<li>采取某种方式压缩其中的内容</li>
+<li>提高工作记忆中操纵信息的效率</li>
+</ul>
+<p>实际上这两者都是从长期记忆中提取一部分到工作区中，因此只占用工作区内的一小部分。</p>
+<p>练习可以使记忆更长久，而<strong>分散练习</strong>有助于记忆维持更长的时间，同时让学生有更多的机会思考如何将学到的东西加以应用，即练习<strong>如何将问题与恰当的知识点建立联系</strong>的过程。要达到自动化需要很多练习，最好的办法是既分散联系的时间，又分散练习的环境，尽量多设计有创意的方法来练习最关键的技巧，使得能够在更高阶的环境中学到基本技能。</p>
+<h2 id="一些额外的建议">一些额外的建议</h2>
+<p>与人搭档合作，一同学习是个好办法。</p>
+<blockquote>
+<p>但除非被问及，否则不要建议别人该做什么。你不会希望做一个什么都懂的圣人。如果你的搭档想咨询你的建议，他会来问你的，这时候你当然可以畅所欲言了。但是在他问你之前，当好一个谨慎的、支持的旁观者，不要以为自己是万能的协调者，不管你多有信心、解决方法多好都不要插手。</p>
+</blockquote>
+<hr>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://book.douban.com/subject/4864832/">为什么学生不喜欢上学?</a></p>
+]]></content:encoded>
     </item>
     
     

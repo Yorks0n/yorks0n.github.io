@@ -14,6 +14,134 @@
       
       <guid>https://yorks0n.github.io/posts/outlier_detection/outlier_detection/</guid>
       <description>整理一下检测单变量异常值的方法。</description>
+      <content:encoded><![CDATA[<h2 id="异常值">异常值？</h2>
+<p>首先，什么是异常值，某个特别的值真的是异常值吗？</p>
+<p>在统计学中，异常值（outlier）是与其他观察值显著不同的数据点。它们可能来源于测量方法的变异性，可能指示出新的数据情况，或者也可能是实验误差的产物。然而，判断某个值是否为异常值并不轻松，也没有一劳永逸的方法或是唯一可信的标准，因此这里整理几种常见的单变量异常值检测方法，以供自己或他人将来参考。</p>
+<p>至于如何处理异常值，是原样保留还是剔除它们，往往会随着分析目的等因素发生变化，但请一定三思，avoid <a href="https://en.wikipedia.org/wiki/Cherry_picking">cherry-picking</a>。</p>
+<h2 id="异常值检测">异常值检测</h2>
+<h3 id="three-sigma-rule">three-sigma rule</h3>
+<p>首先计算数据的平均值mu，与标准差std</p>
+<p>three-sigma 法则将任何 $abs(x - µ) &gt; 3 * std$ 的值作为异常值，这里的3也可以根据情况进行调整</p>
+<p>这种方式与另一种Z-score方法实际是一致的：对数据进行Z-score变换，就是在计算数据的Z统计量</p>
+<p>$$
+z = (x-µ)/σ
+$$</p>
+<p>对应于three-sigma方法中，就是这里的 $abs(z) &gt; 3$会被视为异常值。</p>
+<p>这里划定异常值的系数取3，实际已经是一个非常极端的值了，我们假设Z-score变换后的数据符合标准正态分布，此时置信区间内的概率$p(|z| &gt; 3) = 0.9973$，即数据落在这个区间外的概率只有0.0027。</p>
+<p>我们假设随机来一组数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#a6e22e">set.seed</span>(<span style="color:#ae81ff">2501</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成一组10个符合正态分布的随机数，µ = 100，σ = 10</span>
+</span></span><span style="display:flex;"><span>random_numbers_1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">rnorm</span>(<span style="color:#ae81ff">10</span>, mean <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>, sd <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 99 104 103  91 106 100  96  90 110  99</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 再添加几个值，分别为68,220</span>
+</span></span><span style="display:flex;"><span>data_1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(random_numbers_1, <span style="color:#ae81ff">68</span>, <span style="color:#ae81ff">220</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 99 104 103  91 106 100  96  90 110  99  68 220</span>
+</span></span></code></pre></div><p>此时样本均值和标准差分别为</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span>mu_1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span>(data_1)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 107.17</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sigma_1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">sd</span>(data_1)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 37.13</span>
+</span></span></code></pre></div><p>此时 three-sigma的区间为$mu \pm 3*sigma = (-4.23, 218.57)$，是个大到离谱的区间了。上面的数据中只有220会被这个方式定义为异常值。这个范围对应初始的 $N(100,10^2)$ 中的概率为 $1 - 9.7^{-26}$，即有真实值落在区间外的概率为$9.7^{-26}$，因此是一个区间范围非常大，非常宽松的方法。其原因一方面是选择 3 作为系数，因此可以视情况将其调整为其他值，比如 2.5 等。</p>
+<p>但是，计算置信区间的方式相对比较繁琐，一种更直观的是对所有数据直接计算 z 统计量</p>
+<p>$$
+|z| = \left|\frac{X - \bar{X}}{s}\right|
+$$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#a6e22e">abs</span>(<span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">scale</span>(data_1)[,<span style="color:#ae81ff">1</span>],<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 0.22 0.09 0.11 0.44 0.03 0.19 0.30 0.46 0.08 0.22 1.05 3.04</span>
+</span></span></code></pre></div><p>其中68的z变量为1.05，220的z变量为3.04，如果以3为标准就可以将其作为异常值。</p>
+<p>另一方面，该方法本身涉及到计算平均值和标准偏差，这两个值都受异常值影响很大，尤其是标准偏差，假设上面额外增加的 220 改成 200，这种方法的区间就会成为 $(10.54, 200.45)$，这时 200 落在了边界附近，却刚好不会被视为异常值。</p>
+<h3 id="iqr-方法">IQR 方法</h3>
+<p>有时也称为箱线图方法，通过计算数据的分位数判断异常值，大概方式如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span>Q25 <span style="color:#f92672">=</span> <span style="color:#ae81ff">25</span>th_percentile
+</span></span><span style="display:flex;"><span>Q75 <span style="color:#f92672">=</span> <span style="color:#ae81ff">75</span>th_percentile
+</span></span><span style="display:flex;"><span>IQR <span style="color:#f92672">=</span> Q75 <span style="color:#f92672">-</span> Q25         <span style="color:#f92672">//</span> inter<span style="color:#f92672">-</span>quartile range
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">IF </span>(x <span style="color:#f92672">&lt;</span> Q25 <span style="color:#f92672">-</span> <span style="color:#ae81ff">1.5</span><span style="color:#f92672">*</span>IQR) <span style="color:#a6e22e">OR </span>(Q75 <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.5</span><span style="color:#f92672">*</span>IQR <span style="color:#f92672">&lt;</span> x) THEN  x is a mild outlier
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">IF </span>(x <span style="color:#f92672">&lt;</span> Q25 <span style="color:#f92672">-</span> <span style="color:#ae81ff">3.0</span><span style="color:#f92672">*</span>IQR) <span style="color:#a6e22e">OR </span>(Q75 <span style="color:#f92672">+</span> <span style="color:#ae81ff">3.0</span><span style="color:#f92672">*</span>IQR <span style="color:#f92672">&lt;</span> x) THEN  x is an extreme outlier
+</span></span></code></pre></div><p>IQR 方法的好处在于，去掉异常值前后，其他值的中位数和 IQR 基本是不变的。</p>
+<p>同样用上面的数据，计算一下这种方式的区间：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#a6e22e">quantile</span>(data_1, probs <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0.25</span>,<span style="color:#ae81ff">0.75</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Q25 = 94.75</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Q75 = 104.50</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># IQR = 9.75</span>
+</span></span></code></pre></div><p>此时1.5倍IQR的区间为，相对还是个比较窄的范围，后添加进去的 68 和 220 在此情况下都会被视为异常值。</p>
+<p>$$
+(Q25-1.5\cdot IQR, Q75+1.5\cdot IQR) = (80.12, 119.12)
+$$</p>
+<p>3 倍 IQR 的范围则为 $(65.5, 133.75)$ 相对会宽一些，此时只有220会被作为异常值。</p>
+<p>$$
+(Q25-3\cdot IQR, Q75+3\cdot IQR) = (65.5, 133.75)
+$$</p>
+<p><strong>这种方式的一个好处就是分位数对异常值不太敏感</strong>，如果把220变为200，这个区间依然是不会变的。</p>
+<p>1.5 倍 IQR 的区间$(80.12, 119.12)$放到原始的分布中去大致对应于概率 95% 的正态区间；3 倍 IQR 的区间对应 99.94% 的概率，真实值落入这个区间外的概率也足够低了；当然相比于 three-sigma，还是严格了一些。</p>
+<p>因此，IQR 方法更容易检测出异常值，当然也更有可能把真实值视为异常值，因此需要谨慎选择 IQR 区间的倍数。</p>
+<h2 id="中位数绝对偏差-mad">中位数绝对偏差 MAD</h2>
+<p>上面的方法可能会遇到一些问题，包括</p>
+<ul>
+<li>均值和标准差的计算依赖于所有数值，因此离群值可能会对均值和标准差产生较大影响</li>
+<li>three-sigma、IQR等方法对于小样本不一定合适（？</li>
+</ul>
+<p>还有另一种可以衡量变异程度的统计量，中位数绝对偏差（Median absolute deviation，MAD）</p>
+<p>其计算也相当简便：</p>
+<p>对于一组数据$X_1, X_2, X_3, &hellip;, X_n$ ，其中位数为$\tilde{X} = median(X)$</p>
+<p>MAD是各个数据与其中位数绝对偏差的中位数：</p>
+<p>$$
+MAD = median(|X_i - \tilde{X}|)
+$$</p>
+<p>MAD 相比方差更能适应数据集中的异常值：在标准偏差中，与均值的距离是平方的，因此大偏差的权重更大，因此离群值会严重影响它；在 MAD 中，由于中位数天生受异常值影响较小，少数异常值的偏差几乎不影响MAD。</p>
+<p>上面 three-sigma 使用标准方差 σ 衡量变异程度，IQR 方法使用 IQR 衡量变异，类似的，在这里使用 MAD 衡量数据的变异幅度。MAD 的使用方式类似Z-score变换中将表标准差应用于平均值的过程，为了将 MAD 作为与标准偏差 σ 一致的估计量，需要有</p>
+<p>$$
+\hat{\sigma} = k \cdot MAD
+$$</p>
+<p>其中 k 是一个比例系数，取决于分布。对于正态分布的数据，k 被认为是</p>
+<p>$$
+k = 1/\Phi^{-1}(3/4) \approx 1.4826
+$$</p>
+<p>即标准正态分布$Z = (X-\mu)/\sigma$的分位数函数$\Phi^{-1}$（也称累积分布函数，R中计算使用 qnorm）的倒数。</p>
+<p>用一开始的数据计算</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#75715e"># 99 104 103  91 106 100  96  90 110  99  68 220</span>
+</span></span><span style="display:flex;"><span>mad_1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">median</span>(<span style="color:#a6e22e">abs</span>(data_1 <span style="color:#f92672">-</span> <span style="color:#a6e22e">median</span>(data_1)))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mad_1 = 5.5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">abs</span>((data_1 <span style="color:#f92672">-</span> <span style="color:#a6e22e">median</span>(data_1)) <span style="color:#f92672">/</span> (mad_1<span style="color:#f92672">*</span><span style="color:#ae81ff">1.4826</span>)), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0.06</span>  <span style="color:#ae81ff">0.55</span>  <span style="color:#ae81ff">0.43</span>  <span style="color:#ae81ff">1.04</span>  <span style="color:#ae81ff">0.80</span>  <span style="color:#ae81ff">0.06</span>  <span style="color:#ae81ff">0.43</span>  <span style="color:#ae81ff">1.17</span>  <span style="color:#ae81ff">1.29</span>  <span style="color:#ae81ff">0.06</span>  <span style="color:#ae81ff">3.86</span> <span style="color:#ae81ff">14.78</span>
+</span></span></code></pre></div><p>类似，视情况选择合适的值作为阈值，即可检出异常值。如果选择 3，对应的区间为 (75.04, 123.96)，概率范围为98.5%；如果选择 4，对应的区间为 (58.73, 140.27)，概率范围为99.89%。</p>
+<p>k 的推导过程如下</p>
+<p>为了使 $\pm k*MAD$ 的区间落在概率为 $p_0$ 的标准正态分布中区间内，有以下公式</p>
+<p>$$
+p_0 = P(|X - µ| \le k \cdot MAD) = P\left( \left|\frac{X - µ}{σ}\right| \le \frac{k \cdot MAD}{σ}\right) = P\left( |Z| \le \frac{k \cdot MAD}{σ} \right)
+$$</p>
+<p>因此就有</p>
+<p>$$
+\Phi(k \cdot MAD/\sigma) - \Phi(-k \cdot MAD/\sigma) = p_0
+$$</p>
+<p>又因为</p>
+<p>$$
+\Phi(-k\cdot MAD/\sigma)=1-\Phi(k \cdot MAD/\sigma)
+$$</p>
+<p>所以</p>
+<p>$$
+\Phi(k \cdot MAD/\sigma)= \frac{1 + p_0}{2}
+$$</p>
+<p>令 $p_0 = 0.5$，即 50% 正态分布区间时，</p>
+<p>$$
+k = \frac{\sigma}{MAD} = \frac{1}{\Phi^{-1}(3/4)} \approx 1.4826
+$$</p>
+<p>这里选择 0.5 是因为，对于均值为零的对称分布，总体 MAD 是分布的第 75 个百分位数，因此标准正态分布的总体 MAD 刚好等于$\Phi^{-1}(3/4)$。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>
+<p><a href="https://stackoverflow.com/questions/2303510/recommended-anomaly-detection-technique-for-simple-one-dimensional-scenario">Recommended anomaly detection technique for simple, one-dimensional scenario?</a></p>
+</li>
+<li>
+<p><a href="https://towardsdatascience.com/5-ways-to-detect-outliers-that-every-data-scientist-should-know-python-code-70a54335a623">5 Ways to Detect Outliers/Anomalies That Every Data Scientist Should Know </a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">Median absolute deviation</a></p>
+</li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -23,6 +151,13 @@
       
       <guid>https://yorks0n.github.io/posts/hello-again/</guid>
       <description>我为什么又开始写 Blog 了？</description>
+      <content:encoded><![CDATA[<p>兜兜转转又开始写 Blog 了，之前几次都没写过多少文章。实际花在折腾 Blog 的时间，远比真正写东西的时间更多。因为没啥值得看的内容，页面无法访问了也一直没有去解决。</p>
+<p>但这次再开博客，倒不是有了汩汩冒出的表达欲，而是自一年前在少数派开始写点文章后，逐渐感受到了输出的重要。之前学习各种东西的过程中一直在输入，会记下不少笔记，但很少整理，几乎就堆在各种笔记软件中。时隔很久再去看，也还是最初的样子，往往看的时候已经不太记得当初某一步为什么要这样设置，或是做了哪些没有记录下来的操作。因此，准备把自己折腾过的东西整理成可以复现的形式，也是更好掌握和回顾知识的过程。</p>
+<p>另一方面，在这几年的学习过程中，几乎都是通过搜索引擎与自学研究各种东西，看到高质量的内容中，除了诸多官方提供的教程，就是许多人在博客中记录的学习心得，受益良多。因此，假如能进行一定输出，说不定也能在未来的哪一天帮上其他人的忙。</p>
+<p>最后，从去年年底开始，以 ChatGPT 为首的大语言模型，不由分说地闯进了人们的生活中。目前，我也几乎每天都会用到它，但几乎只局限在遇到不懂问题时候的 Q&amp;A。但 LLM 的一大限制因素就在于优质内容的输入，在内容工厂的摧残下，中文互联网的内容良莠不齐。因此也希望我写的文章，能在将来的某一天，为模型输出更好的结果贡献一点微小的概率。</p>
+<hr>
+<p>又及，还没有想好怎么对文章进行分类，索性先写起来。同时会把以前写过的东西也都整理到一起，因此日期早于这篇文章的内容，都应该是在其他地方已经发过的。整理搬运过程估计还会持续很久，但已经发现 Gridea 插入图片不太趁手了，估计迟早会再换种部署方式，也许是 Hugo 吧。</p>
+]]></content:encoded>
     </item>
     
   </channel>

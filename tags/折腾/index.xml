@@ -14,6 +14,25 @@
       
       <guid>https://yorks0n.github.io/posts/change_to_anybox/</guid>
       <description>苦raindrop久矣，终于找到趁手的书签管理工具了</description>
+      <content:encoded><![CDATA[<p>长期以来，我一直使用Raindrop作为我的书签管理服务，苦raindrop久矣。从2017年左右，一直用着免费版本的Raindrop，主要因为它那些付费版本的功能我也不太用得上，这些年也在其中积累下来大几百个书签，其中不少还标注了标签和备注方便查找。它倒是也能用，既支持多平台同步，又有网页版，最初免费版不支持创建嵌套的文件夹，后来也支持了，可以说功能上没啥大毛病。</p>
+<p><img loading="lazy" src="images/Snipaste_2024-10-22_13-04-42.jpg" alt="Snipaste_2024-10-22_13-04-42"  />
+</p>
+<p>然而这几年里，总想找机会把它换掉，无他，Raindrop的性能真是太差了。不仅各个平台的App都宛如网页版套壳，各种操作的响应也都非常慢。每次想添加新书签，还要在添加页面等一会儿，确定它同步完了再关闭窗口；搜索的时候，也经常弹不出搜索结果。为此，我一直在尝试各种书签管理工具，想找个满意的替代品，大致需求也不复杂：</p>
+<ul>
+<li>性能良好，添加书签时的反应迅速</li>
+<li>同时支持文件夹和标签两种分类方式，便于分大类和进行筛选</li>
+<li>检索性能优秀</li>
+<li>支持同步功能，需要至少有桌面与手机平台</li>
+<li>最好能有独立App，而非依靠浏览器插件等形式实现</li>
+<li>非订阅制，开源或可以买断</li>
+</ul>
+<p>然而找了好久都没遇到合适的，许多开源项目都没有多端，或是同步起来相当费劲，亦或是书签多了后管理不便。一些付费服务页面fancy，但是性能巨差，或是性能好并且拥抱AI，于是每个月订阅费用感人。我还是希望能将书签管理与稍后读等内容管理分开的，避免混在一起检索起来麻烦，因此那些对内容的快速AI检索我也用不上。</p>
+<p>前几年，也曾多次按月订阅试过Anybox，但最初不支持文件夹，支持Tag但不能手动调顺序，以至按类别检索效率略低。后来虽然更新出了标签嵌套，但截至目前还是不支持手动调整标签顺序，没法像文件夹那样方便。不过在最近的尝试中发现它支持了文件夹，甚至可以直接把Raindrop导出中的文件夹结构保留，解决了我主要的痛点。虽然软件为订阅制，但支持198元永久版买断，总比按月支出来得舒服。于是在又订阅了一个月把书签都导进来试用几天后，果断买断了，删除Raindrop，使用至今非常舒适。不管是软件本身提供的快速检索栏，还是结合了Raycast的插件，都异常丝滑，好好好！</p>
+<p><img loading="lazy" src="images/search.gif" alt="search"  />
+</p>
+<p>甚至现在Anybox还可以将网页版归档下载下来保存，也许之后会把读过想储存的文章也迁移过来？</p>
+<p>要说Anybox现在的缺点，估计就是没有网页版也不支持win吧，但我日常主要用Mac和iOS，倒也完全够用。</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -23,6 +42,79 @@
       
       <guid>https://yorks0n.github.io/posts/docker-pack-shiny-app/</guid>
       <description>介绍了如何将 Shiny App 打包成 Docker 格式，方便在不同设备环境下托管</description>
+      <content:encoded><![CDATA[<h2 id="文件准备">文件准备</h2>
+<p>将Shiny用到的<code>server.R</code>和<code>ui.R</code>一起放在<code>app</code>文件夹中</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./app:
+</span></span><span style="display:flex;"><span>server.R ui.R
+</span></span></code></pre></div><p>写个<code>Dockerfile</code>，把用到的包都写在 <code>install.r</code> 后面</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>FROM rocker/r-base:latest
+</span></span><span style="display:flex;"><span>LABEL maintainer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email &lt;example@mail.com&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>RUN apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y --no-install-recommends <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    sudo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcurl4-gnutls-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcairo2-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libxt-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssl-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssh2-1-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span style="display:flex;"><span>RUN install.r shiny shinyBS dplyr stringr
+</span></span><span style="display:flex;"><span>RUN echo <span style="color:#e6db74">&#34;local(options(shiny.port = 3838, shiny.host = &#39;0.0.0.0&#39;))&#34;</span> &gt; /usr/lib/R/etc/Rprofile.site
+</span></span><span style="display:flex;"><span>RUN addgroup --system app <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> adduser --system --ingroup app app
+</span></span><span style="display:flex;"><span>WORKDIR /home/app
+</span></span><span style="display:flex;"><span>COPY app .
+</span></span><span style="display:flex;"><span>RUN chown app:app -R /home/app
+</span></span><span style="display:flex;"><span>USER app
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#ae81ff">3838</span>
+</span></span><span style="display:flex;"><span>CMD <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;R&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;shiny::runApp(&#39;/home/app&#39;)&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>按以下方式进行构建</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># name of the image</span>
+</span></span><span style="display:flex;"><span>export IMAGE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;yorks0n/trxiv_shiny&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># build image</span>
+</span></span><span style="display:flex;"><span>docker build -t $IMAGE .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># run and test locally</span>
+</span></span><span style="display:flex;"><span>docker run -p 8080:3838 $IMAGE
+</span></span></code></pre></div><p>居然就行了！</p>
+<h2 id="部署在-railway-上">部署在 Railway 上</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>brew install railway
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 登录</span>
+</span></span><span style="display:flex;"><span>railway login
+</span></span></code></pre></div><p>创建一个项目，并输入项目名称</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>➜ railway init
+</span></span><span style="display:flex;"><span>&gt; Project Name TRxiv_shiny
+</span></span><span style="display:flex;"><span>Created project TRxiv_shiny on Personal
+</span></span></code></pre></div><p>虽然当前目录下有个 <code>Dockerfile</code> 了，但是这 XX 的 railway 部署时候端口和默认 docker 的不太一样，或者我没找到哪里设置，所以如果要部署在 railway 上，还需要改一下 <code>Dockerfile</code>。虽然在这指定了<code>ENV PORT=3838</code>，但实际上 railway 每次开的端口都不太一样，所以标准 docker 的写法不太行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>FROM rocker/r-base:latest
+</span></span><span style="display:flex;"><span>LABEL maintainer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Yorkson &lt;yorks0n@qq.com&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>RUN apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y --no-install-recommends <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    sudo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcurl4-gnutls-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libcairo2-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libxt-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssl-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libssh2-1-dev <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span style="display:flex;"><span>RUN install.r shiny shinyBS dplyr stringr
+</span></span><span style="display:flex;"><span>RUN addgroup --system app <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> adduser --system --ingroup app app
+</span></span><span style="display:flex;"><span>WORKDIR /home/app
+</span></span><span style="display:flex;"><span>COPY app .
+</span></span><span style="display:flex;"><span>RUN chown app:app -R /home/app
+</span></span><span style="display:flex;"><span>USER app
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#ae81ff">3838</span>
+</span></span><span style="display:flex;"><span>ENV PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">3838</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 研究后发现，这里以获取PORT的方式，才能在 Railway 中部署</span>
+</span></span><span style="display:flex;"><span>CMD <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;R&#34;</span>, <span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;shiny::runApp(&#39;/home/app&#39;, host = &#39;0.0.0.0&#39;, port=as.numeric(Sys.getenv(&#39;PORT&#39;)))&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>railway up
+</span></span></code></pre></div><h2 id="参考资料">参考资料</h2>
+<p><a href="https://blog.csdn.net/douerw/article/details/121256642">在Windows系统下，基于WLS从零开始部署我的 R shiny项目到 Docker 中，并将镜像发布到 Docker Hub（内附详细操作流程）_douerw的博客-CSDN博客</a></p>
+<p><a href="https://hosting.analythium.io/dockerizing-shiny-applications/">Dockerizing Shiny Applications</a></p>
+<p><a href="https://hosting.analythium.io/dockerized-shiny-apps-with-dependencies/">Dockerized Shiny Apps with Dependencies</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -63,6 +155,98 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后对&lt;code&gt;index.js&lt;/code&gt; 进行打包&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ncc build index.js -o dist
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;打包产物会存放于&lt;code&gt;dist/index.js&lt;/code&gt;&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>将JS写的抓取 Altmetric 热门预印本，与 bioRxiv API 结合后储存在 csv 文件中的过程，部署在 Github Action 中。官方文档写的顺序都有点混乱，网上找到的教程又经常都比较老了，因此自己记录一个。</p>
+<h2 id="新建github仓库">新建Github仓库</h2>
+<p>新建一个public仓库，名叫TRxiv，并将远程仓库<code>git clone</code>到本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone git@github.com:Yorks0n/TRxiv.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd TRxiv
+</span></span></code></pre></div><h2 id="创建一个动作元数据文件">创建一个动作元数据文件</h2>
+<p>要让仓库里能被以Action的形式直接调用，需要在<strong>根目录</strong>中创建一个<code>action.yml</code>配置文件，可以在这个文件中指定Action的输入和输出，调用的参数及运行环境</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># action.yml</span>
+</span></span><span style="display:flex;"><span>name: <span style="color:#e6db74">&#39;trxiv&#39;</span>
+</span></span><span style="display:flex;"><span>description: <span style="color:#e6db74">&#39;Tracking popular bioRxiv and medRxiv preprints&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>runs:
+</span></span><span style="display:flex;"><span>  using: <span style="color:#e6db74">&#39;node16&#39;</span>
+</span></span><span style="display:flex;"><span>  main: <span style="color:#e6db74">&#39;dist/index.js&#39;</span>
+</span></span></code></pre></div><h2 id="准备运行的代码">准备运行的代码</h2>
+<p>手动将写好的JS脚本拷贝进来，完整代码在此 <a href="https://github.com/Yorks0n/TRxiv">Yorkson/TRxiv</a>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 在这里初始化一下npm</span>
+</span></span><span style="display:flex;"><span>npm init -y
+</span></span></code></pre></div><p>准备一个<code>.gitignore</code>文件，防止在推送的时候把不必要的文件放到储存库，可以用下面这个工具，或者自己写一下，比如这里就可能有<code>node_modules</code></p>
+<p><a href="https://www.toptal.com/developers/gitignore">https://www.toptal.com/developers/gitignore</a></p>
+<h2 id="文件推送到远程仓库">文件推送到远程仓库</h2>
+<p>然后push到远程仓库</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Initialize&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><h2 id="打包软件">打包软件</h2>
+<p>因为前面把<code>node_modules</code> 从上传的文件列表中忽略了，但脚本<code>index.js</code>内有些依赖的包，所以最好把软件和依赖打包在一起，官方推荐用<code>ncc</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm install @vercel/ncc
+</span></span></code></pre></div><p>然后对<code>index.js</code> 进行打包</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ncc build index.js -o dist
+</span></span></code></pre></div><p>打包产物会存放于<code>dist/index.js</code></p>
+<h2 id="创建工作流">创建工作流</h2>
+<p>在本地创建<code>.github/workflows/main.yml</code>，这个文件实际确定了 Github Action 的行为，此<code>yml</code>格式文件一定要注意正确的缩进。</p>
+<p>配置文件内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># main.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 动作的名称</span>
+</span></span><span style="display:flex;"><span>name: <span style="color:#e6db74">&#39;TRxiv update&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 触发条件</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 条件1，代码push进仓库</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 条件2，定时任务，在UTC 10和22点，即北京时间18点和6点运行</span>
+</span></span><span style="display:flex;"><span>on:
+</span></span><span style="display:flex;"><span>  push:
+</span></span><span style="display:flex;"><span>  schedule:
+</span></span><span style="display:flex;"><span>    - cron: <span style="color:#e6db74">&#39;0 10,22 * * *&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># jobs 定义了要执行的一系列任务 </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>jobs:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## 这个job的名称</span>
+</span></span><span style="display:flex;"><span>  TRxiv_update_job:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">## runs-on 内置运行任务的server类型</span>
+</span></span><span style="display:flex;"><span>    runs-on: ubuntu-latest
+</span></span><span style="display:flex;"><span>    name: Update the csv file
+</span></span><span style="display:flex;"><span>    steps: 
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 必须有这一步，让运行的文件夹成为一个git repo</span>
+</span></span><span style="display:flex;"><span>      - uses: actions/checkout@v3
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 运行脚本，指向我们的repo</span>
+</span></span><span style="display:flex;"><span>      - name: <span style="color:#e6db74">&#39;run script&#39;</span>
+</span></span><span style="display:flex;"><span>        uses: Yorks0n/TRxiv@main
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 运行完后，把运行产生在本地的data.csv更新回仓库中</span>
+</span></span><span style="display:flex;"><span>      - name: Commit files
+</span></span><span style="display:flex;"><span>        run: |
+</span></span><span style="display:flex;"><span>         git config --local user.email <span style="color:#e6db74">&#34;github email adress&#34;</span>
+</span></span><span style="display:flex;"><span>         git config --local user.name <span style="color:#e6db74">&#34;github user name&#34;</span>
+</span></span><span style="display:flex;"><span>         git pull
+</span></span><span style="display:flex;"><span>         git add README.md
+</span></span><span style="display:flex;"><span>         git add data.csv
+</span></span><span style="display:flex;"><span>         git commit -m <span style="color:#e6db74">&#34;update data.csv&#34;</span>
+</span></span><span style="display:flex;"><span>        shell: bash
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">## 使用秘钥确认具有上传权限，同时以秘钥方式提交不会触发push action，避免陷入loop</span>
+</span></span><span style="display:flex;"><span>      - name: Push changes
+</span></span><span style="display:flex;"><span>        uses:  ad-m/github-push-action@master
+</span></span><span style="display:flex;"><span>        with:
+</span></span><span style="display:flex;"><span>         github_token: <span style="color:#e6db74">${</span>{ secrets.MY_GIT_TOKEN <span style="color:#e6db74">}</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>         branch: main
+</span></span></code></pre></div><h2 id="再次将文件推送到远程仓库">再次将文件推送到远程仓库</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Update Workflow&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><h2 id="后续更新">后续更新</h2>
+<p>每次想更新修改前，先在目录中把最新版的环境拉下来</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull
+</span></span></code></pre></div><p><strong>修改过脚本后，要重新打包用到的代码</strong>：<code>ncc build index.js --license licenses.txt</code></p>
+<p>然后再提交回仓库</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://www.freecodecamp.org/news/build-your-first-javascript-github-action/">How to Build Your First JavaScript GitHub Action</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/354188341">如何使用 Github Actions 自动抓取每日必应壁纸?</a></p>
+<p><a href="https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot">Permission denied to github-actions[bot]</a></p>
+<p><a href="https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action">Creating a JavaScript action - GitHub Docs</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -72,6 +256,133 @@
       
       <guid>https://yorks0n.github.io/posts/karabiner/</guid>
       <description>如何借助 Goku 书写 Karabiner 配置文件</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，您可以 <a href="https://sspai.com/post/73827">前往此处</a> 阅读修订后版本。</p>
+<p>Karabiner 全称 Karabiner-Elements[^下文简称为 Karabiner]，是 macOS 上的一款功能强劲的改键工具，可以将键盘上的按键映射成其他一个或多个按键组合。然而，Karabiner 使用JSON 作为配置文件，非常繁琐且不易理解，给上手带来了很高的门槛。</p>
+<p><img loading="lazy" src="images/carbon.png" alt="上图展示了 Karabiner 中与 Goku 中，实现相同效果所需要的写法差异。"  />
+</p>
+<p>上图展示了 Karabiner 中与 Goku 中，实现相同效果所需要的写法差异。</p>
+<p>于是，有人专门为其制作了一个工具「Goku」，借助 <a href="https://github.com/yqrashawn/GokuRakuJoudo">Goku</a> 可以方便地为 Karabiner 进行配置。</p>
+<p><strong>准备工作：</strong></p>
+<ul>
+<li>Karabiner-Elements 可以从<a href="https://karabiner-elements.pqrs.org/">官网</a>进行下载</li>
+<li>Goku 使用 Homebrew 进行安装：<code>brew install yqrashawn/goku/goku</code></li>
+<li>在 Karabiner 中确保配置文件 Profiles 选择默认的 Default</li>
+<li>前往 <code>~/.config/</code>目录，创建名为 <code>karabiner.edn</code> 的 Goku 配置文件</li>
+<li>参考下文进行配置文件的编辑，每次编辑完后在终端中执行 <code>goku</code> 使修改生效</li>
+</ul>
+<h2 id="将-caps-lock-变为键盘功能的中枢">将 Caps Lock 变为键盘功能的中枢</h2>
+<p>通常，我们将<code>⌃Control + ⌥Option + ⇧Shift + ⌘Command</code> 同时按下的组合称为 Hyper 键，因为程序内置的快捷键不会预设这么复杂的组合，因此使用 Hyper 键设定快捷键，能最大程度上避免与预设发生冲突。</p>
+<p>大写锁定键 <code>Caps Lock</code> 位于键盘左侧中间，用起来很顺手，但我只用它切换输入法，输入大写字母靠 <code>⇧shift</code>，因此这里先对它下手，你也可以选择其他顺手且不常用的按键。</p>
+<p>以下的 Goku 配置文件 <code>karabiner.edn</code> 写法，可以将大写锁定键修改为 Hyper 键，这时只需要按下这一个键，就可以发挥 <code>⌃Control + ⌥Option + ⇧Shift + ⌘Command</code> 同时按下的效果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;caps_lock -&gt; hyper&#34;</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [
+</span></span><span style="display:flex;"><span>                 [<span style="color:#960050;background-color:#1e0010">:</span><span style="color:#f92672">##</span>caps_lock <span style="color:#e6db74">:!CTOleft_shift</span>]
+</span></span><span style="display:flex;"><span>                 ]}
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然而，如果只是将 <code>Caps Lock</code> 转化为 Hyper 键，它会失去本身切换输入法的效果。幸好 Karabiner 支持在按键单独按下与组合按下时，为触发不同的效果。</p>
+<p>以下写法可以让 <code>Caps Lock</code> 与其他键一同按下时变为 hyper 键，单独按下时触发 <code>Control+Space</code> 切换输入法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;caps_lock -&gt; Ctrl+space(alone) and caps_lock -&gt; hyper&#34;</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [
+</span></span><span style="display:flex;"><span>                 [<span style="color:#960050;background-color:#1e0010">:</span><span style="color:#f92672">##</span>caps_lock <span style="color:#e6db74">:!CTOleft_shift</span> nil {<span style="color:#e6db74">:alone</span> <span style="color:#e6db74">:!Tspacebar</span>}]
+</span></span><span style="display:flex;"><span>                 ]}
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>以下是一些常用按键在 Goku 中的简化写法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>    <span style="color:#75715e">;; !  | means mandatory -   modifier(s) alone when pressend change behavior</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; #  | means optional  -   modifiers are optional (but at least one necessary)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; :!Ca is keycode :a and prefix a with !C</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; C  | left_command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; T  | left_control</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; O  | left_option</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; S  | left_shift</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; F  | fn</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; Q  | right_command</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; W  | right_control</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; E  | right_option</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; R  | right_shift</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; ## | optional any</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">;; !! | command + control + optional + shift (hyper)</span>
+</span></span></code></pre></div><p>而要知道键盘上每个按键各叫什么名字，可以使用 Karabiner 配套的 Karabiner-EventViewer 进行查看。</p>
+<h2 id="结合-keyboard-maestro-实现快速搜索">结合 Keyboard Maestro 实现快速搜索</h2>
+<p>单靠 Karabiner 只能发挥其一半的功力，要想发挥其全部实力，还是要与 Keyboard Maestro（下称 KM）或是 Alfred 这些支持自动化的工具搭配，才能达到强强联合的效果。这里以 KM 为例，实现快速搜索选中的内容。</p>
+<p>在 KM 中创建如下图的 Macro，为其指定 <code>Hyper + S</code> 的组合键，这样只需要选中想搜索的内容，按下快捷键即可使用 Google 进行搜索。</p>
+<p><img loading="lazy" src="images/karabiner.png" alt="karabiner"  />
+</p>
+<p>同时，借助 KM 独特的冲突调色盘功能，当你为多个 Macro 设定了相同快捷键，按下快捷键后会触发选择界面，借此只需记忆一个快捷键，便可触发多种不同的搜索功能。</p>
+<p><img loading="lazy" src="images/karabiner%201.png" alt="karabiner"  />
+</p>
+<h2 id="hyper--字母实现程序快速切换">Hyper + 字母实现程序快速切换</h2>
+<p>日常使用时，常常需要在不同的应用间来回切换。cmd + tab 虽然可行，但每次的应用顺序不固定，还要找到想切换到的程序，甚至因此诞生了一些专门为切换应用而生的工具。利用 Karabiner 搭配 Keyboard Maestro，即可实现 <code>Hyper + 字母</code> 一键切换应用。</p>
+<p>在 Keyboard Maestro 中添加 Macro， 选择 <code>Activate a Specific Application</code> 即可，配置成如下图即可在激活此 Macro 时切换到 Chrome。</p>
+<p><img loading="lazy" src="images/karabiner%202.png" alt="karabiner"  />
+</p>
+<p>这时，如果在 KM 中将 New Trigger 设置为按键的 <code>Hyper + c</code>，即可在按下此组合键时快速切换到 Chrome。</p>
+<p>但这毕竟是一篇介绍 Karabiner 的文章，因此我演示一下如何在 Karabiner 的配置文件中，直接激活特定的 Macro。</p>
+<p>以下配置文件可以实现 <code>Hyper + C</code> 切换到 Chrome 的效果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:templates</span> {<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;osascript -e &#39;tell application \&#34;Keyboard Maestro Engine\&#34; to do script \&#34;%s\&#34;&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;caps_lock -&gt; Ctrl+space(alone) and caps_lock -&gt; hyper&#34;</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [
+</span></span><span style="display:flex;"><span>                 [<span style="color:#960050;background-color:#1e0010">:</span><span style="color:#f92672">##</span>caps_lock <span style="color:#e6db74">:!CTOleft_shift</span> nil {<span style="color:#e6db74">:alone</span> <span style="color:#e6db74">:!Tspacebar</span>}]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                 [<span style="color:#e6db74">:!!c</span> [<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;open: chrome&#34;</span>] ] <span style="color:#75715e">;;caps+c open Chrome</span>
+</span></span><span style="display:flex;"><span>                 
+</span></span><span style="display:flex;"><span>                 ]}
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我在前面模板的基础上增加了两部分：</p>
+<ul>
+<li>开头利用 <code>:templates</code> 创建了一个名为 <code>:km</code> 的脚本，可以快速激活 KM 中的Macro；</li>
+<li>在 <code>:rules</code> 中新增加了一行规则，<code>:!!c</code> 表示 <code>Hyper + C</code> 的组合键[^这里 !! 是 hyper 键的缩写写法]，<code>:km &quot;open: chrome&quot;</code> 则表示调用前面创建的 <code>km</code> 脚本，并执行 <code>&quot;open: chrome&quot;</code> 这个 Macro。</li>
+</ul>
+<h2 id="进阶让每个键都能成为修饰键">进阶，让每个键都能成为修饰键</h2>
+<p><code>Hyper</code> 键只有一颗，用久了总有因为键位冲突感到不够的那天，比如我既想用 <code>S</code> 键触发 Search，又想用它激活 Sorted 3。这部分我将介绍如何利用层（layer）的概念，让键盘上的每个键都能成为独一无二的修饰键。</p>
+<p>所谓层，可以理解为按下某个键后，键盘上其他键的功能随之发生变化，例如下图就是按下 <code>option</code> 键后键盘的变化，我们可以称之为 option 层。</p>
+<p><img loading="lazy" src="images/Kapture_2022-06-15_at_21.39.24.gif" alt="Kapture 2022-06-15 at 21.39.24.gif"  />
+</p>
+<p>如下规则定义了一个称为「semicolon-mode」的层，在这里我将使用频率较低的分号<code>;</code>定义为触发按键：</p>
+<ul>
+<li><code>:semicolon [&quot;semicolon-mode&quot; 1]</code> 指按下分号「semicolon」后，将变量 <code>semicolon-mode</code> 设置为 1，即进入「semicolon-mode」层；</li>
+<li><code>:afterup [&quot;semicolon-mode&quot; 0]</code> 指松开分号后，将变量 <code>semicolon-mode</code> 设置为 0，即退出「semicolon-mode」层；</li>
+<li>单独按下依然为分号本身 <code>:alone :semicolon</code> 。</li>
+</ul>
+<p>在 <code>[:hyphen [:km &quot;insert: underline&quot;] [&quot;semicolon-mode&quot; 1]]</code> 这里，我定义了按下减号<code>-</code> ，触发 KM 中名为 <code>&quot;insert: underline&quot;</code> 的 Macro，输出一个下划线，这个规则只在<code>[&quot;semicolon-mode&quot; 1]</code> 时（即按住分号时）才有效。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:templates</span> {<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;osascript -e &#39;tell application \&#34;Keyboard Maestro Engine\&#34; to do script \&#34;%s\&#34;&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">:main</span> [
+</span></span><span style="display:flex;"><span>       {<span style="color:#e6db74">:des</span> <span style="color:#e6db74">&#34;This is the semicolon-mode&#34;</span> 
+</span></span><span style="display:flex;"><span>         <span style="color:#e6db74">:rules</span> [[<span style="color:#e6db74">:semicolon</span> [<span style="color:#e6db74">&#34;semicolon-mode&#34;</span> <span style="color:#ae81ff">1</span>]  nil {<span style="color:#e6db74">:afterup</span> [<span style="color:#e6db74">&#34;semicolon-mode&#34;</span> <span style="color:#ae81ff">0</span>] 
+</span></span><span style="display:flex;"><span>                                                 <span style="color:#e6db74">:alone</span> <span style="color:#e6db74">:semicolon</span>}] 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                [<span style="color:#e6db74">:hyphen</span> [<span style="color:#e6db74">:km</span> <span style="color:#e6db74">&#34;insert: underline&#34;</span>] [<span style="color:#e6db74">&#34;semicolon-mode&#34;</span> <span style="color:#ae81ff">1</span>]]  <span style="color:#75715e">;; semicolon - to insert _(underline)</span>
+</span></span><span style="display:flex;"><span>        ]}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="结语">结语</h2>
+<p>「花一些时间，折腾一点小东西，收获一个没多大用的成果，感到巨大的快乐」，这是我对摸鱼的定义。摸鱼摸得久了，总能折腾出些有意思的东西。目前，我每天都用这些快捷键输入一些常用短语，切换程序或是快速搜索，省下的时间可能并没有多少，但是有种莫名的快乐，我觉得这就足够了。</p>
+<h2 id="相关文章">相关文章</h2>
+<p><a href="https://sspai.com/post/46184">macOS 改键利器：Karabiner-Elements 使用详解 - 少数派</a></p>
+<p><a href="https://sspai.com/post/47659">使用 Karabiner 改善 Poker 键盘体验 - 少数派</a></p>
+<p><a href="https://sspai.com/post/42921">让键盘变成你想要的样子：改键利器 Karabiner-Elements - 少数派</a></p>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://medium.com/@nikitavoloboev/karabiner-god-mode-7407a5ddc8f6">Karabiner God Mode</a></p>
+<p><a href="https://einverne.github.io/post/2020/08/use-goku-config-karabiner.html">使用 Goku 配置 Karabiner</a></p>
+<p><a href="https://github.com/yqrashawn/GokuRakuJoudo/blob/master/tutorial.md#advance3">yqrashawn/GokuRakuJoudo</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -81,6 +392,362 @@
       
       <guid>https://yorks0n.github.io/posts/use_n8n_to_build_feishu_rssbot/</guid>
       <description>本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，您可以 <a href="https://sspai.com/post/73255">前往此处</a> 阅读修订后版本。</p>
+<h2 id="前言">前言</h2>
+<p>本文介绍了基于 n8n 搭建的自动化平台，实现监控 RSS 更新并推送到飞书消息的功能。</p>
+<p>文末会列举一些实现此工作流的其他方式，包括发送请求和接收提醒的手段。同时，n8n 还可以通过模块组合，实现更多更复杂的功能，本文只作为抛砖引玉。</p>
+<p>阅读本文可能需要一定 Linux 基础知识。</p>
+<h2 id="n8n-是什么">n8n 是什么</h2>
+<p>n8n 是一个开源的自动化流程搭建工具，可以实现类似 IFTTT 的效果，比如「如果明天下雨，就推送要带伞的消息」。优点是开源、可以自己部署并将信息都储存在本地，同时可以与 Github、Telegram、Slack 等各种服务实现联动，以搭建自动化工作流。</p>
+<h2 id="利用-docker-安裝-n8n">利用 Docker 安裝 n8n</h2>
+<p>n8n 可以直接下载 Win 或是 Mac 版本，快速在本地使用，但如果想更稳定地长期运行，更适合部署在云服务器、树莓派或 NAS 等工具上。</p>
+<p>这里以在云服务器上使用 Docker 进行部署为例，更多安装方式可参考 <a href="https://docs.n8n.io/hosting/installation/">Installation guides for n8n</a>。</p>
+<p>假设已经安装好了 Docker，那么 n8n 的部署就非常简单，先新建一个文件夹储存数据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建数据储存文件夹</span>
+</span></span><span style="display:flex;"><span>mkdir ~/n8n-data
+</span></span></code></pre></div><p>复制运行下面的代码，利用 Docker 安装 n8n。如果云服务器有防火墙，需要把对应的端口打开，这里需要打开<code>5678</code>的 TCP 端口。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 利用Docker安装运行n8n</span>
+</span></span><span style="display:flex;"><span>docker run -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--name n8n --restart unless-stopped <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-p 5678:5678 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-v ~/n8n-data:/home/node/.n8n <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-e GENERIC_TIMEZONE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>n8nio/n8n 
+</span></span></code></pre></div><p>稍作等待，等 Docker 安装完成后，如果一切顺利，访问<code>服务器ip地址:5678</code>就能看到 n8n 的运行页面了，初次进入需要创建账号密码。</p>
+<p><img loading="lazy" src="images/Untitled.png" alt="Untitled"  />
+</p>
+<p>点击右上角的 New blank workflow 即可开始创建，也可以从软件提供的 Workflow 示例中，选择自己想部署的自动化流程。</p>
+<p>这里以搭建一个 RSS 更新自动推送到飞书的机器人为例。</p>
+<h2 id="搭建飞书-rss-推送机器人">搭建飞书 RSS 推送机器人</h2>
+<p>以下是我配置好的一个流程模板，复制以下内容粘贴到 n8n 新建 workflow 的页面。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;url&#34;</span>: <span style="color:#e6db74">&#34;https://sspai.com/feed&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;RSS Feed Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.rssFeedRead&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">160.5</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;conditions&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;number&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value1&#34;</span>: <span style="color:#e6db74">&#34;={{new Date($node[\&#34;Latest Read\&#34;].data[\&#34;latestRead\&#34;]).getTime()}}&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value2&#34;</span>: <span style="color:#e6db74">&#34;={{new Date($node[\&#34;RSS Feed Read\&#34;].data[\&#34;isoDate\&#34;]).getTime()}}&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ],
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;boolean&#34;</span>: [],
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;string&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value1&#34;</span>: <span style="color:#e6db74">&#34;={{$json[\&#34;title\&#34;]}}&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;operation&#34;</span>: <span style="color:#e6db74">&#34;contains&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;IF&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.if&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">560</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;functionCode&#34;</span>: <span style="color:#e6db74">&#34;const staticData = this.getWorkflowStaticData(&#39;global&#39;);\n\nif (items.length &gt; 0) {\n  staticData.latestRead = items[0].json.isoDate || staticData.latestRead;\n}\n\n\nreturn items;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Write Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.function&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">760</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {},
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;NoOp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.noOp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">750</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">580</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;triggerTimes&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;item&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;mode&#34;</span>: <span style="color:#e6db74">&#34;everyX&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Cron&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.cron&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-40</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;requestMethod&#34;</span>: <span style="color:#e6db74">&#34;POST&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;options&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;batchInterval&#34;</span>: <span style="color:#ae81ff">3000</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;batchSize&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;bodyParametersUi&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;parameter&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;msg_type&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;interactive&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;card&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={\n  \&#34;config\&#34;: {\n    \&#34;wide_screen_mode\&#34;: true\n  },\n  \&#34;header\&#34;: {\n    \&#34;template\&#34;: \&#34;black\&#34;,\n    \&#34;title\&#34;: {\n      \&#34;content\&#34;: \&#34;{{$json[\&#34;title\&#34;]}}\&#34;,\n      \&#34;tag\&#34;: \&#34;plain_text\&#34;\n    }\n  },\n  \&#34;elements\&#34;: [\n    {\n      \&#34;tag\&#34;: \&#34;div\&#34;,\n      \&#34;text\&#34;: {\n        \&#34;content\&#34;: \&#34;{{$json[\&#34;contentSnippet\&#34;]}}\&#34;,\n        \&#34;tag\&#34;: \&#34;lark_md\&#34;\n      }\n    },\n    {\n      \&#34;tag\&#34;: \&#34;hr\&#34;\n    },\n    {\n      \&#34;elements\&#34;: [\n        {\n          \&#34;content\&#34;: \&#34;[阅读原文]({{$json[\&#34;link\&#34;]}})\&#34;,\n          \&#34;tag\&#34;: \&#34;lark_md\&#34;\n        }\n      ],\n      \&#34;tag\&#34;: \&#34;note\&#34;\n    }\n  ]\n}&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;headerParametersUi&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;parameter&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Content-Type&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;application/json&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;HTTP Request&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.httpRequest&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">1000</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">340</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;functionCode&#34;</span>: <span style="color:#e6db74">&#34;const staticData = this.getWorkflowStaticData(&#39;global&#39;);\n\nlatestRead = staticData.latestRead;\n\nfor (let item of items) {\n  item.json.latestRead = latestRead || &#39;2022-05-05&#39;;\n  //item.json[\&#34;content:encodedSnippet\&#34;] = item.json[\&#34;content:encodedSnippet\&#34;].replace(/[\\r\\n]/g,\&#34;\\\\n\&#34;);\n}\n\nreturn items;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.function&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">360</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;connections&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;RSS Feed Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;IF&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Write Latest Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;NoOp&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Write Latest Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;HTTP Request&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Cron&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;RSS Feed Read&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Latest Read&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;IF&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>粘贴后可以看到如下的界面：</p>
+<p><img loading="lazy" src="images/Untitled%201.png" alt="Untitled"  />
+</p>
+<p>这里有几处可以配置，第一处是 <strong>Cron</strong>，设置自动化流程触发的频率，每隔 X 时间间隔运行一次，图中设置为每隔一小时运行。在获取 RSS 时，运行频率不宜过高。如果访问过于频繁，一方面会给对方服务器造成较大负担，同时可能被服务器禁止访问。</p>
+<p><img loading="lazy" src="images/Untitled%202.png" alt="Untitled"  />
+</p>
+<p>第二个是在 <strong>RSS Feed Read</strong> 处，填写想订阅的 RSS 地址，这里以少数派 RSS 为例，填写完后点击Excute node，先运行一次获取数据，方便后续设置。</p>
+<p><img loading="lazy" src="images/Untitled%203.png" alt="Untitled"  />
+</p>
+<p>第三处（可选）<strong>IF</strong> 处，设置是否需要针对标题或内容等进行过滤，默认不过滤。</p>
+<p><img loading="lazy" src="images/Untitled%204.png" alt="Untitled"  />
+</p>
+<p>这时先转到飞书，在<strong>飞书桌面端</strong>，打开一个群（建议先创建一个单人的群进行调试），打开<strong>设置</strong>，找到<strong>群机器人</strong>，并点击<strong>添加机器人</strong>，选择自定义机器人加入群聊，详细操作可以参照 <a href="https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN?lang=zh-CN">飞书自定义机器人指南</a>。</p>
+<p><img loading="lazy" src="images/Untitled%205.png" alt="Untitled"  />
+</p>
+<p>最后在 <strong>HTTP Request</strong> 处填入飞书机器人 webhook 地址。</p>
+<p><img loading="lazy" src="images/Untitled%206.png" alt="Untitled"  />
+</p>
+<p>填写完成后 Excute node 尝试运行，一切顺利的话就能在飞书中看到推送来的RSS消息了。</p>
+<p><img loading="lazy" src="images/Untitled.jpeg" alt="Untitled"  />
+</p>
+<p>这里使用了卡片的形式展示消息，若是想调整消息展示样式，可以参考少数派文章 <a href="https://sspai.com/post/68578">手把手教你用飞书 Webhook 打造一个消息推送 Bot</a>。</p>
+<p><img loading="lazy" src="images/Untitled%207.png" alt="一图流配置"  />
+</p>
+<p>一图流配置</p>
+<h2 id="消息机器人安全设置">消息机器人安全设置</h2>
+<p>由于采用 Webhook 的形式，请务必保管好 Webhook 链接，如果泄露可能会导致被推送垃圾信息。为了进一步加道保险，飞书提供了三种安全设置方式，分别是自定义关键词、IP 白名单和签名校验。</p>
+<p>前两种方式非常好理解，也都很好设置。自定义关键词是只有当消息中至少含有一个预设的关键词时，才会进行消息推送；IP 白名单则是只推送名单中来源的 IP 所发送的请求。但是这两种方式也有一定的局限性：</p>
+<ul>
+<li>关键词有时使消息不够简洁</li>
+<li>部署在本地树莓派等设备上时，IP 地址不固定，无法指定</li>
+<li>关键词和 IP 白名单各自最多只能添加十个条目</li>
+</ul>
+<p>因此这里详细介绍一下在 n8n 中进行签名校验的配置方式。</p>
+<p>飞书的签名需要将「timestamp + &ldquo;\n&rdquo; + 密钥」组合起来当作签名密钥，采用 Hmac SHA256 算法计算签名，再进行 Base64 编码。在发送消息请求时，需要增加对应的<code>timestamp</code>和<code>sign</code> 字段。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// 开启签名验证后发送文本消息的请求示例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#e6db74">&#34;1599360473&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;sign&#34;</span>: <span style="color:#e6db74">&#34;xxxxxxxxxxxxxxxxxxxxx&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;msg_type&#34;</span>: <span style="color:#e6db74">&#34;text&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;content&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;text&#34;</span>: <span style="color:#e6db74">&#34;The message content is here&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 n8n 中，可以使用 <strong>Crypto</strong> 模块利用密钥生成签名，复制以下代码粘贴到配置界面，可以得到生成飞书签名用的模块组合。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;action&#34;</span>: <span style="color:#e6db74">&#34;hmac&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;SHA256&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={{&#39;&#39;}}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;dataPropertyName&#34;</span>: <span style="color:#e6db74">&#34;sign&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;secret&#34;</span>: <span style="color:#e6db74">&#34;={{$json[\&#34;timestamp\&#34;]+&#39;\\n&#39;+$json[\&#34;secret\&#34;]}}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;base64&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-80</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;parameters&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;values&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;string&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;timestamp&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;={{Math.round(new Date().getTime()/1000)}}&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;options&#34;</span>: {}
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Set&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;n8n-nodes-base.set&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;typeVersion&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;position&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">-280</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">440</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;connections&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Set&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;main&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;node&#34;</span>: <span style="color:#e6db74">&#34;Crypto&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;main&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;index&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>将上面新增的两个模块按下图方式进行拖拽连接：</p>
+<p><img loading="lazy" src="images/Untitled%208.png" alt="Untitled"  />
+</p>
+<p>从飞书机器人设置界面中，勾选<strong>签名校验</strong>得到密钥，填写在 <strong>Set</strong> 模块中。</p>
+<p><img loading="lazy" src="images/Untitled%209.png" alt="Untitled"  />
+</p>
+<p>接下来将 <strong>Latest Read</strong> 模块中的代码替换为以下内容，储存计算出的签名，方便在请求的时候调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#75715e">// JS code in the Latest Read Module
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">const</span> <span style="color:#960050;background-color:#1e0010">staticData</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">this.getWorkflowStaticData(&#39;global&#39;);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">latestRead</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">staticData.latestRead;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">for</span> <span style="color:#960050;background-color:#1e0010">(let</span> <span style="color:#960050;background-color:#1e0010">item</span> <span style="color:#960050;background-color:#1e0010">of</span> <span style="color:#960050;background-color:#1e0010">items)</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.latestRead</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">latestRead</span> <span style="color:#960050;background-color:#1e0010">||</span> <span style="color:#960050;background-color:#1e0010">&#39;2022-05-05&#39;;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.timestamp</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">$item(</span><span style="color:#f92672">&#34;0&#34;</span><span style="color:#960050;background-color:#1e0010">).$node</span>[<span style="color:#e6db74">&#34;Crypto&#34;</span>]<span style="color:#960050;background-color:#1e0010">.json</span>[<span style="color:#e6db74">&#34;timestamp&#34;</span>]<span style="color:#960050;background-color:#1e0010">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">item.json.sign</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#960050;background-color:#1e0010">$item(</span><span style="color:#e6db74">&#34;0&#34;</span><span style="color:#960050;background-color:#1e0010">).$node</span>[<span style="color:#e6db74">&#34;Crypto&#34;</span>]<span style="color:#960050;background-color:#1e0010">.json</span>[<span style="color:#e6db74">&#34;sign&#34;</span>]<span style="color:#960050;background-color:#1e0010">;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">return</span> <span style="color:#960050;background-color:#1e0010">items;</span>
+</span></span></code></pre></div><p>最后在 <strong>HTTP Request</strong> 模块中增加校验用的字段：Body Parameters - Add Parameter，添加两个参数，Name 分别为 <code>timestamp</code> 和 <code>sign</code>，Value 处点击右侧 Add Expression，再分别点击选择传入的两个对应字段的值。</p>
+<p><img loading="lazy" src="images/Untitled%2010.png" alt="Untitled"  />
+</p>
+<p>这样一番倒腾，给飞书机器人模块增加了签名校验，使得信息推送更加安全。当一切配置妥当后，别忘了点击界面右上角的激活，让工作流开始自动运行。</p>
+<p><img loading="lazy" src="images/Untitled%2011.png" alt="配置密钥验证一图流"  />
+</p>
+<p>配置密钥验证一图流</p>
+<h2 id="后记">后记</h2>
+<p>本文介绍了如何用 n8n 打造一个飞书 RSS 推送机器人。订阅什么样的 RSS 来源，可以是网站自身提供的 RSS 地址，也可以利用 RSShub 将各种奇怪的网站转化为 RSS，甚至是利用 kill-the-newsletter 将任意 Newsletter 邮件转化为 RSS 进行追踪。</p>
+<p>同时，实现类似工作流的手段还有很多。对于 n8n 这部分，可以使用 IFTTT、Integrately，或是 Github Action 等，实现工作流中「监控 RSS 更新并发送 Webhook 请求」这部分；对于接收提醒，文中利用了飞书作为展示消息的界面，而 n8n 也支持连接到 Telegram、Slack 等通讯软件，或是通过 Send Email 模块实现邮件通知，以及发送到 Cubox、flomo 等各种支持 Webhook 的工具中。</p>
+<p>更多功能，更多组合，尽请探索，把闲置的云服务器或是积灰的树莓派等折腾起来吧。</p>
+]]></content:encoded>
     </item>
     
   </channel>

@@ -14,6 +14,195 @@
       
       <guid>https://yorks0n.github.io/posts/basic_elements_data_vis/</guid>
       <description>介绍可视化作图过程中使用的基本元素，简单分析不同数据类型与适合使用的展示方式。</description>
+      <content:encoded><![CDATA[<h2 id="前言">前言</h2>
+<p>本文旨在介绍可视化作图过程中使用的基本元素，简单分析不同数据类型适合使用何种图形进行展示。通过了解这些基本元素，我们可以实现以下两个目的：</p>
+<ul>
+<li>更好地解读图片传递的信息</li>
+<li>判断图表质量的好坏</li>
+</ul>
+<p>在理解了基本元素的基础上，我们能够更好地设计图表，从而更高效直观地向读者传递我们的结论。</p>
+<h2 id="用于数据可视化的基本图形元素">用于数据可视化的基本图形元素</h2>
+<h3 id="marks-and-channels">Marks and Channels</h3>
+<p>一张数据可视化图（特指将数据用图的形式展示出来）中的元素，基本可以分成下面提到的两大类。即使是较为复杂的图，也能拆分成诸多基本元素的组合。</p>
+<p>其中第一类称为 <strong>Mark（标记），是一张图中的基本图形元素。</strong> Mark根据其维度可以细分为三种：</p>
+<p><img loading="lazy" src="images/vis_elements.png" alt="Untitled"  />
+</p>
+<p>第二类元素是 <strong>Channel（通道），指用于控制 Mark 如何呈现在图中的变量。</strong> 通道可以分为以下几种：</p>
+<ul>
+<li>位置</li>
+<li>颜色</li>
+<li>形状</li>
+<li>斜率</li>
+<li>大小（长度、面积、体积）</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements1.png" alt="Untitled"  />
+</p>
+<p>这样讲非常抽象，来几个具体的例子：</p>
+<ul>
+<li>a 图，使用线段作为 Mark（柱状图就是些粗了点的线段），Channel 是长度，所以当我们在看柱状图时，比较的实际是不同线段（柱子）的长度</li>
+<li>b 图，用点作为 Mark，Channel 是点在图上的位置，每个点都有其坐标 (x,y)</li>
+<li>c 图，在 b 图的基础上，增加了一个颜色 Channel，用这个通道将点分成了红蓝两组</li>
+<li>d 图，在 c 图的基础上，又增加了面积作为 Channel 控制点的大小，额外编码了一个变量</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements2.png" alt="Untitled"  />
+</p>
+<p><strong>以此可见，无论复杂还是简单的图，都是通过 Marks 与 Channels 的适当组合得到的。</strong></p>
+<h3 id="channel-rankings">Channel Rankings</h3>
+<p>在画图的时候，一次必然不会用到全部的上述元素。由于各种 Channel 传递信息的效果并不一致，要想让你的图更为直观，需要选择恰当的元素表现方式。</p>
+<p>下图展示了不同类型的数据，用不同 Channel 进行表达时，其效果的优劣，越靠上的 Channel 越便于读者理解。</p>
+<p>有顺序的数据（比如一组有大有小的测量值）应当以左边这组形式呈现，类别数据（比如野生型和突变体这两组材料）应当以右边的形式呈现。</p>
+<p><img loading="lazy" src="images/vis_elements3.png" alt="Untitled"  />
+</p>
+<p>对于两类数据，效果最好的都是空间位置。我们来看一组例子，体会一下不同数值编码方式传递信息的效率差异。</p>
+<p>浏览下面的每一张图，快速判断图中的数据能分为几组。</p>
+<p><img loading="lazy" src="images/vis_elements4.png" alt="Untitled"  />
+</p>
+<ul>
+<li>第一的图，用位置+颜色编码，很容易将点进行分组。</li>
+<li>第二张图，用大小+颜色编码，稍微混乱了一些，但还算可以分辨。</li>
+<li>第三张图，该分成三组还是四组？这张图采用宽度+高度编码，还算可以分辨，但由于我们通常感知面积快于形状，所以矮宽/高瘦的椭圆形可能在直觉上会被归为一组，于是图中四组容易被认作大中小的三组。</li>
+<li>第四张图，只用颜色进行编码，非常混乱，实际也是四组。</li>
+</ul>
+<h2 id="不同数据类型与其适合的展示方式">不同数据类型与其适合的展示方式</h2>
+<h3 id="one-quantitative-value">One quantitative value</h3>
+<p>首先是一维数据，只有一组连续值，我们希望展示这组数据的分布情况。如果只用平均值、标准差来描述，可能会损失很多信息，便可以考虑用直方图或密度图来展示。</p>
+<p><img loading="lazy" src="images/vis_elements5.png" alt="Untitled"  />
+</p>
+<h4 id="直方图histogram">直方图（Histogram）</h4>
+<p>直方图（Histogram）是展示 <strong>连续数据分布情况</strong> 最常用的工具，它划分好一组区间，将落到每个区间中值的个数进行统计并绘图，使用线条的长度来编码数据。由于直方图需要对连续型数据做离散分组，因此它有一个明显的缺点，就是它的形状依赖于分组的端点，例如若有好几个相同的数值正好处在分组端点上，那么我们只要稍微向左或向右移动一下分组端点，这些数据点就会被划分入不同的区间，导致矩形条的高度变化。</p>
+<ul>
+<li>Mark: line</li>
+<li>Channel: length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements6.png" alt="Untitled"  />
+</p>
+<h4 id="密度图density-plot">密度图（Density plot）</h4>
+<p>密度图利用核密度估计，对原始数据估计其密度函数，相比直方图对数据的描述更加准确。然而其边界处可能由于边界效应与实际情况不符。</p>
+<ul>
+<li>Mark: line</li>
+<li>Channel: position</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements7.png" alt="Untitled"  />
+</p>
+<h3 id="two-quantitative-values">Two quantitative values</h3>
+<p>当面对二维连续值的情况，比一维稍微复杂一点，可以用散点图展示它们之间的关系。</p>
+<p><img loading="lazy" src="images/vis_elements8.png" alt="Untitled"  />
+</p>
+<h4 id="散点图scatter-plot">散点图（Scatter plot）</h4>
+<p>散点图展示 <strong>两个变量之间的关系</strong> ，这种关系可能是线性或非线性的。图中每一个点的横纵坐标都分别对应两个变量各自的观测值，因此散点所反映出来的趋势也就是两个变量之间的关系。</p>
+<ul>
+<li>Mark: point</li>
+<li>Channel: position</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements9.png" alt="Untitled"  />
+</p>
+<h3 id="one-key-one-value">One key, one value</h3>
+<p>假如一张表是这样的：</p>
+<ul>
+<li><strong>能够定位到某个表格位置的变量称作 Key</strong>，这通常是我们统计对象的某个属性，比如某个材料的名称；</li>
+<li><strong>表格中某个格中具体的值被称为 Value</strong></li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements10.png" alt="Untitled"  />
+</p>
+<h4 id="柱状图bar-chart">柱状图（Bar chart）</h4>
+<p>柱状图可能是我们最熟悉的图形之一，目前是各种统计图形中应用最广泛的，但柱状图使用统计后的数据（平均值、标准差）进行作图，所能展示的统计量比较贫乏：只能以矩形条的长度展示原始数值，对数据的分布几乎没有任何展示。</p>
+<p>比如在下图中，因为展示的是每个动物的平均质量，如果不加误差线，我们既不能看出它的变异程度，也看不到这些数据的分布。</p>
+<ul>
+<li>Mark: lines</li>
+<li>Channel: position, length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements11.png" alt="Untitled"  />
+</p>
+<h4 id="箱线图box-plot">箱线图（Box plot）</h4>
+<p>统计（平均值、标准差）后画出的柱状图损失了太多信息，相比之下，直接用原始数据画出的箱线图呈现了 <strong>更详细的数据分布情况</strong> ，并允许数据中包含异常值。</p>
+<ul>
+<li>Mark: line, point</li>
+<li>Channel: position, length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements12.png" alt="Untitled"  />
+</p>
+<h4 id="小提琴图violin-plot">小提琴图（Violin plot）</h4>
+<p>小提琴图是密度曲线图的变体，有时也与箱线图一同呈现，能够更清晰地展示数据的分布情况。由于其外形与小提琴的形状相似（尤其展示双峰数据时），所以称为小提琴图。通常要较多的数据量，才能呈现出比较好看的小提琴图。</p>
+<ul>
+<li>Mark: line, point</li>
+<li>Channel: position, length</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements13.png" alt="Untitled"  />
+</p>
+<h3 id="one-ordered-key-one-value">One ordered key, one value</h3>
+<p>当我们的数据，其中的 Key 有内在顺序时，其呈现方式又可以有所不同。</p>
+<p><img loading="lazy" src="images/vis_elements14.png" alt="Untitled"  />
+</p>
+<h4 id="折线图line-chart">折线图（Line chart）</h4>
+<p>比方说展示一组随时间（比如年份）变化的数据，一般会用折线图的形式，更容易体现出数据的变化趋势。</p>
+<ul>
+<li>Mark: line, point</li>
+<li>Channel: position</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements15.png" alt="Untitled"  />
+</p>
+<p>各种常见的基本图片类型就讲到这，我在每张图处都表明了作图利用到的 Mark 与 Channel。比较后就会发现，各种图确实都可以抽象为作图元素的适当组合。</p>
+<h2 id="常见问题">常见问题</h2>
+<p>以下介绍一些常见的问题与争议，同时包含一些注意事项。篇幅有限，没法将各种问题逐一分析，如果感兴趣也可以与我深入进行交流。</p>
+<h3 id="选择柱状图还是折线图">选择柱状图还是折线图</h3>
+<p>这个问题一般取决于数据的类型，尤其是其中 Key 的类型。</p>
+<ul>
+<li>如果是<strong>类别数据</strong>，用柱状图</li>
+<li>如果是<strong>有序数据</strong>，用折线图</li>
+</ul>
+<p>需注意，类别数据不应使用折线图来展示，而有序数据也能用柱状图表示。</p>
+<p>下面两张图展示了性别与身高的关系，在这里 Key 为性别，属于类别数据，因此柱状图可以，但是折线图不合适。因为折线图天生带有一种展示趋势的倾向，会错误地传递出一种「从 Female 到 Male 身高存在上升趋势」，但一般来说性别不会逐渐变化，通常也不会出现身高随着性别变化而改变的情况。</p>
+<p><img loading="lazy" src="images/vis_elements16.png" alt="Untitled"  />
+</p>
+<p>再看下面的图，年龄与身高的关系。柱状图展示了不同年龄段的身高差别，折线图展示出从十岁到十二岁儿童身高有上升的趋势，这就非常合理了。</p>
+<p><img loading="lazy" src="images/vis_elements17.png" alt="Untitled"  />
+</p>
+<h3 id="原点是否从0开始">原点是否从0开始</h3>
+<p>一个作图过程中需要注意的问题：原点是否从0开始？在不同图中这个问题存在一些争议，但是 <strong>在柱状图中，原点一定要从0开始。</strong> 我们有时也会见到，为了刻意传递出某种结论而在柱状图中不从零开始展示数据的情况。</p>
+<p>回想一下前面提到柱状图的时候，我们提到<strong>柱状图利用长度来编码数值</strong>。正因如此，长度需要与数值以合适的比例关系进行对应，100 是 50 的两倍，因此在线性坐标轴上，对应 100 的柱子长度就该是 50 的两倍长。</p>
+<p>而<strong>折线图利用位置来编码数值</strong>，所以在一些情况下，为了展示出更清晰的局部变化，可以不从0开始。</p>
+<p><img loading="lazy" src="images/vis_elements18.png" alt="Untitled"  />
+</p>
+<h3 id="雷达图与饼图">雷达图与饼图</h3>
+<p>雷达图实际上是极坐标系中的折线图，<strong>以到中心的距离编码数值</strong>，然而其<strong>可读性非常差</strong>，绝大多数情况下避免使用。</p>
+<ul>
+<li>纵坐标对应的数值不易阅读</li>
+<li>折线的趋势变化不明显</li>
+<li>折线图不应用来表示没有顺序的分组数据</li>
+<li>除非周期性数据，否则一组数据结尾和开始处的连接没有实际含义</li>
+</ul>
+<p><img loading="lazy" src="images/vis_elements19.png" alt="Untitled"  />
+</p>
+<p>饼图<strong>用角度编码数值</strong>，给人的感知是角度/面积，<strong>可读性也不好</strong>。因为人眼对角度或面积辨识能力不强，尤其是相似的角度非常多的时候。</p>
+<p><img loading="lazy" src="images/vis_elements20.png" alt="Untitled"  />
+</p>
+<p>回看一下最开始放的排序图，角度与面积都排在了最后，因此请谨慎使用饼图。如果用，对数据进行排序后再画饼图，可以稍稍让读图变得轻松一点。</p>
+<p><img loading="lazy" src="images/vis_elements21.png" alt="Untitled"  />
+</p>
+<h3 id="一些奇怪的图">一些奇怪的图</h3>
+<p>我翻了一些CNS文章，除了热图和树状/网状图，基本都是上面提到的图片类型。其中有些变体形式的图也非常不错，比如下面这张直接展示出原始值及其平均值，又省空间又直观。</p>
+<p><img loading="lazy" src="images/vis_elements22.png" alt="Untitled"  />
+</p>
+<p>或是下面这种（我画了个示意图），相比于柱状图省去了柱子的部分，同样呈现出平均值和误差线，又比柱状图省下不少空间（柱状图的柱子宽度几乎毫无意义）。</p>
+<p><img loading="lazy" src="images/vis_elements23.png" alt="Untitled"  />
+</p>
+<p>再举个例子，说说如何用图片元素的基本知识，帮助我们读一张图，尤其是如今日益花哨的各种组学图。下面是张呈现出转录组数据的火山图（Volcano plot），一眼看上去还挺炫，让我将其中的各种元素拆分一下：</p>
+<ul>
+<li>横坐标与纵坐标都是取 log 后的连续型数值，坐标轴不包括离散（分组）数据，因此这是将（x,y）映射到位置的散点图，每个点代表一个基因</li>
+<li>再看横纵坐标表示的含意，横坐标是 R-NR 数据的比值，因此越靠右表明比值越大，越靠左则比值越小</li>
+<li>图中的两条曲线划定了一定范围，因此作为比较数据的阈值</li>
+<li>数据点还映射到了不同的颜色，灰色是没有达到阈值的数据，黑色点达到阈值，其中又有些选出的基因，被标注以不同颜色，应该是依照某个其他因素进行了分组</li>
+</ul>
+<p>那么，再接下去看看上下文有没有提到这些颜色代表了什么分组，就清楚它是要讲什么了。</p>
+<p><img loading="lazy" src="images/vis_elements24.png" alt="Untitled"  />
+</p>
+<p>好了，这篇文章就写到这，我们下次再见。</p>
+<h2 id="参考资料与延伸阅读">参考资料与延伸阅读</h2>
+<ul>
+<li><a href="https://socviz.co/index.html#preface">Data Visualization - A practical introduction</a></li>
+<li><a href="https://www.cs.ubc.ca/~tmm/talks.html#vad15sydney">Visualization Analysis &amp; Design</a></li>
+</ul>
+]]></content:encoded>
     </item>
     
     <item>
@@ -58,6 +247,42 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;annotate&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;, x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.8&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;, label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; label_text) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 添加上文字标注，类型是&amp;#34;text&amp;#34;，位置在x=5.8，y=9&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  leg &lt;span style=&#34;color:#75715e&#34;&gt;# 添加之前指定的字体大小部分，不关键&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <content:encoded><![CDATA[<p>前几天看到群里有人问如何画一张类似下图的、带拟合线与误差的相关性图，这里找点数据来演示一下怎么画。</p>
+<p><img loading="lazy" src="images/corplot1.png" alt="demo"  />
+
+找了点数字画了个例子，假设数据读进来是这样的两列：</p>
+<p><img loading="lazy" src="images/corplot2.png" alt="Untitled"  />
+</p>
+<p>绘图的部分我用了这些</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>leg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">theme</span>(title<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>), 
+</span></span><span style="display:flex;"><span>             axis.text.x<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             axis.text.y<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             legend.text<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>))
+</span></span><span style="display:flex;"><span>label_text <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;r = &#34;</span>, <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">cor</span>(subdata<span style="color:#f92672">$</span>Na,subdata<span style="color:#f92672">$</span>K),<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(subdata, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(Na), y <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(K))) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stat_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lm&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>)<span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_classic</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x<span style="color:#f92672">=</span><span style="color:#ae81ff">5.8</span>, y<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>, label<span style="color:#f92672">=</span> label_text) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  leg
+</span></span></code></pre></div><p>以上代码画出来的图如下：
+<img loading="lazy" src="images/corplot3.png" alt="Untitled"  />
+</p>
+<p>其中各部分的解释如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>leg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">theme</span>(title<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>), 
+</span></span><span style="display:flex;"><span>             axis.text.x<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             axis.text.y<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>),
+</span></span><span style="display:flex;"><span>             legend.text<span style="color:#f92672">=</span><span style="color:#a6e22e">element_text</span>(size<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>)) <span style="color:#75715e"># 用于指定字体大小等，可以先忽略</span>
+</span></span><span style="display:flex;"><span>label_text <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;r = &#34;</span>, <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">cor</span>(subdata<span style="color:#f92672">$</span>Na,subdata<span style="color:#f92672">$</span>K),<span style="color:#ae81ff">2</span>)) <span style="color:#75715e"># 用于计算相关系数r的值，并处理成标在图上的「r = xxx」的文本</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2) <span style="color:#75715e"># 用ggplot2包画图</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(subdata, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(Na), y <span style="color:#f92672">=</span> <span style="color:#a6e22e">log</span>(K))) <span style="color:#f92672">+</span> <span style="color:#75715e">#指定画图的数据subdata，在aes(x = ,y = )中指定横纵坐标轴</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>) <span style="color:#f92672">+</span> <span style="color:#75715e">#绘制散点部分，点的大小为2，颜色为浅绿色</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stat_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lm&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#31705a&#34;</span>)<span style="color:#f92672">+</span> <span style="color:#75715e">#绘制拟合线部分，method = &#34;lm&#34; 使用线性拟合，颜色同前</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_classic</span>() <span style="color:#f92672">+</span> <span style="color:#75715e"># 使用ggplot的classic画图主题，是个只显示横纵坐标轴的主题</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x<span style="color:#f92672">=</span><span style="color:#ae81ff">5.8</span>, y<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>, label<span style="color:#f92672">=</span> label_text) <span style="color:#f92672">+</span> <span style="color:#75715e"># 添加上文字标注，类型是&#34;text&#34;，位置在x=5.8，y=9</span>
+</span></span><span style="display:flex;"><span>  leg <span style="color:#75715e"># 添加之前指定的字体大小部分，不关键</span>
+</span></span></code></pre></div>]]></content:encoded>
     </item>
     
     <item>
@@ -67,6 +292,37 @@
       
       <guid>https://yorks0n.github.io/posts/interesting-1-dataset-100-visualizations/</guid>
       <description>分享最近看到的一组有意思的数据可视化</description>
+      <content:encoded><![CDATA[<p>分享最近看到的一组有意思的数据可视化。
+由 ferdio 出品的，主题为「1 dataset 100 visualizations」。他们选用了一组非常简单的数据，用一百种不同的图进行可视化，借此「展示数据可视化的多样性和复杂性，以及如何使用有限的视觉元素来讲述不同的故事」。尽管使用了相同的原始数据，但每张图都有其独特的重点，传递出的信息也不尽相同。
+<img loading="lazy" src="images/1680530087246.png" alt=""  />
+</p>
+<p>我计划从中选几个有代表性的图，并尝试解读这种可视化突出了数据怎样的特点。
+先从比较常见的开始，下面两张图都是将数值编码成了长度，算是最常见的柱状图了。依照组合顺序的不同，左图将相同年份的数据摆在一起，更能突出相同年度中，几个国家之间谁的数量更多；右边的图将同一国家两个年度的数据放在一起展示，更能体现出每个国家世界遗产数量都在上升这个趋势。
+<img loading="lazy" src="images/1680530106670.png" alt=""  />
+
+与此同时，假如使用堆积柱状图，则突出的是两个年度，这三个国家世界遗产总量的增长趋势。
+<img loading="lazy" src="images/1680530119989.png" alt=""  />
+
+另外，上面几张图中还有一个特点，它们都将各个部分的具体数值直接标注在了对应的区域。这种方式蛮好，可以减轻看图时「视线需要在坐标轴和数据间反复切换，估算数值」所产生的负担。在这样处理的图中，即使完全删去纵坐标轴也不影响数据解读。</p>
+<p>下面这两张图则是让我比较眼前一亮的（尤其是下面第二张），仔细去看，它们虽然形状不太相似，但实际是几乎一样的两张图——用在一条直线上的位置标记多个数据点的数值。我觉得它们好在以下几个方面：</p>
+<ul>
+<li>清晰明了，无论是比较同一年度各个国家的数值（点的位置），还是增长幅度（两点间的连线长度）都一目了然</li>
+<li>节约空间，如果把第二张图放平，只占据柱状图单个柱子的空间，就足以展示六条柱子所传达的信息</li>
+<li>可以体现出跨越性的增长与压倒性的优势：丹麦（橙色）的世界遗产数量从04年的不如挪威（深蓝色），到22年超越挪威，这种跨越性的增长趋势在这两张图中一目了然，反观上面的几个柱状图，都需要在柱子长度间反复多次比较数值，才能观察到这种变化；另一方面，瑞典（蓝色）无论哪个年度的数量都远超另外两个人国家，这个结论在前面的图中也能通过比较得出，但在这张图中尤其清晰。
+究其原因，这两张图将本身分散的长度、位置信息合并在了同一条线上，使得相互间的比较更为容易。但它也有一些缺点：</li>
+<li>假如是多个时间点，比如三个年度，在这张图中就容易造成混乱</li>
+<li>这批数据的变化趋势一致，都是22年的数值高于04年，假如在不同国家间，有的数量增加，有的数量减少，可能就需要带箭头的线段才能表示年份间的变化趋势。
+<img loading="lazy" src="images/1680530135444.png" alt=""  />
+
+同样，假如不放在一条直线上，而是按位置分开的图也有，比如下面这张图。上面提到的一些优点，比如增长幅度的大小、丹麦超越性的增长、瑞典压倒性的数量也都可以看到，但少了在原位的国家名称与数量标注，感觉就没那么醒目了。但这张图也有它的优点：使用颜色来表示年份而不是国家，假如有国家的数量下降了，在这张图上就会很好地展现出来。
+<img loading="lazy" src="images/1680530144415.png" alt=""  />
+
+这次就先写这些，溜了溜了。
+如果对更多可视化感兴趣，或是想找找新的画图思路，可以直接去原网站查看可视化结果。</li>
+</ul>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="https://100.datavizproject.com/#">1 dataset. 100 visualizations.</a></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -76,6 +332,214 @@
       
       <guid>https://yorks0n.github.io/posts/color_guide/</guid>
       <description>论文作图时用得上的配色技巧与工具</description>
+      <content:encoded><![CDATA[<p>注：本文首发于少数派，此处有删改，您可以 <a href="https://sspai.com/post/75989">前往此处</a> 阅读修订后版本。</p>
+<h2 id="色彩模型">色彩模型</h2>
+<h3 id="人眼的色彩感知">人眼的色彩感知</h3>
+<p>我们能看到颜色主要与人眼的生理特性有关，视杆细胞和视锥细胞在其中发挥了重要作用。其中，视杆细胞主要负责感受光的明暗，视锥细胞负责感受不同波长的光。大多数人有三种不同类型的视锥细胞，它们各自对不同波长的光有不同的灵敏度：红色、绿色和蓝色。当某些视锥细胞缺失或敏感度发生变化，将导致色觉异常。</p>
+<p><img loading="lazy" src="images/color_selection.png" alt="三种视锥细胞对不同光波长的光具有不同的敏感度。来源："  />
+</p>
+<p>三种视锥细胞对不同光波长的光具有不同的敏感度。来源：</p>
+<h3 id="rgb-模型">RGB 模型</h3>
+<p>RGB 模型绝对称得上是数字时代最为常见的色彩模型，它将红色（R）、绿色（G）、蓝色（B）三种颜色的光，按照不同比例混合，得到各种不同的颜色。RGB 模型如此流行，一方面是因为它符合人眼对色彩的感知过程（对应三种视锥细胞），另一方面，屏幕上的每个像素也都是由红绿蓝三个次级像素组成，直接以此方式编码， 极大地方便了在屏幕上进行显示。</p>
+<p><img loading="lazy" src="images/color_selection%201.png" alt="RGB色彩模型"  />
+</p>
+<p>RGB色彩模型</p>
+<h3 id="hsbhsv">HSB/HSV</h3>
+<p>虽然 RGB 模型既常用又方便理解，但它并不符合人对颜色的直观感受。我们看到某个颜色时，不会把它拆分成红绿蓝三个组分，而是直接感知三种视锥细胞叠加后的效果。因此，后来又出现了称为 HSV 的色彩模型（也称HSB）。</p>
+<p><img loading="lazy" src="images/color_selection%202.png" alt="color_selection"  />
+</p>
+<p>你也许在选颜色时见到见过这种模型，它仿佛将所有颜色放入了一个倒置的圆锥。</p>
+<p>HSV 模型采用三个维度的数值描述颜色：</p>
+<ul>
+<li>色相（Hue），圆锥的最外围一圈，即它是什么颜色；</li>
+<li>饱和度（Saturation），圆锥上某个点到中轴的距离，离中轴越近饱和度越低，颜色也越接近黑白灰；</li>
+<li>亮度（Brightness 或 Value），圆锥上点到尖端的距离，越接近尖端，亮度越低（越黑）。</li>
+</ul>
+<p>那 HSV 相比 RGB 直观在哪里？举个例子，左边颜色只降低亮度后，可以得到右边的颜色；但要是通过 RGB 来调整，就需要同时调整红绿蓝三种颜色值，颜色很容易一下就偏得没边了。</p>
+<p><img loading="lazy" src="images/color_selection%203.png" alt="color_selection"  />
+</p>
+<h3 id="为什么要有不同的色彩模型">为什么要有不同的色彩模型</h3>
+<p>一个很好的例子是地图制图投影方式和飞行路径图，我们可以将不同的色彩空间模型视为不同的地图投影方式。根据选择地图类型（色彩空间）的不同，同样的飞行路径可能看起来大不一样。</p>
+<p><img loading="lazy" src="images/color_selection%204.png" alt="墨卡托投影地图上从洛杉矶到莫斯科、纽约到莫斯科的飞行路线。"  />
+</p>
+<p>墨卡托投影地图上从洛杉矶到莫斯科、纽约到莫斯科的飞行路线。</p>
+<p><img loading="lazy" src="images/color_selection%205.png" alt="正射投影"  />
+</p>
+<p>正射投影</p>
+<h2 id="根据数据类型选择颜色">根据数据类型选择颜色</h2>
+<p><img loading="lazy" src="images/color_selection%206.png" alt="color_selection"  />
+</p>
+<h3 id="类别色阶categorical-color-scales">类别色阶（<strong>Categorical color scales</strong>）</h3>
+<p>类别数据使用类别色阶。</p>
+<p>当数据是一组类别时，它们没有内在的顺序，比如不同的分组实验材料。下图中不同的国家，并不会说某个国家比另一个国家排在前面或是后面，就属于<strong>类别数据，因此要用类别色阶</strong>（<strong>Categorical color scales</strong>）。</p>
+<p>何为类别色阶？红色、黄色、蓝色，它们适合区分没有内在顺序的类别，其中一种颜色并不比另一种颜色更重要。</p>
+<p><img loading="lazy" src="images/color_selection%207.png" alt="color_selection"  />
+</p>
+<h3 id="单向色阶sequential-color-scales">单向色阶（<strong>Sequential color scales）</strong></h3>
+<p>连续色阶是<strong>从暗到亮/从亮到暗的颜色渐变</strong>，它们适合可视化从低到高变化的数值数据，比如温度、质量或浓度。</p>
+<p><img loading="lazy" src="images/color_selection%208.png" alt="From Chroma.js Color Palette Helper"  />
+</p>
+<p>From <strong><strong>Chroma.js Color Palette Helper</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%209.png" alt="color_selection"  />
+</p>
+<p>这时并不是说就不能分组，你依然可以将特定数值划分成一个个区间，对每个区间采用一个颜色。</p>
+<p><img loading="lazy" src="images/color_selection%2010.png" alt="color_selection"  />
+</p>
+<p>或是不划分区间</p>
+<p><img loading="lazy" src="images/color_selection%2011.png" alt="color_selection"  />
+</p>
+<p>注意⚠️：</p>
+<ul>
+<li>
+<p>在单向的顺序色阶中，只能使用一到两种色调，比如浅蓝色到深蓝色（单色，蓝色），或是从浅黄色到深蓝色（双色，蓝色和黄色）。</p>
+</li>
+<li>
+<p>好的顺序色阶中，变化的并不只是颜色的色相（Hue），颜色的亮度（Lightness）与饱和度也在同步变化。</p>
+</li>
+<li>
+<p>对低值使用浅色，对高值使用深色（亮度更低、饱和度更高）。使用颜色渐变时，请确保亮色代表低值，而深色代表高值。对于大多数读者来说，这将是最直观的</p>
+<p><img loading="lazy" src="images/color_selection%2012.png" alt="color_selection"  />
+</p>
+</li>
+</ul>
+<h3 id="双向色阶diverging-color-scales">双向色阶（<strong>Diverging color scales</strong>）</h3>
+<p>双向色阶（Diverging / bipolar / double-ended color scales）与单向色阶类似，但是它不再是亮度或饱和度的从低到高变化，它中间亮度更高，然后向两侧色调与亮度同时变化。</p>
+<p><img loading="lazy" src="images/color_selection%2013.png" alt="color_selection"  />
+</p>
+<p>双向色阶通常用于：</p>
+<ul>
+<li>正值和负值这样两端有明确对立关系的值</li>
+<li>有个有意义的中间点，比如0、50%、平均值、选定的阈值</li>
+</ul>
+<p><img loading="lazy" src="images/color_selection%2014.png" alt="color_selection"  />
+</p>
+<p>同单向色阶一样，双向色阶也可以再分为分组和不分组两种：</p>
+<p><img loading="lazy" src="images/color_selection%2015.png" alt="双向，分组"  />
+</p>
+<p>双向，分组</p>
+<p><img loading="lazy" src="images/color_selection%2016.png" alt="双向，不分组"  />
+</p>
+<p>双向，不分组</p>
+<h2 id="从色彩集中选择颜色">从色彩集中选择颜色</h2>
+<p>这里介绍四个工具</p>
+<p><a href="https://www.learnui.design/tools/data-color-picker.html#palette">The Data Viz Color Picker</a></p>
+<p><a href="https://tristen.ca/hcl-picker/#/hlc/6/1/15534C/E2E062">Colorpicker for data</a></p>
+<p><a href="https://carto.com/carto-colors/">CARTOColors - CARTO</a></p>
+<p><a href="https://vis4.net/palettes/#/9%7Cs%7C00429d,96ffea,ffffe0%7Cffffe0,ff005e,93003a%7C1%7C1">chroma.js palette helper</a></p>
+<h3 id="data-viz-color-picker">Data Viz Color Picker</h3>
+<p><strong><strong>PALETTE</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2017.png" alt="color_selection"  />
+</p>
+<p><strong><strong>SINGLE HUE</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2018.png" alt="color_selection"  />
+</p>
+<p><strong><strong>DIVERGENT COLOR</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2019.png" alt="color_selection"  />
+</p>
+<h3 id="colorpicker-for-data"><strong><strong>Colorpicker for data</strong></strong></h3>
+<p><img loading="lazy" src="images/color_selection%2020.png" alt="color_selection"  />
+</p>
+<h3 id="cartocolors"><strong>CARTOColors</strong></h3>
+<p><strong><strong>Sequential schemes</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2021.png" alt="color_selection"  />
+</p>
+<p><strong><strong>Diverging schemes</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2022.png" alt="color_selection"  />
+</p>
+<p><strong><strong>Qualitative schemes</strong></strong></p>
+<p><img loading="lazy" src="images/color_selection%2023.png" alt="color_selection"  />
+</p>
+<h2 id="注意事项">注意事项</h2>
+<h3 id="色觉异常">色觉异常</h3>
+<p>前面提到，由于有三种视锥细胞存在，我们可以感知红绿蓝三种颜色极其组合。如果其中某种视锥细胞的灵敏度不够，那么会导致色弱；如果某种细胞完全不起作用，那么就会导致色盲。因此有三种不同类型的色弱，和三种不同类型的色盲。</p>
+<p>在人群中，色弱相比色盲更加常见，大约6-7%的男性有某种色弱，而大约2-3%的男性是色盲。</p>
+<p><img loading="lazy" src="images/color_selection%2024.png" alt="color_selection"  />
+</p>
+<p>因此，某些颜色的组合应当避免，比如红色-绿色-棕色。</p>
+<p><img loading="lazy" src="images/color_selection%2025.png" alt="color_selection"  />
+</p>
+<p>我们比较熟悉的荧光图中也会倡议使用洋红色+绿色的组合，而不是红色和绿色的组合。</p>
+<p><img loading="lazy" src="images/%E6%B4%8B%E7%BA%A2%E8%89%B2.png" alt="洋红色.png"  />
+</p>
+<p>另一方面，在选择颜色时，不仅在色相（Hue）上发生变化，也让饱和度和亮度同时变化，也有助于增加色彩的区分度。一些工具会给出相同配色在不同色觉异常人士眼中的效果。</p>
+<p><img loading="lazy" src="images/color_selection%2026.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2027.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2028.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2029.png" alt="color_selection"  />
+</p>
+<p>还有一种方式，是用颜色和模式同时来表示不同的类别，比如加上阴影，或是采用不同的虚实线段。</p>
+<p><img loading="lazy" src="images/color_selection%2030.png" alt="color_selection"  />
+</p>
+<p><img loading="lazy" src="images/color_selection%2031.png" alt="color_selection"  />
+</p>
+<h3 id="less-is-more">Less is more</h3>
+<p>如非必要，勿增实体</p>
+<ul>
+<li>
+<p>是否有替代渐变色的数值表示方式（能不用，就不用）</p>
+<p>比如采用长度（条形图）、位置（点图）或是面积的大小</p>
+<p><img loading="lazy" src="images/color_selection%2032.png" alt="color_selection"  />
+</p>
+</li>
+<li>
+<p>避免同时使用过多颜色（能少用，不多用）</p>
+<p>如果图中使用了超过七种颜色，可能要考虑其他的图表类型，或是将类别组合在一起。</p>
+<p>颜色本身是帮助读者区分类别的，但是颜色越多，就越难快速阅读和理解，在读图时将不得不反复在图例和图形间来回查阅。</p>
+<p><img loading="lazy" src="images/color_selection%2033.png" alt="color_selection"  />
+</p>
+</li>
+</ul>
+<h3 id="更好地分配颜色">更好地分配颜色</h3>
+<p>对相同变量使用相同颜色，简化理解过程</p>
+<p><img loading="lazy" src="images/color_selection%2034.png" alt="color_selection"  />
+</p>
+<p>配合图例解释颜色指代的内容：图形的大小代表什么、深浅是对应哪个变量，这些都需要解释清晰。</p>
+<p><img loading="lazy" src="images/color_selection%2035.png" alt="color_selection"  />
+</p>
+<p>详略得当地使用颜色，将不重要的元素用灰色或其他非常浅的颜色来表示，可以突出需要重点关注的数据</p>
+<p><img loading="lazy" src="images/color_selection%2036.png" alt="color_selection"  />
+</p>
+<p>保证对比度，避免使用互补色（比如红配绿、橙配蓝）</p>
+<p><img loading="lazy" src="images/color_selection%2037.png" alt="color_selection"  />
+</p>
+<p>避免使用彩虹色渐变</p>
+<p>彩虹色渐变有几个大的问题：</p>
+<ul>
+<li>它的颜色变化并不均匀，其中绿色占据了几乎1/3的范围</li>
+<li>各种颜色之间的亮度变化不均一</li>
+</ul>
+<p><img loading="lazy" src="images/color_selection%2038.png" alt="color_selection"  />
+</p>
+<h2 id="参考资料">参考资料</h2>
+<p><strong>Star:</strong></p>
+<p><a href="https://medium.com/thinking-design/colorimetry-and-the-cartography-of-color-415ef5315c0a">Colorimetry and the Cartography of Color</a></p>
+<p>色彩空间</p>
+<p><a href="https://sspai.com/post/72510">弄清色彩的作用和表达 - 少数派</a></p>
+<p>不同的色彩模型</p>
+<p><a href="https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/">Which color scale to use when visualizing data - Datawrapper Blog</a></p>
+<p>根据数据类型（离散、连续）选择颜色</p>
+<p><a href="https://blog.datawrapper.de/colors/">What to consider when choosing colors for data visualization</a></p>
+<p>一些颜色安排上的注意事项</p>
+<p><a href="https://spectrum.adobe.com/page/color-for-data-visualization/">Spectrum, Adobe&rsquo;s design system</a></p>
+<p>选择颜色的注意事项</p>
+<p><a href="https://eagereyes.org/basics/rainbow-color-map">How The Rainbow Color Map Misleads</a></p>
+<p>彩虹色渐变为什么不合适</p>
+<p><a href="https://blog.datawrapper.de/colorblindness-part1/">How your colorblind and colorweak readers see your colors - Datawrapper Blog</a></p>
+<p>色觉异常</p>
+<p><strong>Other:</strong></p>
+<p><a href="https://blog.datawrapper.de/diverging-vs-sequential-color-scales/">When to use sequential and when to use diverging color scales - Datawrapper Blog</a></p>
+<p><a href="https://blog.datawrapper.de/classed-vs-unclassed-color-scales/">When to use classed and when to use unclassed color scales - Datawrapper Blog</a></p>
+<p><a href="https://blog.datawrapper.de/colorguide/">Your Friendly Guide to Colors in Data Visualisation</a></p>
+<p><a href="https://blog.datawrapper.de/10-ways-to-use-fewer-colors-in-your-data-visualizations/">10 ways to use fewer colors in your data visualizations - Datawrapper Blog</a></p>
+<p>如何减少使用的颜色数量</p>
+<p><a href="http://www.gcmap.com/mapui?P=svo-lax&amp;MS=bm&amp;DU=mi&amp;SG=0.82&amp;SU=mach">A map from Great Circle Mapper</a></p>
+<p>大圆航线</p>
+<p><a href="https://davidmathlogic.com/colorblind/#%23000000-%23E69F00-%2356B4E9-%23009E73-%23F0E442-%230072B2-%23D55E00-%23CC79A7">Coloring for Colorblindness</a></p>
+<p>色觉异常的颜色选择</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -85,6 +549,132 @@
       
       <guid>https://yorks0n.github.io/posts/basic-about-paper-figures/</guid>
       <description>参考几个期刊的投稿指南，整理了一些论文作图时会遇到的基本概念及要求。</description>
+      <content:encoded><![CDATA[<p>本文参考了 Nature、Science、Plant Cell 等期刊的图片指南整理而成，旨在介绍一些作图前后会遇到的基本概念及要求。应注意的是，本文只能作为参考，<strong>具体的作图要求会依据期刊发生变化，应遵循期刊提供的投稿指南</strong>。</p>
+<h3 id="科研论文绘图的特点">科研论文绘图的特点</h3>
+<p>相比于文字描述，<strong>论文中的图表通常是最快传递大量复杂信息的手段</strong>。</p>
+<ul>
+<li>高质量的图片结果会传递出<strong>专业性</strong>，给读者良好的第一印象</li>
+<li>许多人在阅读时也会从图片开始，因此应保证图片<strong>清晰准确地传递信息</strong></li>
+<li>图片也是吸引读者进一步阅读文章内容的基础，因此条件允许时<strong>适当兼顾艺术性</strong></li>
+</ul>
+<h3 id="本文包含什么">本文包含什么</h3>
+<p>本文包含许多在作图前后，尤其是完成单张结果图后，进行进一步图片组合时所需了解的基本概念与注意事项。</p>
+<h3 id="本文不包含什么">本文不包含什么</h3>
+<p>本文不是指导投稿某个期刊时的作图规范，一切具体标准与要求仍以各期刊自己的投稿指南为准。</p>
+<hr>
+<h2 id="创建画布">创建画布</h2>
+<h3 id="图片格式">图片格式</h3>
+<p>图片格式可以分成<a href="https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide">位图与矢量图</a>两种：</p>
+<p>位图（Bitmap），又称栅格图（Raster graphics），指使用像素点组成的阵列来表示的图像，通过定义每个像素点的位置及其颜色来生成图片，比如JPG、TIFF等。
+矢量图（Vector）是用点、直线或多边形等基于数学方程的几何元素表示的图像，如PDF、EPS等。</p>
+<p><img loading="lazy" src="images/1680600531904.jpeg" alt=""  />
+</p>
+<p>由于矢量图记录的是形状的计算方式，其经过放大也不会变得模糊，因此是作图时首选的图片格式。</p>
+<p>期刊主要接受的位图格式为TIFF，接受PDF等矢量图；其中PDF中可以同时储存位图与矢量图，因而成为更加通用的格式；尽量避免使用PowerPoint储存图像。</p>
+<h3 id="画布尺寸">画布尺寸</h3>
+<p>由于出版时版面宽度限制，期刊通常会对图片的尺寸有所要求，为了更好地排列每张Figure中的图片大小及位置，同时匹配字号和图片尺寸，最好在新建画布时就设定好尺寸。</p>
+<p>每个期刊对于图片尺寸的要求各不相同，一般会区分单栏或双栏的布局方式。
+<img loading="lazy" src="images/1680600541142.png" alt=""  />
+
+部分期刊的图片尺寸要求如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>期刊  </th>
+          <th>单栏（cm） </th>
+          <th>双栏（cm）  </th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Nature</td>
+          <td>9</td>
+          <td>18</td>
+      </tr>
+      <tr>
+          <td>Plant Cell</td>
+          <td>8.25</td>
+          <td>16.5</td>
+      </tr>
+      <tr>
+          <td>Science</td>
+          <td>5.5</td>
+          <td>12</td>
+      </tr>
+  </tbody>
+</table>
+<p>图片的高度一般没有明确要求，PC建议最大图片高度20 cm，Nature建议最大图片高度17 cm，以尽量保证图片和图例在同一页范围内。</p>
+<h3 id="颜色模式">颜色模式</h3>
+<p>颜色模式是数字图像中表示颜色的算法，期刊中常见要求有<a href="https://99designs.ca/blog/tips/correct-file-formats-rgb-and-cmyk/">RGB模式与CMYK模式</a>。
+<img loading="lazy" src="images/1680600551809.png" alt=""  />
+</p>
+<ul>
+<li>RGB模式：利用红（R）、绿（G）、蓝（B）三种颜色的加法混合，产生各种各样的颜色。</li>
+<li>CMYK模式：将三原色叠加生成的四种颜色，即青色（C）、洋红色（M）、黄色（Y）与黑色（K），利用减法混合，形成CMYK颜色。</li>
+</ul>
+<p>不同期刊对于投稿图片中的颜色模式的要求也各有不同，比如Science要求CMYK，Plant Cell则要求RGB。
+不用担心，这两种颜色模式可以相互转换，但每次都会损失一点数据，所以最好先用RGB处理好图像，一旦有需要，再将其转换为CMYK模式。</p>
+<h2 id="字体">字体</h2>
+<p>衬线，是指笔画末端的装饰线，是区分不同英文字体最显著的特征。有衬线的字体叫做<strong>衬线字体</strong>（Serif），而没有的则是<strong>非衬线</strong>（Sans-Serif）。（「Serif」意为「衬线」，「Sans」在法文中意为「没有」）
+<img loading="lazy" src="images/1680600561146.jpeg" alt=""  />
+
+常见期刊一般要求使用非衬线字体，如Arial或Helvetica，且不同期刊对于图片中的字体大小也有要求：</p>
+<table>
+  <thead>
+      <tr>
+          <th>期刊  </th>
+          <th>最小字号（pt） </th>
+          <th>最大字号（pt）  </th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Nature</td>
+          <td>5</td>
+          <td>7</td>
+      </tr>
+      <tr>
+          <td>Science</td>
+          <td>5</td>
+          <td>7</td>
+      </tr>
+      <tr>
+          <td>Plant Cell</td>
+          <td>6</td>
+          <td>8</td>
+      </tr>
+  </tbody>
+</table>
+<p>要注意的是组合多张图片时，通常图片会被缩放，这时实际显示出的字号会发生变化，应以最终缩放后的字号为准；多张图片的标注（即标注 A, B, C, D 时），应采用大写加粗，具体字号另各有要求。</p>
+<h2 id="颜色">颜色</h2>
+<p>图片中的颜色应当差异明显且视觉效果良好。期刊都会要求考虑到色觉障碍人士，因而要求避免使用诸如红色与绿色这样的颜色组合作为对比（改为使用洋红色与绿色），尤其是在荧光显微照片中。
+<img loading="lazy" src="images/1680600567695.png" alt=""  />
+</p>
+<h2 id="分辨率">分辨率</h2>
+<p>在涉及到位图的时候，就要考虑分辨率，通常以ppi作为单位（pixels per inch）。分辨率过低会导致图片在放大时边缘模糊。
+在纯线条与文字组成的图片中（如化学式），分辨率尤其重要。一个好的方法是将图片放大至400%（至少200%），观察其边缘是否依然锐利清晰。
+<img loading="lazy" src="images/1680600572700.png" alt=""  />
+
+纯矢量图不需要考虑分辨率；如果导出位图则照片尽量达到300 ppi。</p>
+<h2 id="图片布局">图片布局</h2>
+<p>一大原则就是避免空间浪费，但应保证不同的照片边缘有明显分界线；同时图片边缘尽量对齐。</p>
+<p><img loading="lazy" src="images/1680600577500.png" alt=""  />
+</p>
+<h2 id="额外注意事项">额外注意事项</h2>
+<p>务必整理好所有作图过程中使用过的原始图片，尽量保证其分辨率，最好是原始格式的原始文件，因为部分杂志会要求提供原始图片。</p>
+<p>相比于文中提到的要求，不同期刊对于图片都会有各自的额外要求，一切应以期刊提供的投稿指南为准。比如<a href="https://www.nature.com/nature/for-authors/initial-submission">Nature</a>要求所有图片中的文字可编辑；<a href="https://www.science.org/content/page/instructions-preparing-initial-manuscript">Science</a>要求避免使用灰度图等。</p>
+<hr>
+<p>推荐进一步阅读<a href="https://academic.oup.com/plcell/pages/general-instructions">Plant Cell</a>提供的<em>Detailed Figure Guidelines</em>，里面不但有杂志自身的投稿要求，还对许多基本概念有详细介绍，同时对一些可能犯的错误提供了修改意见。</p>
+<h3 id="references">References</h3>
+<ul>
+<li>位图与矢量图: <em><a href="https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide">https://business.oregonstate.edu/student-experience/resources/DAMlab/vector-and-bitmap-image-guide</a></em></li>
+<li>RGB模式与CMYK模式: <em><a href="https://99designs.ca/blog/tips/correct-file-formats-rgb-and-cmyk/">https://99designs.ca/blog/tips/correct-file-formats-rgb-and-cmyk/</a></em></li>
+<li>Nature: <em><a href="https://www.nature.com/nature/for-authors/initial-submission">https://www.nature.com/nature/for-authors/initial-submission</a></em></li>
+<li>Science: <em><a href="https://www.science.org/content/page/instructions-preparing-initial-manuscript">https://www.science.org/content/page/instructions-preparing-initial-manuscript</a></em></li>
+<li>Plant Cell: <em><a href="https://academic.oup.com/plcell/pages/general-instructions">https://academic.oup.com/plcell/pages/general-instructions</a></em></li>
+<li>Figures and tables - springer: <em><a href="https://www.springer.com/gp/authors-editors/authorandreviewertutorials/writing-a-journal-manuscript/figures-and-tables/10285530">https://www.springer.com/gp/authors-editors/authorandreviewertutorials/writing-a-journal-manuscript/figures-and-tables/10285530</a></em></li>
+</ul>
+]]></content:encoded>
     </item>
     
   </channel>
