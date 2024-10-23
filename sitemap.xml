@@ -2,14 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://yorks0n.github.io/posts/</loc>
-    <lastmod>2024-10-23T16:30:00+00:00</lastmod>
+    <loc>https://yorks0n.github.io/tags/mutter/</loc>
+    <lastmod>2024-10-23T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://yorks0n.github.io/</loc>
-    <lastmod>2024-10-23T16:30:00+00:00</lastmod>
+    <loc>https://yorks0n.github.io/posts/</loc>
+    <lastmod>2024-10-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/tags/</loc>
-    <lastmod>2024-10-22T00:00:00+00:00</lastmod>
+    <lastmod>2024-10-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://yorks0n.github.io/</loc>
+    <lastmod>2024-10-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://yorks0n.github.io/posts/nine_questions/</loc>
+    <lastmod>2024-10-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/posts/change_to_anybox/</loc>
     <lastmod>2024-10-22T00:00:00+00:00</lastmod>
@@ -22,9 +28,6 @@
   </url><url>
     <loc>https://yorks0n.github.io/posts/basic_elements_data_vis/</loc>
     <lastmod>2023-07-19T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://yorks0n.github.io/tags/mutter/</loc>
-    <lastmod>2023-07-17T14:01:55+08:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/posts/outlier_detection/outlier_detection/</loc>
     <lastmod>2023-07-17T14:01:55+08:00</lastmod>
