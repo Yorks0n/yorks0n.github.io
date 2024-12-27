@@ -6,7 +6,60 @@
     <description>Recent content in Posts on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Dec 2024 18:16:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 27 Dec 2024 12:00:11 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rstudio也能用GitHub Copilot了</title>
+      <link>https://yorks0n.github.io/posts/rstudio_with_copilot/</link>
+      <pubDate>Fri, 27 Dec 2024 12:00:11 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/rstudio_with_copilot/</guid>
+      <description>希望我不是最后一个知道的。</description>
+      <content:encoded><![CDATA[<p>之前在VS Code中体验过Copilot的自动补全，大为震撼，但是其他IDE写R的体验都不是很好，就没有日常用起来。最近偶然一搜，发现说Rtudio里也能用Copilot的自动补全，赶紧配置了试了一下。</p>
+<p>注：此过程适用于Mac上英文版Rstudio，并且需要保证有良好的网络环境。</p>
+<h2 id="配置过程">配置过程</h2>
+<p>首先将Rstudio更新到最新版，打开Rsutio，由于登录GitHub可能需要良好的网络环境，因此需要先给Rtudio设置http代理。首先在Rtudio中运行以下命令，打开<code>~/.Renviron</code>处的一个配置文件。</p>
+<pre tabindex="0"><code>file.edit(&#39;~/.Renviron&#39;)
+</code></pre><p>在打开的文件中加入http代理设置如下，设置完后记得保存。</p>
+<pre tabindex="0"><code>http_proxy=http://proxy.dom.com/  #代理服务器地址，或者为http_proxy=http://ip地址:端口号
+http_proxy_user=user:passwd #用户名和密码，没有用户名和密码时可省略此行
+</code></pre><p>随后在顶部菜单栏选择Tools - Global Options</p>
+<p><img loading="lazy" src="images//image-20241227103247146.png" alt="image-20241227103247146"  />
+</p>
+<p>最下面一栏直接就有Copilot的选项，选中并在顶部启用，再登录自己的GitHub账号。</p>
+<p><img loading="lazy" src="images/image-20241227103503312-5266905.png" alt="image-20241227103503312"  />
+</p>
+<p>如果网络条件不佳，可能会遇到GitHub登录页面打不开的情况。如果是网页上显示<strong>Congratulations, you&rsquo;re all set!</strong>，但是Rsutio中还是一直在加载，说明给GitHub配置的http代理有问题。</p>
+<p>如果步骤正确，此时会显示登录的账号名称：</p>
+<p><img loading="lazy" src="images/image-20241227104214859-5267336.png" alt="image-20241227104214859"  />
+</p>
+<p>这时按说就能正常使用Copilot了。</p>
+<h2 id="试用">试用</h2>
+<p>我试着写了两行注释，其他部分都让Copilot帮我补全，运行正常。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-R" data-lang="R"><span style="display:flex;"><span><span style="color:#75715e"># generate some data to draw heatmap &lt;- 这行是我写的</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">set.seed</span>(<span style="color:#ae81ff">123</span>)
+</span></span><span style="display:flex;"><span>df <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">expand.grid</span>(x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>, y <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">$</span>z <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rnorm</span>(<span style="color:#a6e22e">nrow</span>(df))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># load the ggplot2 package</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># draw a heat map with ggplot &lt;- 这行也是我写的</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(data <span style="color:#f92672">=</span> df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> x, y <span style="color:#f92672">=</span> y, fill <span style="color:#f92672">=</span> z)) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_tile</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">scale_fill_viridis_c</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bottom&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Heatmap of z values&#34;</span>,
+</span></span><span style="display:flex;"><span>       x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;x values&#34;</span>,
+</span></span><span style="display:flex;"><span>       y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;y values&#34;</span>,
+</span></span><span style="display:flex;"><span>       fill <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;z values&#34;</span>)
+</span></span></code></pre></div><p>画出的图</p>
+<p><img loading="lazy" src="images/image-20241227104417598-5267458.png" alt="image-20241227104417598"  />
+</p>
+<p>赶快体验一下吧。</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>双十一买了啥</title>
       <link>https://yorks0n.github.io/posts/buy_11/</link>
