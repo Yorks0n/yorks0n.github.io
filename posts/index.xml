@@ -6,7 +6,110 @@
     <description>Recent content in Posts on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Feb 2025 16:00:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Mar 2025 12:13:11 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vita3K存档转移到PSV实机</title>
+      <link>https://yorks0n.github.io/posts/vita3k_to_psv/</link>
+      <pubDate>Thu, 20 Mar 2025 12:13:11 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/vita3k_to_psv/</guid>
+      <description>模拟转转移到psv实机。</description>
+      <content:encoded><![CDATA[<p>查到的存档转移方式都是从PSV实机转移到Vita3K模拟器中，但我最近整了台实机，准备把之前模拟器里胧村正的存档转移到PSV机器上，查了不少帖子才找到办法，在此记录一下转移过程。</p>
+<ol>
+<li>在实体PSV上，打开游戏并创建一个存档，到保存后退出游戏。</li>
+<li>在实体PSV上，利用存档管理器导出存档。导出后的<strong>存档位置</strong>位于<code>ux0://data/savegames/[游戏编号，胧村正为PCSG00150]/[存档栏位编号，例如第一个为SLOT0]</code></li>
+<li>Vita3K的存档位于<code>path_to_vita3k\portable\ux0\user\00\savedata\[游戏编号，如PCSG00150]</code>，将此处的NinPri_PSV.dat复制到上面的<strong>存档位置</strong>并替换文件，不要动存档位置处的<code>sce_sys</code>文件夹。</li>
+<li>启动PSV上的存档管理器，将对应存档栏位的记录恢复到游戏。</li>
+</ol>
+<p>这时进游戏就能看到PC上的存档了。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>SnapGene创建多外显子基因结构</title>
+      <link>https://yorks0n.github.io/posts/snapgene_create_structure/</link>
+      <pubDate>Thu, 20 Feb 2025 16:00:00 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/snapgene_create_structure/</guid>
+      <description>&lt;p&gt;记录一下如何在SnapGene中为一段基因组序列，添加多个不同外显子/CDS的完整结构。&lt;/p&gt;
+&lt;p&gt;这里以拟南芥的序列为例，比方说选择这个由三个外显子（三段CDS）组成的AT4G10310(HKT1)。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;首先下载该区域的全长基因组序列，这里简单起见就直接下载TAIR上的，也可以下载别处带有启动子等额外信息的序列，该序列在Sequences部分的full length genomic。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%201.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;点击进入后在序列底部有Copy Sequence按钮，点击复制序列。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%202.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;打开SnapGene，选择 New DNA or RNA File，贴入刚刚的序列，选择线性DNA并输入文件名，点击OK确认。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%203.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;接下来后退页面回到Sequences处，点击full length CDS，进入并复制全长的CDS序列（或者cDNA，按需要来），并到SnapGene中点击左侧的序列比对，将刚刚的CDS序列与基因组序列进行比对。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%204.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;此时在Map界面能看到CDS的部分比对到了基因组上，内含子区域显示为空缺。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%205.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;之后点击底部的Sequence，切换到序列面板，从第一个开始比对上的位置（ATG）开始选中序列，一直拖动直到选中最后一个比对上的位置（终止密码子TAA），在顶部点选Feature-Add Feature。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%206.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;在弹出窗口中随意输入Feature名称（这里我输入了CDS），并在Type处为序列类型选择为CDS，点击OK进行创建。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%207.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;这样得到的是没有区分出内含子区域的结构，接下来我们为其拆分出内含子。&lt;/p&gt;
+&lt;p&gt;在序列比对的Sequence界面，从第一个内含子的起始到第一个内含子结束选中序列，再去Feature菜单中选择Create Feature Segment，弹出界面中就会将完整的结构按选中位置进行拆分。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%208.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;再点击选中内含子区域的片段，按右侧的删除片段，即可创建第一个内含子，重复此过程直到所有内含子都添加完成。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%209.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;最后构选上Translate this feature in Sequence view，即可将序列按照CDS翻译为氨基酸序列。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%2010.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image%2011.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;记得保存得到的文件，就完成了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>记录一下如何在SnapGene中为一段基因组序列，添加多个不同外显子/CDS的完整结构。</p>
+<p>这里以拟南芥的序列为例，比方说选择这个由三个外显子（三段CDS）组成的AT4G10310(HKT1)。</p>
+<p><img loading="lazy" src="images/image.png" alt="image.png"  />
+</p>
+<p>首先下载该区域的全长基因组序列，这里简单起见就直接下载TAIR上的，也可以下载别处带有启动子等额外信息的序列，该序列在Sequences部分的full length genomic。</p>
+<p><img loading="lazy" src="images/image%201.png" alt="image.png"  />
+</p>
+<p>点击进入后在序列底部有Copy Sequence按钮，点击复制序列。</p>
+<p><img loading="lazy" src="images/image%202.png" alt="image.png"  />
+</p>
+<p>打开SnapGene，选择 New DNA or RNA File，贴入刚刚的序列，选择线性DNA并输入文件名，点击OK确认。</p>
+<p><img loading="lazy" src="images/image%203.png" alt="image.png"  />
+</p>
+<p>接下来后退页面回到Sequences处，点击full length CDS，进入并复制全长的CDS序列（或者cDNA，按需要来），并到SnapGene中点击左侧的序列比对，将刚刚的CDS序列与基因组序列进行比对。</p>
+<p><img loading="lazy" src="images/image%204.png" alt="image.png"  />
+</p>
+<p>此时在Map界面能看到CDS的部分比对到了基因组上，内含子区域显示为空缺。</p>
+<p><img loading="lazy" src="images/image%205.png" alt="image.png"  />
+</p>
+<p>之后点击底部的Sequence，切换到序列面板，从第一个开始比对上的位置（ATG）开始选中序列，一直拖动直到选中最后一个比对上的位置（终止密码子TAA），在顶部点选Feature-Add Feature。</p>
+<p><img loading="lazy" src="images/image%206.png" alt="image.png"  />
+</p>
+<p>在弹出窗口中随意输入Feature名称（这里我输入了CDS），并在Type处为序列类型选择为CDS，点击OK进行创建。</p>
+<p><img loading="lazy" src="images/image%207.png" alt="image.png"  />
+</p>
+<p>这样得到的是没有区分出内含子区域的结构，接下来我们为其拆分出内含子。</p>
+<p>在序列比对的Sequence界面，从第一个内含子的起始到第一个内含子结束选中序列，再去Feature菜单中选择Create Feature Segment，弹出界面中就会将完整的结构按选中位置进行拆分。</p>
+<p><img loading="lazy" src="images/image%208.png" alt="image.png"  />
+</p>
+<p>再点击选中内含子区域的片段，按右侧的删除片段，即可创建第一个内含子，重复此过程直到所有内含子都添加完成。</p>
+<p><img loading="lazy" src="images/image%209.png" alt="image.png"  />
+</p>
+<p>最后构选上Translate this feature in Sequence view，即可将序列按照CDS翻译为氨基酸序列。</p>
+<p><img loading="lazy" src="images/image%2010.png" alt="image.png"  />
+</p>
+<p><img loading="lazy" src="images/image%2011.png" alt="image.png"  />
+</p>
+<p>记得保存得到的文件，就完成了。</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>Rstudio也能用GitHub Copilot了</title>
       <link>https://yorks0n.github.io/posts/rstudio_with_copilot/</link>

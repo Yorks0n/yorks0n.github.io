@@ -5,12 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Tags | Yorksite</title>
-<meta name="keywords" content="">
-<meta name="description" content="">
+<title>Vita3K存档转移到PSV实机 | Yorksite</title>
+<meta name="keywords" content="折腾">
+<meta name="description" content="模拟转转移到psv实机。">
 <meta name="author" content="Yorkson">
-<link rel="canonical" href="https://yorks0n.github.io/tags/">
+<link rel="canonical" href="https://yorks0n.github.io/posts/vita3k_to_psv/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.a64d292f66122a1e5591815ee8c06e138b9cb7dda180c36c77cfcf3f15fa04b5.css" integrity="sha256-pk0pL2YSKh5VkYFe6MBuE4uct92hgMNsd8/PPxX6BLU=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
 <link rel="icon" href="https://yorks0n.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://yorks0n.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://yorks0n.github.io/favicon-32x32.png">
@@ -18,8 +20,7 @@
 <link rel="mask-icon" href="https://yorks0n.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://yorks0n.github.io/tags/index.xml">
-<link rel="alternate" hreflang="zh" href="https://yorks0n.github.io/tags/">
+<link rel="alternate" hreflang="zh" href="https://yorks0n.github.io/posts/vita3k_to_psv/">
 <noscript>
     <style>
         #theme-toggle,
@@ -76,18 +77,74 @@
         });
     });
 </script>
-<meta property="og:title" content="Tags" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://yorks0n.github.io/tags/" />
+<meta property="og:title" content="Vita3K存档转移到PSV实机" />
+<meta property="og:description" content="模拟转转移到psv实机。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yorks0n.github.io/posts/vita3k_to_psv/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-03-20T12:13:11+08:00" />
+<meta property="article:modified_time" content="2025-03-20T12:13:11+08:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Tags"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="Vita3K存档转移到PSV实机"/>
+<meta name="twitter:description" content="模拟转转移到psv实机。"/>
 
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://yorks0n.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Vita3K存档转移到PSV实机",
+      "item": "https://yorks0n.github.io/posts/vita3k_to_psv/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Vita3K存档转移到PSV实机",
+  "name": "Vita3K存档转移到PSV实机",
+  "description": "模拟转转移到psv实机。",
+  "keywords": [
+    "折腾"
+  ],
+  "articleBody": "查到的存档转移方式都是从PSV实机转移到Vita3K模拟器中，但我最近整了台实机，准备把之前模拟器里胧村正的存档转移到PSV机器上，查了不少帖子才找到办法，在此记录一下转移过程。\n在实体PSV上，打开游戏并创建一个存档，到保存后退出游戏。 在实体PSV上，利用存档管理器导出存档。导出后的存档位置位于ux0://data/savegames/[游戏编号，胧村正为PCSG00150]/[存档栏位编号，例如第一个为SLOT0] Vita3K的存档位于path_to_vita3k\\portable\\ux0\\user\\00\\savedata\\[游戏编号，如PCSG00150]，将此处的NinPri_PSV.dat复制到上面的存档位置并替换文件，不要动存档位置处的sce_sys文件夹。 启动PSV上的存档管理器，将对应存档栏位的记录恢复到游戏。 这时进游戏就能看到PC上的存档了。\n",
+  "wordCount" : "6",
+  "inLanguage": "zh",
+  "datePublished": "2025-03-20T12:13:11+08:00",
+  "dateModified": "2025-03-20T12:13:11+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Yorkson"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yorks0n.github.io/posts/vita3k_to_psv/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yorksite",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yorks0n.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -136,7 +193,7 @@
             </li>
             <li>
                 <a href="https://yorks0n.github.io/tags/" title="🏷 Tags">
-                    <span class="active">🏷 Tags</span>
+                    <span>🏷 Tags</span>
                 </a>
             </li>
             <li>
@@ -148,39 +205,63 @@
     </nav>
 </header>
 <main class="main">
-<header class="page-header">
-    <h1>Tags</h1>
-</header>
+<div class="grid-layout">
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://yorks0n.github.io/">主页</a>&nbsp;»&nbsp;<a href="https://yorks0n.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Vita3K存档转移到PSV实机
+    </h1>
+    <div class="post-meta"><span title='2025-03-20 12:13:11 +0800 +0800'>三月 20, 2025</span>&nbsp;·&nbsp;Yorkson
 
-<ul class="terms-tags">
-    <li>
-        <a href="https://yorks0n.github.io/tags/mutter/">mutter <sup><strong><sup>3</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E8%AF%BB%E4%B9%A6/">读书 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E6%8A%80%E5%B7%A7/">技巧 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/">可视化 <sup><strong><sup>5</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E7%94%9F%E6%B4%BB/">生活 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E6%96%87%E7%8C%AE/">文献 <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E6%95%88%E7%8E%87/">效率 <sup><strong><sup>2</sup></strong></sup> </a>
-    </li>
-    <li>
-        <a href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/">折腾 <sup><strong><sup>7</sup></strong></sup> </a>
-    </li>
-</ul>
+</div>
+  </header> 
+  <div class="post-content"><p>查到的存档转移方式都是从PSV实机转移到Vita3K模拟器中，但我最近整了台实机，准备把之前模拟器里胧村正的存档转移到PSV机器上，查了不少帖子才找到办法，在此记录一下转移过程。</p>
+<ol>
+<li>在实体PSV上，打开游戏并创建一个存档，到保存后退出游戏。</li>
+<li>在实体PSV上，利用存档管理器导出存档。导出后的<strong>存档位置</strong>位于<code>ux0://data/savegames/[游戏编号，胧村正为PCSG00150]/[存档栏位编号，例如第一个为SLOT0]</code></li>
+<li>Vita3K的存档位于<code>path_to_vita3k\portable\ux0\user\00\savedata\[游戏编号，如PCSG00150]</code>，将此处的NinPri_PSV.dat复制到上面的<strong>存档位置</strong>并替换文件，不要动存档位置处的<code>sce_sys</code>文件夹。</li>
+<li>启动PSV上的存档管理器，将对应存档栏位的记录恢复到游戏。</li>
+</ol>
+<p>这时进游戏就能看到PC上的存档了。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://yorks0n.github.io/tags/%E6%8A%98%E8%85%BE/">折腾</a></li>
+    </ul>
+  </footer>
+</article>
+
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observerForTableOfContentActiveState = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+
+        if (entry.intersectionRatio > 0) {
+          clearActiveStatesInTableOfContents();
+          document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+        }
+      });
+    });
+    document.querySelectorAll('h1[id],h2[id],h3[id],h4[id]').forEach((section) => {
+      observerForTableOfContentActiveState.observe(section);
+    });
+
+  });
+
+  function clearActiveStatesInTableOfContents() {
+    document.querySelectorAll('nav li').forEach((section) => {
+      section.classList.remove('active');
+    });
+  }
+</script>
     </main>
     
 <footer class="footer">
