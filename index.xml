@@ -6,7 +6,68 @@
     <description>Recent content on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Apr 2025 17:15:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 15 Oct 2025 16:40:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决远程服务器上Singularity联网问题</title>
+      <link>https://yorks0n.github.io/posts/fix_singularity_connection_issue/</link>
+      <pubDate>Wed, 15 Oct 2025 16:40:00 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/fix_singularity_connection_issue/</guid>
+      <description>docker 系列的镜像国内直连不了，真是太费劲了。</description>
+      <content:encoded><![CDATA[<p>这几天遇到个项目，需要在服务器上用到 Nextflow 流程运行一个Singularity镜像（<code>singleron-RD/wf-single-cell</code>）虽然服务器能联网，但因为某些众所周知的原因，Singularity（或 Apptainer）完全无法从 DockerHub 直接拉取所需镜像。倒腾了一下午，试了各种办法，终于搞定了，这里记录下最终可行的解决方案。</p>
+<h2 id="背景">背景</h2>
+<p>在服务器上运行某Nextflow流程时，需要从以下两个镜像拉取容器：</p>
+<ul>
+<li><code>docker://ontresearch/wf-single-cell:sha0fcdf10929fbef2d426bb985e16b81153a88c6f4</code></li>
+<li><code>docker://ontresearch/wf-common:sha91cd87900c86f05bf36d8c77b841b8fda5ecf3aa</code></li>
+</ul>
+<p>但由于某些原因，所有 docker 系列的网站直连都打不开，直接拉取失败。</p>
+<h2 id="方案一mac上下载好镜像包再传给服务器不可行">方案一：Mac上下载好镜像包再传给服务器（不可行）</h2>
+<p>一开始想在 Mac 上直接下载好镜像包，但是发现 M 系列芯片的 Mac 由于架构原因，并不支持直接安装 Singularity 或是 Apptainer。于是尝试在本地通过 Docker 启动一个运行 Apptainer 的环境再进行下载。</p>
+<pre tabindex="0"><code>docker run -it --privileged \
+  -v $PWD:/data \
+  ghcr.io/apptainer/apptainer:latest bash
+
+cd /data
+
+apptainer pull ontresearch-wf-single-cell.sif docker://ontresearch/wf-single-cell:sha0fcdf10929fbef2d426bb985e16b81153a88c6f4
+
+apptainer pull ontresearch-wf-common.sif       docker://ontresearch/wf-common:sha91cd87900c86f05bf36d8c77b841b8fda5ecf3aa
+</code></pre><p>然而问题在于，Mac（ARM 架构）上生成的 <code>.sif</code> 文件无法在服务器（x86 架构）上运行，会报出架构不匹配错误，因此此方法虽然能成功获得 sif 文件，但获取的文件在服务器上无法运行。。</p>
+<hr>
+<h2 id="方案二通过-ssh-代理转发使用本地代理下载可行">方案二：通过 SSH 代理转发使用本地代理下载（可行）</h2>
+<p>因为不想在服务器上单独配置一套代理，发现可以通过 SSH 反向端口转发，让服务器直接使用 Mac 本地代理，从而顺利下载容器镜像，实现流程如下：</p>
+<h3 id="1-建立-ssh-反向代理通道">1. 建立 SSH 反向代理通道</h3>
+<p>假设本地代理端口为 <code>6152</code>，在连接服务器时建立反向映射：</p>
+<pre tabindex="0"><code>ssh -p 22 -R 1080:127.0.0.1:6152 usr_name@remote_ip -t zsh
+</code></pre><p>连接成功后，服务器可以通过 <code>127.0.0.1:1080</code> 访问外网。</p>
+<h3 id="2-在服务器上设置代理环境变量">2. 在服务器上设置代理环境变量</h3>
+<pre tabindex="0"><code>export https_proxy=http://127.0.0.1:1080
+export http_proxy=http://127.0.0.1:1080
+</code></pre><h3 id="3-在服务器上准备镜像存放目录">3. 在服务器上准备镜像存放目录</h3>
+<pre tabindex="0"><code>mkdir -p $HOME/containers &amp;&amp; cd $HOME/containers
+</code></pre><h3 id="4-使用-singularity-拉取镜像">4. 使用 Singularity 拉取镜像</h3>
+<pre tabindex="0"><code>singularity pull ontresearch-wf-single-cell.sif docker://ontresearch/wf-single-cell:sha0fcdf10929fbef2d426bb985e16b81153a88c6f4
+singularity pull ontresearch-wf-common.sif       docker://ontresearch/wf-common:sha91cd87900c86f05bf36d8c77b841b8fda5ecf3aa
+</code></pre><p>下载完成后，镜像文件保存在：</p>
+<pre tabindex="0"><code>$HOME/containers/
+</code></pre><h3 id="5-在-nextflow-配置中使用本地-sif-文件">5. 在 Nextflow 配置中使用本地 SIF 文件</h3>
+<p>为了避免 Nextflow 再次联网下载，可在 <code>nextflow.config</code> 中指定本地容器路径：</p>
+<pre tabindex="0"><code>process {
+  withLabel: singlecell {
+    container = &#34;$HOME/containers/ontresearch-wf-single-cell.sif&#34;
+  }
+  withLabel: wf_common {
+    container = &#34;$HOME/containers/ontresearch-wf-common.sif&#34;
+  }
+}
+</code></pre><p>这样 Nextflow 会直接使用本地镜像文件，而不会再尝试从 DockerHub 获取。</p>
+<hr>
+<h2 id="五总结">五、总结</h2>
+<p>真是太费劲了！</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>又是一个Mac软件列表</title>
       <link>https://yorks0n.github.io/posts/another_mac_software_list/</link>
