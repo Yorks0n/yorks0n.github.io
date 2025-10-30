@@ -19,7 +19,7 @@
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image.png&#34; alt=&#34;image.png&#34;  /&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;实现逻辑&#34;&gt;实现逻辑&lt;/h2&gt;
-&lt;p&gt;**太长不看：**ZotWatcher会利用Zotero数据库中已有文章的信息，生成一份文献兴趣索引，再将每天运行时新发表的文章与索引进行比对，找到与已有兴趣打分较高的文章作为候选文章，生成RSS供我订阅。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;太长不看&lt;/strong&gt;：ZotWatcher会利用Zotero数据库中已有文章的信息，生成一份文献兴趣索引，再将每天运行时新发表的文章与索引进行比对，找到与已有兴趣打分较高的文章作为候选文章，生成RSS供我订阅。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;详细版本&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;获取Zotero文献库&lt;/strong&gt;：首先通过Zotero API获取个人积累的文献数据库，只是标题、摘要等文献元数据的话，Zotero并不限制储存容量。&lt;/li&gt;
@@ -39,7 +39,7 @@
 <p><img loading="lazy" src="images/image.png" alt="image.png"  />
 </p>
 <h2 id="实现逻辑">实现逻辑</h2>
-<p>**太长不看：**ZotWatcher会利用Zotero数据库中已有文章的信息，生成一份文献兴趣索引，再将每天运行时新发表的文章与索引进行比对，找到与已有兴趣打分较高的文章作为候选文章，生成RSS供我订阅。</p>
+<p><strong>太长不看</strong>：ZotWatcher会利用Zotero数据库中已有文章的信息，生成一份文献兴趣索引，再将每天运行时新发表的文章与索引进行比对，找到与已有兴趣打分较高的文章作为候选文章，生成RSS供我订阅。</p>
 <p><strong>详细版本</strong></p>
 <ul>
 <li><strong>获取Zotero文献库</strong>：首先通过Zotero API获取个人积累的文献数据库，只是标题、摘要等文献元数据的话，Zotero并不限制储存容量。</li>
