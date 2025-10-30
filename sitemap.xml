@@ -3,13 +3,19 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://yorks0n.github.io/posts/</loc>
-    <lastmod>2025-10-15T16:40:00+08:00</lastmod>
+    <lastmod>2025-10-30T17:09:00+08:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/tags/</loc>
-    <lastmod>2025-10-15T16:40:00+08:00</lastmod>
+    <lastmod>2025-10-30T17:09:00+08:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/</loc>
-    <lastmod>2025-10-15T16:40:00+08:00</lastmod>
+    <lastmod>2025-10-30T17:09:00+08:00</lastmod>
+  </url><url>
+    <loc>https://yorks0n.github.io/posts/zotwatcher/</loc>
+    <lastmod>2025-10-30T17:09:00+08:00</lastmod>
+  </url><url>
+    <loc>https://yorks0n.github.io/tags/%E6%96%87%E7%8C%AE/</loc>
+    <lastmod>2025-10-30T17:09:00+08:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/posts/fix_singularity_connection_issue/</loc>
     <lastmod>2025-10-15T16:40:00+08:00</lastmod>
@@ -66,9 +72,6 @@
     <lastmod>2023-05-30T09:24:00+08:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/posts/read-single-cell-best-practice/</loc>
-    <lastmod>2023-04-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://yorks0n.github.io/tags/%E6%96%87%E7%8C%AE/</loc>
     <lastmod>2023-04-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://yorks0n.github.io/posts/docker-pack-shiny-app/</loc>

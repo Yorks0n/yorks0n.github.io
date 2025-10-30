@@ -255,7 +255,8 @@
 <p><strong>shifted logarithm transformation</strong>：使用缩放系数s的 log(𝑦/𝑠+1) 表现良好，但不应使用 CPM（counts per million）作为输入。</p>
 <blockquote>
 <p>should not be used with counts per million as an input, as it reflects an unrealistically large overdispersion.
-原文如此，但没看懂为什么，待补充。</p></blockquote>
+原文如此，但没看懂为什么，待补充。</p>
+</blockquote>
 <p>通过使用一个公因数缩放所有基因，会假定由于细胞大小导致的测序深度差异可以忽略不计。然而对于异质性较大的数据集，其中包含了特性不同的各种细胞，其本身基因表达差异就较大，难以对每个基因找到一个合适所有细胞的系数。</p>
 <p>此外还有 <strong>Scran</strong> 标准化和 <strong>Pearson</strong> 残差方法。shifted logarithm transformation 被证明可以更好地稳定方差以进行后续降维，Scran 在批量校正任务中表现良好，Pearson 残差更适合生物变异基因的选择和稀有细胞身份的识别。</p>
 <h3 id="消除混杂的变异来源-removing-confounding-sources-of-variation">消除混杂的变异来源 Removing confounding sources of variation<a hidden class="anchor" aria-hidden="true" href="#消除混杂的变异来源-removing-confounding-sources-of-variation">#</a></h3>

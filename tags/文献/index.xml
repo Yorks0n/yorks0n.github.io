@@ -6,7 +6,56 @@
     <description>Recent content in 文献 on Yorksite</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 07 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/%E6%96%87%E7%8C%AE/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 30 Oct 2025 17:09:00 +0800</lastBuildDate><atom:link href="https://yorks0n.github.io/tags/%E6%96%87%E7%8C%AE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>根据Zotero数据库追踪新发表文献</title>
+      <link>https://yorks0n.github.io/posts/zotwatcher/</link>
+      <pubDate>Thu, 30 Oct 2025 17:09:00 +0800</pubDate>
+      
+      <guid>https://yorks0n.github.io/posts/zotwatcher/</guid>
+      <description>&lt;p&gt;很长时间里，我追踪新发表文章的方式是用RSS订阅几个感兴趣的期刊网站，每天午休的时候去翻一翻，看有没有感兴趣的，同时也订阅了一些公众号，遇到感兴趣的文章推送就丢进稍后读列表。然而这一流程有几个比较膈应的点，一方面，RSS订阅对于专业领域内的期刊，其中能遇到自己感兴趣文章的概率较高，但是对于综合类期刊（比如CNS），大部分文章跨专业太远了，订阅其RSS大部分推送都是自己不感兴趣的；另一方面，专业相关的大文章公众号一般会发，但有些非国内作者或是中小文章，则很难见到推送，并且公众号的推荐排序真的是一言难尽。&lt;/p&gt;
+&lt;p&gt;因此，很希望能有更加贴合我阅读兴趣的文章追踪方式。也曾经想过靠关键词过滤等方式筛选，但关键词硬性匹配很容易过于严格，并且维护一份关键词库也绝非易事。前几年LLM兴盛后，动过一些靠AI来追踪文献的念头，但也没想好怎么合适地告知AI我的兴趣所在，并且将大量文章直接丢给AI进行筛选，每天消耗的token估计也少不了。&lt;/p&gt;
+&lt;p&gt;前些天偶然想到，既然我这几年已经在文献管理工具Zotero里积累了大量阅读过的文献，实际就应该以这些文献为种子，生成一份我的兴趣画像，然后再用这份画像去追踪文献。于是在用codex捣鼓了几天后，做了个脚本，这里暂且将其命名为&lt;a href=&#34;https://github.com/Yorks0n/ZotWatch&#34;&gt;ZotWatcher&lt;/a&gt;。下图为其在News Explorer中的订阅效果。&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image.png&#34; alt=&#34;image.png&#34;  /&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;实现逻辑&#34;&gt;实现逻辑&lt;/h2&gt;
+&lt;p&gt;**太长不看：**ZotWatcher会利用Zotero数据库中已有文章的信息，生成一份文献兴趣索引，再将每天运行时新发表的文章与索引进行比对，找到与已有兴趣打分较高的文章作为候选文章，生成RSS供我订阅。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;详细版本&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;获取Zotero文献库&lt;/strong&gt;：首先通过Zotero API获取个人积累的文献数据库，只是标题、摘要等文献元数据的话，Zotero并不限制储存容量。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;构建文献信息索引&lt;/strong&gt;：将读取到的文献元数据，通过TextVectorizer进行向量化，构建FAISS索引，同时生成一份概要统计文献，包含高频出现的期刊、作者等信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抓取候选文章&lt;/strong&gt;：目前启用了Crossref、arXiv、bioRxiv/medRxiv的API作为新发表文章的来源，同时会根据统计到的高频期刊进行补充抓取。后续可能会加上Altmetric的热门文献。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文献打分&lt;/strong&gt;：首先利用FAISS检索新获取文献与已有数据库的相似度，同时结合ScimagoJR的期刊SJR质量、时效性、作者等进行加权打分。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文献过滤&lt;/strong&gt;：根据打分和指定的输出文献数量（默认是20，避免overwhelming），同时筛选只保留近七天内的文章、限制预印本比例不超过30%，获得最终输出。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RSS生成&lt;/strong&gt;：将候选文章整理成RSS格式，使用GitHub Actions每天早上6点运行，并把运行结果以GitHub Pages形式发布方便使用其他软件订阅。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;如果你也想试试&#34;&gt;如果你也想试试&lt;/h2&gt;
+&lt;p&gt;本仓库地址为：&lt;a href=&#34;https://github.com/Yorks0n/ZotWatch&#34;&gt;ZotWatch&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;可以Clone或Fork后，需要在设置中配置几项必要信息，例如自己的&lt;code&gt;ZOTERO_API_KEY&lt;/code&gt;与&lt;code&gt;ZOTERO_USER_ID&lt;/code&gt;等，这些信息的获取方式请见README页面，这里就不赘述了。&lt;/p&gt;
+&lt;p&gt;每次检测到&lt;code&gt;git push&lt;/code&gt;行为或次日六点后该仓库会自动运行，并生成结果。需要留意直接给出的GitHub Pages地址如果打不开，需要在末尾加上&lt;code&gt;/feed.xml&lt;/code&gt;（因为没有生成对应的index页面，直接访问可能打不开）。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>很长时间里，我追踪新发表文章的方式是用RSS订阅几个感兴趣的期刊网站，每天午休的时候去翻一翻，看有没有感兴趣的，同时也订阅了一些公众号，遇到感兴趣的文章推送就丢进稍后读列表。然而这一流程有几个比较膈应的点，一方面，RSS订阅对于专业领域内的期刊，其中能遇到自己感兴趣文章的概率较高，但是对于综合类期刊（比如CNS），大部分文章跨专业太远了，订阅其RSS大部分推送都是自己不感兴趣的；另一方面，专业相关的大文章公众号一般会发，但有些非国内作者或是中小文章，则很难见到推送，并且公众号的推荐排序真的是一言难尽。</p>
+<p>因此，很希望能有更加贴合我阅读兴趣的文章追踪方式。也曾经想过靠关键词过滤等方式筛选，但关键词硬性匹配很容易过于严格，并且维护一份关键词库也绝非易事。前几年LLM兴盛后，动过一些靠AI来追踪文献的念头，但也没想好怎么合适地告知AI我的兴趣所在，并且将大量文章直接丢给AI进行筛选，每天消耗的token估计也少不了。</p>
+<p>前些天偶然想到，既然我这几年已经在文献管理工具Zotero里积累了大量阅读过的文献，实际就应该以这些文献为种子，生成一份我的兴趣画像，然后再用这份画像去追踪文献。于是在用codex捣鼓了几天后，做了个脚本，这里暂且将其命名为<a href="https://github.com/Yorks0n/ZotWatch">ZotWatcher</a>。下图为其在News Explorer中的订阅效果。</p>
+<p><img loading="lazy" src="images/image.png" alt="image.png"  />
+</p>
+<h2 id="实现逻辑">实现逻辑</h2>
+<p>**太长不看：**ZotWatcher会利用Zotero数据库中已有文章的信息，生成一份文献兴趣索引，再将每天运行时新发表的文章与索引进行比对，找到与已有兴趣打分较高的文章作为候选文章，生成RSS供我订阅。</p>
+<p><strong>详细版本</strong></p>
+<ul>
+<li><strong>获取Zotero文献库</strong>：首先通过Zotero API获取个人积累的文献数据库，只是标题、摘要等文献元数据的话，Zotero并不限制储存容量。</li>
+<li><strong>构建文献信息索引</strong>：将读取到的文献元数据，通过TextVectorizer进行向量化，构建FAISS索引，同时生成一份概要统计文献，包含高频出现的期刊、作者等信息。</li>
+<li><strong>抓取候选文章</strong>：目前启用了Crossref、arXiv、bioRxiv/medRxiv的API作为新发表文章的来源，同时会根据统计到的高频期刊进行补充抓取。后续可能会加上Altmetric的热门文献。</li>
+<li><strong>文献打分</strong>：首先利用FAISS检索新获取文献与已有数据库的相似度，同时结合ScimagoJR的期刊SJR质量、时效性、作者等进行加权打分。</li>
+<li><strong>文献过滤</strong>：根据打分和指定的输出文献数量（默认是20，避免overwhelming），同时筛选只保留近七天内的文章、限制预印本比例不超过30%，获得最终输出。</li>
+<li><strong>RSS生成</strong>：将候选文章整理成RSS格式，使用GitHub Actions每天早上6点运行，并把运行结果以GitHub Pages形式发布方便使用其他软件订阅。</li>
+</ul>
+<h2 id="如果你也想试试">如果你也想试试</h2>
+<p>本仓库地址为：<a href="https://github.com/Yorks0n/ZotWatch">ZotWatch</a></p>
+<p>可以Clone或Fork后，需要在设置中配置几项必要信息，例如自己的<code>ZOTERO_API_KEY</code>与<code>ZOTERO_USER_ID</code>等，这些信息的获取方式请见README页面，这里就不赘述了。</p>
+<p>每次检测到<code>git push</code>行为或次日六点后该仓库会自动运行，并生成结果。需要留意直接给出的GitHub Pages地址如果打不开，需要在末尾加上<code>/feed.xml</code>（因为没有生成对应的index页面，直接访问可能打不开）。</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>【读文献】单细胞分析最佳实践</title>
       <link>https://yorks0n.github.io/posts/read-single-cell-best-practice/</link>
@@ -53,7 +102,8 @@
 <p><strong>shifted logarithm transformation</strong>：使用缩放系数s的 log(𝑦/𝑠+1) 表现良好，但不应使用 CPM（counts per million）作为输入。</p>
 <blockquote>
 <p>should not be used with counts per million as an input, as it reflects an unrealistically large overdispersion.
-原文如此，但没看懂为什么，待补充。</p></blockquote>
+原文如此，但没看懂为什么，待补充。</p>
+</blockquote>
 <p>通过使用一个公因数缩放所有基因，会假定由于细胞大小导致的测序深度差异可以忽略不计。然而对于异质性较大的数据集，其中包含了特性不同的各种细胞，其本身基因表达差异就较大，难以对每个基因找到一个合适所有细胞的系数。</p>
 <p>此外还有 <strong>Scran</strong> 标准化和 <strong>Pearson</strong> 残差方法。shifted logarithm transformation 被证明可以更好地稳定方差以进行后续降维，Scran 在批量校正任务中表现良好，Pearson 残差更适合生物变异基因的选择和稀有细胞身份的识别。</p>
 <h3 id="消除混杂的变异来源-removing-confounding-sources-of-variation">消除混杂的变异来源 Removing confounding sources of variation</h3>
